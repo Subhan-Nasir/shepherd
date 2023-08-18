@@ -34,6 +34,16 @@
   .shepherd-has-title .shepherd-content .shepherd-cancel-icon:hover {
     color: rgba(0, 0, 0, 0.75);
   }
+
+  .material-symbols-outlined {
+    font-variation-settings: 
+    'FILL' 0,
+    'wght' 700,
+    'GRAD' 0,
+    'opsz' 48;
+  }
+
+
 </style>
 
 <button
@@ -42,5 +52,9 @@
   on:click={handleCancelClick}
   type="button"
 >
-  <span aria-hidden="true">&times;</span>
+  <!-- <span aria-hidden="true">&times;</span> -->
+
+  <span class="material-symbols-outlined">close</span>
+
+
 </button>
