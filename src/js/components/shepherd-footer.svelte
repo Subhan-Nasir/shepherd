@@ -7,8 +7,8 @@
   
     let tour = step.getTour();
     let allSteps = tour.steps;
-    // let progressBarEnabled = tour.options.enableProgressBar;
-    let progressBarEnabled = true;
+    let progressBarEnabled = tour.options.enableProgressBar;
+    // let progressBarEnabled = true;
 
     // Previous step
     let percentage = `${Math.round(100*(allSteps.indexOf(step))/allSteps.length)}%`

@@ -39,6 +39,9 @@ export class Tour extends Evented {
    * @param {boolean} options.useModalOverlay Whether or not steps should be placed above a darkened
    * modal overlay. If true, the overlay will create an opening around the target element so that it
    * can remain interactive
+   * 
+   * @param {boolean} options.enableProgressBar Enables progress bar
+   * 
    * @returns {Tour}
    */
   constructor(options = {}) {

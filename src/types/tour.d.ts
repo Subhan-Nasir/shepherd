@@ -159,6 +159,8 @@ declare namespace Tour {
      * can remain interactive
      */
     useModalOverlay?: string | boolean;
+
+    enableProgressBar?: boolean;
   }
 }
 
