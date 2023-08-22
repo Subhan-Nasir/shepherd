@@ -12,7 +12,6 @@
     border-radius: 5px;
     outline: none;
     padding: 0;
-    border: 2px solid black;
   }
 </style>
 

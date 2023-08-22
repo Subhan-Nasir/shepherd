@@ -48,7 +48,8 @@ export class Tour extends Evented {
 
     const defaultTourOptions = {
       exitOnEsc: true,
-      keyboardNavigation: true
+      keyboardNavigation: true,
+      enableProgressBar: false,
     };
 
     this.options = Object.assign({}, defaultTourOptions, options);

@@ -7,6 +7,8 @@
   
     let tour = step.getTour();
     let allSteps = tour.steps;
+    // let progressBarEnabled = tour.options.enableProgressBar;
+    let progressBarEnabled = true;
 
     // Previous step
     let percentage = `${Math.round(100*(allSteps.indexOf(step))/allSteps.length)}%`
@@ -67,7 +69,7 @@
     .shepherd-progress-bar {
         height: 100%;
         width: var(--width, 0%);
-        background-color: blueviolet;
+        background-color: rgb(79, 55, 98);
         transition: width 400ms ease-in;
     }
 
@@ -100,8 +102,10 @@
         </div>
     {/if}
 
-    <div class="shepherd-progress" data-content="{percentage}">
-        <div class="shepherd-progress-bar" style="--width: {percentage};"></div>
-    </div>
+    {#if progressBarEnabled}
+        <div class="shepherd-progress" data-content="{percentage}">
+            <div class="shepherd-progress-bar" style="--width: {percentage};"></div>
+        </div>
+    {/if}
 
 </footer>
