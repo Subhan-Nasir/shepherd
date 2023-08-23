@@ -184,7 +184,7 @@
   * Arrow on top of tooltip centered horizontally, with title color
   */
   .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
-    background-color: #e6e6e6;
+    background-color: #eeeeee;
   }
 
   .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
@@ -196,24 +196,25 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
-  aria-describedby={!isUndefined(step.options.text) ? descriptionId : null}
-  aria-labelledby={step.options.title ? labelId : null}
-  bind:this={element}
-  class:shepherd-has-cancel-icon="{hasCancelIcon}"
-  class:shepherd-has-title="{hasTitle}"
-  class:shepherd-element="{true}"
-  {...dataStepId}
-  on:keydown={handleKeyDown}
-  role="dialog"
-  tabindex="0"
+    aria-describedby={!isUndefined(step.options.text) ? descriptionId : null}
+    aria-labelledby={step.options.title ? labelId : null}
+    bind:this={element}
+    class:shepherd-has-cancel-icon="{hasCancelIcon}"
+    class:shepherd-has-title="{hasTitle}"
+    class:shepherd-element="{true}"
+    {...dataStepId}
+    on:keydown={handleKeyDown}
+    role="dialog"
+    tabindex="0"
 >
     {#if step.options.arrow && step.options.attachTo && step.options.attachTo.element && step.options.attachTo.on}
-      <div class="shepherd-arrow" data-popper-arrow></div>
+        <div class="shepherd-arrow" data-popper-arrow></div>
     {/if}
-  <ShepherdContent
-    {descriptionId}
-    {labelId}
-    {step}
-  />
+    <ShepherdContent
+        {descriptionId}
+        {labelId}
+        {step}
+    />
 </div>

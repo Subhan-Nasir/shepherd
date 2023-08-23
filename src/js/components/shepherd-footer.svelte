@@ -78,7 +78,7 @@
         padding: 0;
         margin: 0;
         font-size: 2.25rem !important;
-        background: #e5e5e5;
+        background: #eeeeee;
         color: #0000002b;
     }
 
