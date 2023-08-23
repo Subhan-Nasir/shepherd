@@ -119,7 +119,8 @@
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
+    max-width: 500px;
+    max-height: 650px;
     opacity: 0;
     outline: none;
     transition: opacity 0.3s, visibility 0.3s;
