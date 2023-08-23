@@ -23,7 +23,7 @@
   }
 
   .shepherd-has-title .shepherd-content .shepherd-header {
-    background: #e6e6e6;
+    background: #00000008;
     padding: 1em;
   }
 </style>

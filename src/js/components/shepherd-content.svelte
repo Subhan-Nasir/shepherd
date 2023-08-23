@@ -12,6 +12,7 @@
     border-radius: 5px;
     outline: none;
     padding: 0;
+    box-shadow: 3px 1px 20px 3px hsl(0deg 0% 0% / 15%);
   }
 </style>
 

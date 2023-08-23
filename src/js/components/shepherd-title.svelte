@@ -18,10 +18,12 @@
     color: rgba(0, 0, 0, 0.75);
     display: flex;
     font-size: 1rem;
-    font-weight: normal;
+    font-family: sans-serif;
+    font-weight: bold;
     flex: 1 0 auto;
     margin: 0;
     padding: 0;
+
   }
 </style>
 

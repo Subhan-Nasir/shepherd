@@ -79,6 +79,8 @@ export class Tour extends Evented {
       })(event);
     });
 
+    this.previousStepIndex = null;
+
     this._setTourID();
 
     return this;
@@ -128,6 +130,7 @@ export class Tour extends Evented {
    */
   back() {
     const index = this.steps.indexOf(this.currentStep);
+    this.previousStepIndex = index;
     this.show(index - 1, false);
   }
 
@@ -206,7 +209,7 @@ export class Tour extends Evented {
    */
   next() {
     const index = this.steps.indexOf(this.currentStep);
-
+    this.previousStepIndex = index;
     if (index === this.steps.length - 1) {
       this.complete();
     } else {
