@@ -5,14 +5,13 @@
     export let step;
     $: buttons = step.options.buttons
 
-    $: backButton = buttons.find(btn => {return btn.type === "back"});
-    $: nextButton = buttons.find(btn => {return btn.type === "next"});
+    $: backButton = buttons.find(btn => {return (btn.type === "back" || btn.customRole === "back")});
+    $: nextButton = buttons.find(btn => {return (btn.type === "next" || btn.customRole === "next")});
     $: finishButton = buttons.find(btn => {return btn.customRole === "finish"});
 
     $: footerButtons = [backButton, nextButton, finishButton]
 
     $: addtionalButtons = buttons.filter(btn => {return !footerButtons.includes(btn)});
-    $: console.log(`ADDITONAL BUTTONS: ${addtionalButtons.map(btn => {return btn.text})}`);
     
 
     let tour = step.getTour();
