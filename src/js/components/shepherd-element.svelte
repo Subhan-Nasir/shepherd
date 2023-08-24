@@ -119,14 +119,18 @@
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    max-height: 650px;
+    max-width: 400px;
     opacity: 0;
     outline: none;
     transition: opacity 0.3s, visibility 0.3s;
     visibility: hidden;
     width: 100%;
     z-index: 9999;
+  }
+
+  .shepherd-large-container {
+    max-width: 500px;
+    max-height: 650px;
   }
 
   .shepherd-enabled.shepherd-element {

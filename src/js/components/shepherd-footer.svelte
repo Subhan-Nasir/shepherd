@@ -3,12 +3,13 @@
     import ShepherdButton from './shepherd-button.svelte';
 
     export let step;
-    $: buttons = step.options.buttons;
+    $: buttons = step.options.buttons
 
-    $: backButton = buttons.find(btn => {return btn.text.includes("chevron_left")});
-    $: nextButton = buttons.find(btn => {return btn.text.includes("chevron_right")});
+    $: backButton = buttons.find(btn => {return btn.type === "back"});
+    $: nextButton = buttons.find(btn => {return btn.type === "next"});
+    $: finishButton = buttons.find(btn => {return btn.customRole === "finish"});
 
-
+    $: buttons.forEach(btn => {console.log(`Classes: ${btn.classes}, Type: ${btn.type}, Custom Role: ${btn.customRole}`)});
 
     let tour = step.getTour();
     let allSteps = tour.steps;
@@ -17,9 +18,6 @@
 
     let previousPercentage = `${Math.round(100*(tour.previousStepIndex+1)/allSteps.length)}%`
     let newPercentage = `${Math.round(100*(allSteps.indexOf(step) + 1)/allSteps.length)}%`
-
-
-
 
 
 </script>
@@ -59,8 +57,6 @@
     }
 
 
-
-
     .footer-arrows-container {
         display: flex;
         flex-direction: row;
@@ -68,6 +64,8 @@
         align-items: center;
         width: 100%;
     }
+
+
 
     .arrow-button {
         min-width: 40px;
@@ -97,20 +95,37 @@
         </div>
     {/if}
 
-    {#if buttons && progressBarEnabled}
+    {#if progressBarEnabled}
         <div class="footer-arrows-container">
 
-            <ShepherdButton
-                config={backButton}
-                step={step}
-            />
-            
+            {#if backButton}
+                <ShepherdButton
+                    config={backButton}
+                    step={step}
+                />
+            {:else}
+                <!-- spacer to center progress bar using justify-content: space-between -->
+                <span></span>
+            {/if}
+                
             <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
-            
-            <ShepherdButton
+                
+            {#if nextButton}
+                <ShepherdButton
                 config={nextButton}
                 step={step}
-            />
+                />
+            {:else if finishButton}
+
+                <ShepherdButton
+                    config={finishButton}
+                    step={step}
+                />
+            {:else}
+                <!-- spacer to center progress bar using justify-content: space-between -->
+                <span></span>
+            {/if}
+
 
         </div>
 

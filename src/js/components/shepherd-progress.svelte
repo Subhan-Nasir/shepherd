@@ -12,14 +12,14 @@
 <style>
 
     :root {
-        --progress-width: 100px;
+        --progress-width: 150px;
     }
 
 
     .shepherd-progress {
         position: relative;
         border: 0;
-        width: var(--progress-width, 150px);
+        width: var(--progress-width, 100px);
         height: 1.5rem;
         line-height: 1;
         font-family: sans-serif;
@@ -35,7 +35,7 @@
         top: 50%;
         transform: translateY(-50%);
 
-        width: var(--progress-width, 150px);
+        width: var(--progress-width, 100px);
         text-align: center;
         color: black;
 

@@ -287,6 +287,9 @@ declare namespace Step {
      * The HTML text of the button
      */
     text?: string | (() => string);
+
+    customRole?: string;
+
   }
 
   interface StepOptionsButtonEvent {
