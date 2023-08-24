@@ -9,7 +9,11 @@
     $: nextButton = buttons.find(btn => {return btn.type === "next"});
     $: finishButton = buttons.find(btn => {return btn.customRole === "finish"});
 
-    $: buttons.forEach(btn => {console.log(`Classes: ${btn.classes}, Type: ${btn.type}, Custom Role: ${btn.customRole}`)});
+    $: footerButtons = [backButton, nextButton, finishButton]
+
+    $: addtionalButtons = buttons.filter(btn => {return !footerButtons.includes(btn)});
+    $: console.log(`ADDITONAL BUTTONS: ${addtionalButtons.map(btn => {return btn.text})}`);
+    
 
     let tour = step.getTour();
     let allSteps = tour.steps;
@@ -24,19 +28,24 @@
 
 <style global>
 
+    :root {
+        --arrow-btn-min-width: 40px; 
+    }
+
     .shepherd-footer {
         display: flex;
         justify-content: center;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
 
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
 
 
-        padding: 0 0.75rem 0.75rem;
+        padding: 0;
+        overflow: hidden;
 
     }
 
@@ -63,12 +72,14 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
+        background-color: white;
+        border-top: 1px solid #f1f1f1 ;
+        padding: 0.5rem 1rem;
+        overflow: hidden;
     }
 
-
-
     .arrow-button {
-        min-width: 40px;
+        min-width: var(--arrow-btn-min-width);
         aspect-ratio: 1/1;
         display: flex;
         justify-content: center;
@@ -79,6 +90,13 @@
         background: #eeeeee;
         color: #0000002b;
     }
+
+    .spacer {
+        min-width: var(--arrow-btn-min-width);
+        aspect-ratio: 1/1;
+    }
+
+
 
 </style>
 
@@ -96,6 +114,13 @@
     {/if}
 
     {#if progressBarEnabled}
+
+        <div class="additional-buttons">
+            {#each addtionalButtons as btn}
+                <ShepherdButton config={btn} step={step}/>
+            {/each}
+        </div>
+
         <div class="footer-arrows-container">
 
             {#if backButton}
@@ -105,7 +130,7 @@
                 />
             {:else}
                 <!-- spacer to center progress bar using justify-content: space-between -->
-                <span></span>
+                <span class="spacer"></span>
             {/if}
                 
             <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
@@ -123,7 +148,7 @@
                 />
             {:else}
                 <!-- spacer to center progress bar using justify-content: space-between -->
-                <span></span>
+                <span class="spacer"></span>
             {/if}
 
 
