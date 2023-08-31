@@ -27,7 +27,7 @@
     background: rgb(50, 136, 230);
     border: 0;
     border-radius: 3px;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 1);
     cursor: pointer;
     margin-right: 0.5rem;
     padding: 0.5rem 1.5rem;
@@ -36,7 +36,7 @@
 
   .shepherd-button:not(:disabled):hover {
     background: rgb(25, 111, 204);
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 1);
   }
 
   .shepherd-button.shepherd-button-secondary {
@@ -46,7 +46,7 @@
 
   .shepherd-button.shepherd-button-secondary:not(:disabled):hover {
     background: rgb(214, 217, 219);
-    color: rgba(0, 0, 0, 0.75);
+    color: rgba(0, 0, 0, 1);
   }
 
   .shepherd-button:disabled {

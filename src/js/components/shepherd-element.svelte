@@ -115,87 +115,97 @@
 </script>
 
 <style global>
-  .shepherd-element {
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    opacity: 0;
-    outline: none;
-    transition: opacity 0.3s, visibility 0.3s;
-    visibility: hidden;
-    width: 100%;
-    z-index: 9999;
-  }
+    .shepherd-element {
+        background: #fff;
+        /* border-radius: 5px; */
 
-  .shepherd-large-container {
-    max-width: 500px;
-    max-height: 650px;
-  }
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        opacity: 0;
+        outline: none;
+        transition: opacity 0.3s, visibility 0.3s;
+        visibility: hidden;
+        width: 100%;
+        z-index: 9999;
+    }
 
-  .shepherd-enabled.shepherd-element {
-    opacity: 1;
-    visibility: visible;
-  }
+    .shepherd-large-container {
+        max-width: 500px;
+        max-height: 650px;
+    }
 
-  .shepherd-element[data-popper-reference-hidden]:not(.shepherd-centered) {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-  }
+    .shepherd-enabled.shepherd-element {
+        opacity: 1;
+        visibility: visible;
+    }
 
-  .shepherd-element, .shepherd-element *,
-  .shepherd-element *:after,
-  .shepherd-element *:before {
-    box-sizing: border-box;
-  }
+    .shepherd-element[data-popper-reference-hidden]:not(.shepherd-centered) {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+    }
 
-  .shepherd-arrow,
-  .shepherd-arrow::before {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    z-index: -1;
-  }
+    .shepherd-element, .shepherd-element *,
+    .shepherd-element *:after,
+    .shepherd-element *:before {
+        box-sizing: border-box;
+    }
 
-  .shepherd-arrow:before {
-    content: '';
-    transform: rotate(45deg);
-    background: #fff  ;
-  }
+    .shepherd-arrow,
+    .shepherd-arrow::before {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        z-index: -1;
+    }
 
-  .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
-    bottom: -8px;
-  }
+    .shepherd-arrow:before {
+        content: '';
+        transform: rotate(45deg);
+        background: #fff  ;
+    }
 
-  .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow {
-    top: -8px;
-  }
+    .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
+        bottom: -8px;
+    }
 
-  .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow {
-    right: -8px;
-  }
+    .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow {
+        top: -8px;
+    }
 
-  .shepherd-element[data-popper-placement^='right'] > .shepherd-arrow {
-    left: -8px;
-  }
+    .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow {
+        right: -8px;
+    }
 
-  .shepherd-element.shepherd-centered > .shepherd-arrow {
-    opacity: 0;
-  }
+    .shepherd-element[data-popper-placement^='right'] > .shepherd-arrow {
+        left: -8px;
+    }
+
+    .shepherd-element.shepherd-centered > .shepherd-arrow {
+        opacity: 0;
+    }
 
 
   /**
   * Arrow on top of tooltip centered horizontally, with title color
   */
-  .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
-    background-color: #eeeeee;
-  }
+    .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
+        background-color: #eeeeee;
+    }
 
-  .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
-  .shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
-    pointer-events: none;
-  }
+    .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
+    .shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
+        pointer-events: none;
+    }
+
+    .material-symbols-outlined {
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 200,
+            'GRAD' 0,
+            'opsz' 24
+    }
+
 </style>
 
 

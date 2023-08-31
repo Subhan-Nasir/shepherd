@@ -25,7 +25,17 @@
         width: 2rem;
         aspect-ratio: 1/1;
         border-radius: 50%;
+
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24 !important;
+
     }
+
+
+
 
     .shepherd-cancel-icon:hover {
         background: #808080;
@@ -39,20 +49,6 @@
         /* color: rgba(0, 0, 0, 0.75); */
         color: white;
     }
-
-
-    .material-symbols-outlined {
-        font-variation-settings:
-            'FILL' 1,
-            'wght' 700,
-            'GRAD' 200,
-            'opsz' 48
-
-
-    }
-
-
-
 
 
 </style>

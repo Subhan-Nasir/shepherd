@@ -15,21 +15,21 @@
 
 <style global>
   .shepherd-title {
-    color: rgba(0, 0, 0, 0.75);
+    color: #1a7f95;
     display: flex;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-family: sans-serif;
     font-weight: bold;
     flex: 1 0 auto;
     margin: 0;
     padding: 0;
-
+    place-content: center;
   }
 </style>
 
-<h3
-  bind:this={element}
-  id="{labelId}"
-  class="shepherd-title"
->
+    <h3
+        bind:this={element}
+        id="{labelId}"
+        class="shepherd-title"
+    >
 </h3>

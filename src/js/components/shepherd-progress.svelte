@@ -13,6 +13,8 @@
 
     :root {
         --progress-width: 150px;
+        --progress-height: 1.5rem;
+        --progress-border-radius: calc(var(--progress-height)*0.5);
     }
 
 
@@ -25,9 +27,9 @@
         font-family: sans-serif;
         font-weight: bold;
         font-size: 0.875rem;
-        background-color: lightgrey;
-        border-radius: 0.375rem;
+        background-color: #DDEEF3;
         overflow: hidden;
+        border-radius: var(--progress-border-radius)
 
     }
     .shepherd-progress .shepherd-progress-text {
@@ -45,13 +47,14 @@
         height: 100%;
         overflow: hidden;
         width: var(--width, 0%);
-        background-color: blueviolet;
+        background-color: #3E95BB;
         /*   border-radius: 999px; */
         /*   box-shadow: 0 0 0 1px white; */
         overflow: hidden;
         position: relative;
 
         transition: width 300ms ease-in;
+        border-radius: var(--progress-border-radius);
     }
     .shepherd-progress .shepherd-progress-bar .shepherd-progress-text {
         color: white;
