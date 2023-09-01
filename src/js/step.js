@@ -107,6 +107,8 @@ export class Step extends Evented {
    *   }
    * }
    * ```
+   * 
+   * @param {string} options.image (optional) image settings, needs url, width height
    * @return {Step} The newly created Step instance
    */
   constructor(tour, options = {}) {

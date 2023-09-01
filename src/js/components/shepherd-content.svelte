@@ -8,19 +8,13 @@
     
     export let descriptionId, labelId, step;
 
-    let imgWidth = 475;
-    let imgHeight = imgWidth * (9/16);
+    let image = step.options.image;
 
-    getRandomPicUrl() {
-        return `https://source.unsplash.com/random/sig=${getRandomNumber()}/?space`
+    if (image) {
+        console.log("STEP OPTIONS IMAGE:");
+        console.log("URL: " + image.url);
+        console.log(`SIZE: ${image.width}x${image.height}`);
     }
-
-    getRandomNumber(max = 50){
-        return (Math.floor(Math.random() * max));
-    };
-
-
-    let imgURL = getRandomPicUrl();
 
 </script>
 
@@ -50,12 +44,17 @@
         />
     {/if}
 
-    <ShepherdImage 
-        url={imgURL}
-        height={imgHeight}
-        width={imgWidth}
-        alt="random"
-    />
+    {#if !isUndefined(image)}
+
+        <ShepherdImage 
+            url={image.url}
+            height={image.height}
+            width={image.width}
+            alt="random photo"
+        />
+
+    {/if}
+
 
     {#if Array.isArray(step.options.buttons) && step.options.buttons.length}
         <ShepherdFooter

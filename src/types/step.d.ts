@@ -234,6 +234,8 @@ declare namespace Step {
      * ```
      */
     when?: StepOptionsWhen;
+
+    image?: StepOptionsImage;
   }
 
   type PopperPlacement = 'top'|'top-start'|'top-end'|'bottom'|'bottom-start'|'bottom-end'|'right'|'right-start'|'right-end'|'left'|'left-start'|'left-end';
@@ -304,6 +306,15 @@ declare namespace Step {
   interface StepOptionsWhen {
     [key: string]: ((this: Step) => void);
   }
+
+  interface StepOptionsImage {
+    url: string;
+    position?:string;
+    width: number;
+    height: number;
+
+  }
+
 }
 
 export default Step;

@@ -60,9 +60,14 @@
         bottom: 0;
         left: 0;
         transform: translateX(-100%);
-        background: linear-gradient(90deg, rgba(255,255,255,0) 30%, rgb(255 255 255) 50%, rgba(255,255,255,0) 70%);
+        background: linear-gradient(
+            90deg,
+            hsla(0,0%,100%,0) 25%,
+            hsl(0, 0%, 100%) 50%,
+            hsla(0,0%,100%,0) 75%);
         animation: shimmer 2s infinite;
         content: '';
+        z-index: -1;
     }
 
     @keyframes shimmer {
@@ -72,33 +77,43 @@
     }
 
 
+    .image-wrapper {
+        height: var(--height);
+        aspect-ratio: var(--aspect-ratio);
+    }
+
     .image-container {
         max-width: 100%;
-        max-height: 100%;
+        height: auto;
+        text-align: center;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .image-container > img {
+    .img-fluid, .image-wrapper{
         border-radius: 0;
+        max-height: 250px;
+        object-fit: scale-down;
+        z-index: 20;
     }
 
 </style>
 
     <div class='image-container'>
-        <img 
-            class="img-fluid"
-            class:skeleton={!imageLoaded }
-            height={height}
-            width={width}
-            src={url}
-            alt={alt}
-            bind:this={imageElement}
-        >
-        <!-- <div class="skeleton-box img-fluid" style="height: 200px; width: 200px;" bind:this={imageElement}>
-        </div> -->
 
+        <div class="image-wrapper" class:skeleton-box={!imageLoaded} style="--height:{height}px; --aspect-ratio: {width}/{height};">
+
+            <img 
+                class="img-fluid"
+                height="{height}px"
+                width="{width}px"
+                src={url}
+                alt={alt}
+                bind:this={imageElement}
+            >
+            
+        </div>
     
     </div>
 
