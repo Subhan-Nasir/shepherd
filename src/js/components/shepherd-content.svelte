@@ -5,15 +5,23 @@
     import ShepherdText from './shepherd-text.svelte';
     import { isUndefined } from '../utils/type-check.js';
     import ShepherdImage from './shepherd-image.svelte';
+    import ShepherdVideo from './shepherd-video.svelte';
     
     export let descriptionId, labelId, step;
 
     let image = step.options.image;
+    let video = step.options.video;
 
     if (image) {
         console.log("STEP OPTIONS IMAGE:");
         console.log("URL: " + image.url);
         console.log(`SIZE: ${image.width}x${image.height}`);
+    }
+
+    if (video) {
+        console.log("STEP OPTIONS VIDEO");
+        console.log(video)
+        console.log(video.url);
     }
 
 </script>
@@ -54,6 +62,14 @@
         />
 
     {/if}
+
+    {#if !isUndefined(video)}
+
+        <ShepherdVideo url={video.url} width={video.width}, height={video.height}/>
+
+    {/if}
+
+
 
 
     {#if Array.isArray(step.options.buttons) && step.options.buttons.length}

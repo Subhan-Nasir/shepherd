@@ -315,6 +315,12 @@ declare namespace Step {
 
   }
 
+  interface StepOptionsVideo {
+    url: string,
+    width: number;
+    height: number;
+  }
+
 }
 
 export default Step;
