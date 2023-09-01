@@ -28,7 +28,7 @@
 
     .shepherd-has-title .shepherd-content .shepherd-header {
         /* background: #eeeeee; */
-        background: #00ede457;
+        background: var(--header-bg);
         padding: 1em;
     }
 </style>

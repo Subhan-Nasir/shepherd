@@ -115,6 +115,13 @@
 </script>
 
 <style global>
+
+    :root{
+        --header-bg: #c8fffd;
+        --pointer-bg: var(--header-bg);
+    }
+
+
     .shepherd-element {
         background: #fff;
         /* border-radius: 5px; */
@@ -190,7 +197,7 @@
   * Arrow on top of tooltip centered horizontally, with title color
   */
     .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
-        background-color: #eeeeee;
+        background-color: var(--pointer-bg);
     }
 
     .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
