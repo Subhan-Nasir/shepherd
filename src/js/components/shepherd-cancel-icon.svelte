@@ -20,7 +20,7 @@
         font-weight: normal;
         margin: 0;
         padding: 0;
-        transition: all 0.5s ease;
+        transition: all 350ms ease-in-out;
 
         width: 2rem;
         aspect-ratio: 1/1;
