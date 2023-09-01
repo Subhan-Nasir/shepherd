@@ -12,7 +12,7 @@
 
     onMount(()=>{
         imageElement.onload = () => {
-            imageLoaded = false;
+            imageLoaded = true;
         }
     })
 
