@@ -156,7 +156,7 @@
             </div>
         {/if}
 
-        {#if navButtons && navButtons.length > 0}
+        {#if navButtons && navButtons.length > 1}
             <div class="footer-arrows-container">
                 {#each navButtons as config}
                     <ShepherdButton
@@ -166,6 +166,34 @@
                 {/each}
             </div>
         {/if}
+
+        {#if navButtons && navButtons.length === 1}
+            
+            {#if backButton}
+
+                <div class="footer-arrows-container">
+                        <ShepherdButton
+                            config={backButton}
+                            {step}
+                        />
+
+                        <span class="spacer"></span>
+                </div>
+
+            {:else}
+                <div class="footer-arrows-container">
+                    <span class="spacer"></span>
+
+                    <ShepherdButton
+                        config={navButtons[0]}
+                        {step}
+                    />
+                </div>
+            {/if}
+                
+        
+        {/if}
+
     {/if}
 
 

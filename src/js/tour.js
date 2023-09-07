@@ -404,6 +404,16 @@ export class Tour extends Evented {
 
         this.id = `${tourName}--${uuid()}`;
     }
+
+    getName() {
+        return this.options.tourName;
+    }
+
+    getID() {
+        return this.id;
+    }
+
+
 }
 
 export { Shepherd };

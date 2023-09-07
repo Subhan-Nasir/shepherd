@@ -95,6 +95,9 @@ declare class Tour extends Evented {
    * An array of Step instances
    */
   steps: Array<Step>;
+
+  getName(): string;
+  getID(): string;
 }
 
 declare namespace Tour {
