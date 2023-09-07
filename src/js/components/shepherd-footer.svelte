@@ -1,7 +1,8 @@
 <script>
     import ShepherdProgress from './shepherd-progress.svelte';
+    import ShepherdProgressDots from './shepherd-progress-dots.svelte';
     import ShepherdButton from './shepherd-button.svelte';
-    import { add_iframe_resize_listener } from 'svelte/internal';
+    
 
     export let step;
     
@@ -28,9 +29,12 @@
     let allSteps = tour.steps;
     let progressBarEnabled = tour.options.enableProgressBar;
 
+    let numSteps = allSteps.length;
+    let currentStepIndex = allSteps.indexOf(step);
+    let previousStepIndex = tour.previousStepIndex
 
-    let previousPercentage = `${Math.round(100*(tour.previousStepIndex+1)/allSteps.length)}%`
-    let newPercentage = `${Math.round(100*(allSteps.indexOf(step) + 1)/allSteps.length)}%`
+    let previousPercentage = `${Math.round(100*(previousStepIndex+1)/numSteps)}%`
+    let newPercentage = `${Math.round(100*(currentStepIndex + 1)/numSteps)}%`
 
 
 </script>
@@ -217,8 +221,12 @@
                 <!-- spacer to center progress bar using justify-content: space-between -->
                 <span class="spacer"></span>
             {/if}
-                
-            <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
+            
+            {#if numSteps >= 3}
+                <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
+            {:else}
+                <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
+            {/if}
                 
             {#if nextButton}
                 <ShepherdButton

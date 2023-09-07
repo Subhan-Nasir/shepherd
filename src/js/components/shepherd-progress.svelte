@@ -1,4 +1,5 @@
 <script>
+
     import ShepherdButton from './shepherd-button.svelte';
 
     export let previousPercentage;
@@ -60,6 +61,7 @@
         color: white;
     }
 
+
 </style>
 
 <div class="shepherd-progress">
@@ -68,4 +70,6 @@
         <div class="shepherd-progress-text">{percentage}</div>
     </div>
 </div>
+
+
 
