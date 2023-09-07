@@ -1,18 +1,28 @@
 <script>
     import ShepherdProgress from './shepherd-progress.svelte';
     import ShepherdButton from './shepherd-button.svelte';
+    import { add_iframe_resize_listener } from 'svelte/internal';
 
     export let step;
-    $: buttons = step.options.buttons
-
+    
+    $: buttons = step.options.buttons;
+    
     $: backButton = buttons.find(btn => {return (btn.type === "back" || btn.customRole === "back")});
     $: nextButton = buttons.find(btn => {return (btn.type === "next" || btn.customRole === "next")});
     $: finishButton = buttons.find(btn => {return btn.customRole === "finish"});
 
-    $: footerButtons = [backButton, nextButton, finishButton]
+    // Filter to remove falsy values
+    $: navButtons = [backButton, nextButton, finishButton].filter(btn => !!btn);
 
-    $: addtionalButtons = buttons.filter(btn => {return !footerButtons.includes(btn)});
-    
+
+    $: addtionalButtons = buttons.filter(btn => {return !navButtons.includes(btn)})
+
+    $: console.log("NAV BUTTONS: " + navButtons );
+    $: console.log("ADDITIONAL BUTTONS: " + addtionalButtons);
+
+
+
+
 
     let tour = step.getTour();
     let allSteps = tour.steps;
@@ -37,7 +47,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.5rem;
 
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
@@ -63,6 +73,7 @@
         /* flex-grow: 1; */
         width: 100%;
         justify-content: center;
+        padding-bottom: 1rem;
     }
 
 
@@ -122,22 +133,42 @@
         aspect-ratio: 1/1;
     }
 
+    .space-apart {
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
 
 
 </style>
 
 <footer class="shepherd-footer">
 
-    {#if buttons && !progressBarEnabled}
-        <div class="shepherd-footer-buttons">
-        {#each buttons as config}
-          <ShepherdButton
-            {config}
-            {step}
-          />
-        {/each}
-        </div>
+    {#if !progressBarEnabled }
+        {#if addtionalButtons && addtionalButtons.length > 0}
+            <div class="shepherd-footer-buttons">
+                {#each addtionalButtons as config}
+                    <ShepherdButton
+                        {config}
+                        {step}
+                    />
+                {/each}
+            </div>
+        {/if}
+
+        {#if navButtons && navButtons.length > 0}
+            <div class="footer-arrows-container">
+                {#each navButtons as config}
+                    <ShepherdButton
+                        {config}
+                        {step}
+                    />
+                {/each}
+            </div>
+        {/if}
     {/if}
+
+
 
     {#if progressBarEnabled}
 

@@ -25,6 +25,7 @@
     font-size: 1rem;
     line-height: 1.3em;
     padding: 1rem 2rem;
+    padding-bottom: 0;
   }
 
   .shepherd-text p {
