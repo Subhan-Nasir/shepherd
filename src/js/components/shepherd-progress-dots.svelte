@@ -12,7 +12,7 @@
     let fillBg = "#4095bf";
 
     let defaultSize = "0.5rem";
-    let bigSize = "1.5rem";
+    let bigSize = "1.1rem";
 
     let fillBgAnimated = defaultBg;
     let bigSizeAnimated = defaultSize;

@@ -22,12 +22,10 @@
     $: console.log("ADDITIONAL BUTTONS: " + addtionalButtons);
 
 
-
-
-
     let tour = step.getTour();
     let allSteps = tour.steps;
     let progressBarEnabled = tour.options.enableProgressBar;
+    let progressBarStyle = tour.options.progressBarStyle;
 
     let numSteps = allSteps.length;
     let currentStepIndex = allSteps.indexOf(step);
@@ -221,13 +219,13 @@
                 <!-- spacer to center progress bar using justify-content: space-between -->
                 <span class="spacer"></span>
             {/if}
-            
-            {#if numSteps >= 3}
+
+            {#if progressBarStyle === "fill"}
                 <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
-            {:else}
+            {:else if progressBarStyle == "dots"}
                 <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
             {/if}
-                
+
             {#if nextButton}
                 <ShepherdButton
                 config={nextButton}

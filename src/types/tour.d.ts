@@ -164,6 +164,7 @@ declare namespace Tour {
     useModalOverlay?: string | boolean;
 
     enableProgressBar?: boolean;
+    progressBarStyle?: string;
   }
 }
 

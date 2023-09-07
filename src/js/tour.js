@@ -41,6 +41,7 @@ export class Tour extends Evented {
      * can remain interactive
      * 
      * @param {boolean} options.enableProgressBar Enables progress bar
+     * @param {string} options.progressBarStyle Enables progress bar
      * 
      * @returns {Tour}
      */
