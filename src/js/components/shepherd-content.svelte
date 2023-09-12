@@ -12,18 +12,6 @@
     let image = step.options.image;
     let video = step.options.video;
 
-    if (image) {
-        console.log("STEP OPTIONS IMAGE:");
-        console.log("URL: " + image.url);
-        console.log(`SIZE: ${image.width}x${image.height}`);
-    }
-
-    if (video) {
-        console.log("STEP OPTIONS VIDEO");
-        console.log(video)
-        console.log(video.url);
-    }
-
 </script>
 
 <style global>

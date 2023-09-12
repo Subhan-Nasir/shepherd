@@ -18,10 +18,6 @@
 
     $: addtionalButtons = buttons.filter(btn => {return !navButtons.includes(btn)})
 
-    $: console.log("NAV BUTTONS: " + navButtons );
-    $: console.log("ADDITIONAL BUTTONS: " + addtionalButtons);
-
-
     let tour = step.getTour();
     let allSteps = tour.steps;
     let progressBarEnabled = tour.options.enableProgressBar;
