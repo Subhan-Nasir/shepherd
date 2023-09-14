@@ -12,11 +12,17 @@
     $: nextButton = buttons.find(btn => {return (btn.type === "next" || btn.customRole === "next")});
     $: finishButton = buttons.find(btn => {return btn.customRole === "finish"});
 
-    // Filter to remove falsy values
+
     $: navButtons = [backButton, nextButton, finishButton].filter(btn => !!btn);
+    $: addtionalButtons = buttons.filter(btn => {return !navButtons.includes(btn)});
+
+    $: leftButton = backButton ?? null;
+    $: rightButton = nextButton ?? finishButton ?? null;
+    $: footerPresent = (progressBarEnabled || leftButton || rightButton) ? true : false;
+    $: console.log("FOOTER PRESENT: " + footerPresent);
 
 
-    $: addtionalButtons = buttons.filter(btn => {return !navButtons.includes(btn)})
+
 
     let tour = step.getTour();
     let allSteps = tour.steps;
@@ -25,10 +31,24 @@
 
     let numSteps = allSteps.length;
     let currentStepIndex = allSteps.indexOf(step);
-    let previousStepIndex = tour.previousStepIndex
+    let previousStepIndex = tour.previousStepIndex;
 
-    let previousPercentage = `${Math.round(100*(previousStepIndex+1)/numSteps)}%`
-    let newPercentage = `${Math.round(100*(currentStepIndex + 1)/numSteps)}%`
+    let previousPercentage = `${Math.round(100*(previousStepIndex+1)/numSteps)}%`;
+    let newPercentage = `${Math.round(100*(currentStepIndex + 1)/numSteps)}%`;
+
+    function isIconButton(btn){
+
+        if(btn && btn.classes.includes("icon-button")){
+            return true;
+        }
+
+        return false;
+    }
+
+    function isTextButton(btn){
+        return btn.classes.includes("text-button");
+    }
+
 
 
 </script>
@@ -36,7 +56,11 @@
 <style global>
 
     :root {
-        --arrow-btn-min-width: 40px; 
+        --icon-btn-min-width: 40px; 
+        --icon-btn-max-width: 60px;
+
+       --text-btn-min-width: 100px;
+       --text-btn-max-width: 200px;
     }
 
     .shepherd-footer {
@@ -45,7 +69,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0;
 
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
@@ -64,31 +88,37 @@
         align-items: center;
     } */
 
-    .shepherd-footer-buttons {
+    .additional-buttons-container {
         display: flex;
         flex-direction: row;
         gap: 0.25rem;
         /* flex-grow: 1; */
         width: 100%;
         justify-content: center;
-        padding-bottom: 1rem;
+        /* padding-bottom: var(--padding-bottom); */
     }
 
 
-    .footer-arrows-container {
+    .footer-buttons-container {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
+
+
+        align-items: center;
+        justify-items: center;
+
+
         width: 100%;
         background-color: transparent;
-        /* border-top: 1px solid #f1f1f1 ; */
         padding: 0.5rem 1rem;
         overflow: hidden;
     }
 
-    .arrow-button, .finish-button {
-        min-width: var(--arrow-btn-min-width);
+    .icon-button {
+        /* min-width: var(--arrow-btn-min-width); */
+        max-width: 50px;
         aspect-ratio: 1/1;
         display: flex;
         justify-content: center;
@@ -96,19 +126,17 @@
         padding: 0;
         margin: 0;
         font-size: 2.25rem !important;
-        /* background: #eeeeee; */
-        /* color: #0000002b; */
         background-color: hsl(200 50% 50%);
         color: white;
-        /* border-radius: 50%; */
+
     }
 
-    .arrow-button:hover,
-    .arrow-button:focus{
+    .icon-button:hover,
+    .icon-button:focus{
         background-color: hsl(211.29deg 100% 50%) !important;
     }
     
-    .arrow-button:active {
+    .icon-button:active {
         background-color: hsl(217, 100%, 37%) !important;
     }
 
@@ -126,14 +154,42 @@
         background-color: #485d3a !important;
     }
 
-    .spacer {
-        min-width: var(--arrow-btn-min-width);
+    .spacer-small {
+        min-width: var(--icon-btn-min-width);
+        max-width: var(--icon-btn-max-width);
         aspect-ratio: 1/1;
+        border: 2px solid red;
+    }
+
+    .spacer-large {
+        min-width: var(--text-btn-min-width);
+        max-width: var(--text-btn-max-width);
+        height: 1rem;
     }
 
     .space-apart {
         justify-content: space-between;
         margin-bottom: 2rem;
+    }
+
+    .left-button-container, .right-button-container {
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+
+    .left-button-container{
+        justify-content: flex-start;
+    }
+
+    .right-button-container{
+        justify-content: flex-end;
+    }
+
+    .progress-bar-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
 
@@ -142,106 +198,53 @@
 
 <footer class="shepherd-footer">
 
-    {#if !progressBarEnabled }
-        {#if addtionalButtons && addtionalButtons.length > 0}
-            <div class="shepherd-footer-buttons">
-                {#each addtionalButtons as config}
-                    <ShepherdButton
-                        {config}
-                        {step}
-                    />
-                {/each}
-            </div>
-        {/if}
-
-        {#if navButtons && navButtons.length > 1}
-            <div class="footer-arrows-container">
-                {#each navButtons as config}
-                    <ShepherdButton
-                        {config}
-                        {step}
-                    />
-                {/each}
-            </div>
-        {/if}
-
-        {#if navButtons && navButtons.length === 1}
-            
-            {#if backButton}
-
-                <div class="footer-arrows-container">
-                        <ShepherdButton
-                            config={backButton}
-                            {step}
-                        />
-
-                        <span class="spacer"></span>
-                </div>
-
-            {:else}
-                <div class="footer-arrows-container">
-                    <span class="spacer"></span>
-
-                    <ShepherdButton
-                        config={navButtons[0]}
-                        {step}
-                    />
-                </div>
-            {/if}
-                
-        
-        {/if}
-
-    {/if}
 
 
-
-    {#if progressBarEnabled}
-
-        <div class="additional-buttons">
-            {#each addtionalButtons as btn}
-                <ShepherdButton config={btn} step={step}/>
+    {#if addtionalButtons && addtionalButtons.length > 0}
+        <div class="additional-buttons-container" style="padding-bottom: {footerPresent ? "0rem": "1rem"}">
+            {#each addtionalButtons as config}
+                <ShepherdButton
+                    {config}
+                    {step}
+                />
             {/each}
         </div>
+    {/if}
 
-        <div class="footer-arrows-container">
+    {#if footerPresent}
 
-            {#if backButton}
-                <ShepherdButton
-                    config={backButton}
-                    step={step}
-                />
-            {:else}
-                <!-- spacer to center progress bar using justify-content: space-between -->
-                <span class="spacer"></span>
-            {/if}
+        <div class="footer-buttons-container">
 
-            {#if progressBarStyle === "fill"}
-                <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
-            {:else if progressBarStyle == "dots"}
-                <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
-            {/if}
+            <div class="left-button-container">
+                {#if leftButton}
+                    <ShepherdButton config={leftButton} step={step}/>
+                {/if}
 
-            {#if nextButton}
-                <ShepherdButton
-                config={nextButton}
-                step={step}
-                />
-            {:else if finishButton}
+            </div>
 
-                <ShepherdButton
-                    config={finishButton}
-                    step={step}
-                />
-            {:else}
-                <!-- spacer to center progress bar using justify-content: space-between -->
-                <span class="spacer"></span>
-            {/if}
+            <div class="progress-bar-container">
+                {#if progressBarStyle === "fill"}
+                    <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
+                {:else if progressBarStyle == "dots"}
+                    <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
+                {/if}
+            </div>
+
+            <div class="right-button-container">
+                {#if rightButton}
+                    <ShepherdButton config={rightButton} step={step}/>
+                {/if}
+
+            </div>
+
+
 
 
         </div>
-
-
+        
     {/if}
+
+
+    
 
 </footer>

@@ -47,7 +47,7 @@ export function setupTooltip(step) {
     }
 
     setPosition(target, step, floatingUIOptions, shouldCenter);
-  });
+  }, {animationFrame: true, layoutShift: true, });
 
   step.target = attachToOptions.element;
 
@@ -90,7 +90,7 @@ export function destroyTooltip(step) {
  */
 function setPosition(target, step, floatingUIOptions, shouldCenter) {
   return (
-    computePosition(target, step.el, floatingUIOptions)
+    computePosition(target, step.el,floatingUIOptions)
       .then(floatingUIposition(step, shouldCenter))
       // Wait before forcing focus.
       .then(
