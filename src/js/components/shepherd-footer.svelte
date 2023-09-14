@@ -223,10 +223,12 @@
             </div>
 
             <div class="progress-bar-container">
-                {#if progressBarStyle === "fill"}
-                    <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
-                {:else if progressBarStyle == "dots"}
-                    <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
+                {#if progressBarEnabled}
+                    {#if progressBarStyle === "fill"}
+                        <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
+                    {:else if progressBarStyle == "dots"}
+                        <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
+                    {/if}
                 {/if}
             </div>
 
