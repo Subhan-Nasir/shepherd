@@ -42,6 +42,7 @@ export class Tour extends Evented {
      * 
      * @param {boolean} options.enableProgressBar Enables progress bar
      * @param {string} options.progressBarStyle Enables progress bar
+     * @param {boolean} options.cancelOnOutsideClick Cancels the tour when you click outside tooltip
      * 
      * @returns {Tour}
      */
@@ -349,7 +350,7 @@ export class Tour extends Evented {
 
         Shepherd.activeTour = this;
     }
-
+ 
     /**
      * _setupModal create the modal container and instance
      * @private
@@ -362,6 +363,14 @@ export class Tour extends Evented {
                 styles: this.styles
             }
         });
+
+        if(this.options.cancelOnOutsideClick){
+
+                    document.getElementById("tourModalOverlay")?.addEventListener("click", ()=>{
+                        this.cancel();
+                    })
+
+        }
     }
 
     /**

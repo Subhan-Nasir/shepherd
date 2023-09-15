@@ -163,6 +163,11 @@ declare namespace Tour {
      */
     useModalOverlay?: string | boolean;
 
+    /**
+     * Will cancel the tour when you click outside the tooltip.
+     */
+    cancelOnOutsideClick: boolean;
+
     enableProgressBar?: boolean;
     progressBarStyle?: string;
   }
