@@ -19,7 +19,6 @@
     $: leftButton = backButton ?? null;
     $: rightButton = nextButton ?? finishButton ?? null;
     $: footerPresent = (progressBarEnabled || leftButton || rightButton) ? true : false;
-    $: console.log("FOOTER PRESENT: " + footerPresent);
 
 
 
