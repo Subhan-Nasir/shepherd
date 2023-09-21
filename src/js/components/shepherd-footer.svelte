@@ -6,21 +6,27 @@
 
     export let step;
     
-    $: buttons = step.options.buttons;
+    // $: buttons = step.options.buttons;
     
-    $: backButton = buttons.find(btn => {return (btn.type === "back" || btn.customRole === "back")});
-    $: nextButton = buttons.find(btn => {return (btn.type === "next" || btn.customRole === "next")});
-    $: finishButton = buttons.find(btn => {return btn.customRole === "finish"});
+    // $: backButton = buttons.find(btn => {return (btn.type === "back" || btn.position === "left")});
+    // $: nextButton = buttons.find(btn => {return (btn.type === "next" || btn.position === "right")});
+    // $: finishButton = buttons.find(btn => {return btn.position === "addtional"});
 
 
-    $: navButtons = [backButton, nextButton, finishButton].filter(btn => !!btn);
-    $: addtionalButtons = buttons.filter(btn => {return !navButtons.includes(btn)});
+    // $: navButtons = [backButton, nextButton, finishButton].filter(btn => !!btn);
+    // $: addtionalButtons = buttons.filter(btn => {return !navButtons.includes(btn)});
 
-    $: leftButton = backButton ?? null;
-    $: rightButton = nextButton ?? finishButton ?? null;
+    // $: leftButton = backButton ?? null;
+    // $: rightButton = nextButton ?? finishButton ?? null;
+    // $: footerPresent = (progressBarEnabled || leftButton || rightButton) ? true : false;
+
+
+    $: buttons = step.options.buttons;
+
+    $: leftButton = buttons.find(btn => {return (btn.type === "back" || btn.position === "left")}) ?? null;
+    $: rightButton = buttons.find(btn => {return (btn.type === "next" || btn.position === "right")}) ?? null;
     $: footerPresent = (progressBarEnabled || leftButton || rightButton) ? true : false;
-
-
+    $: addtionalButtons = buttons.filter(btn => {return btn !== leftButton && btn !== rightButton}).filter(btn => !!btn);
 
 
     let tour = step.getTour();

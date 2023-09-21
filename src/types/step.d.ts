@@ -292,7 +292,7 @@ declare namespace Step {
      */
     text?: string | (() => string);
 
-    customRole?: string;
+    position?: string;
 
   }
 
