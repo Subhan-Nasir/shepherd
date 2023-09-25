@@ -4,13 +4,13 @@
 </script>
 
 <style global>
-    .video-container {
+    .shepherd-video-container {
         padding: 0 2rem;
     }
 
 </style>
 
-<div class="video-container">
+<div class="shepherd-video-container">
     
     <div class="embed-responsive embed-responsive-16by9">
         <iframe
