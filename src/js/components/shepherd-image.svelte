@@ -30,11 +30,11 @@
     } */
 
 
-    .skeleton {
-        animation: skeleton-loading 1s linear infinite alternate;
+    .shepherd-skeleton {
+        animation: shepherd-skeleton-loading 1s linear infinite alternate;
     }
 
-    @keyframes skeleton-loading {
+    @keyframes shepherd-skeleton-loading {
         0% {
             background-color: hsl(200, 20%, 70%);
         }
@@ -46,14 +46,14 @@
     }
 
 
-    .skeleton-box {
+    .shepherd-skeleton-box {
         display: inline-block;
         height: 1em;
         position: relative;
         overflow: hidden;
         background-color: #DDDBDD;
     }
-    .skeleton-box::after {
+    .shepherd-skeleton-box::after {
         position: absolute;
         top: 0;
         right: 0;
@@ -65,24 +65,24 @@
             hsla(0,0%,100%,0) 25%,
             hsl(0, 0%, 100%) 50%,
             hsla(0,0%,100%,0) 75%);
-        animation: shimmer 2s infinite;
+        animation: shepherd-shimmer 2s infinite;
         content: '';
         z-index: -1;
     }
 
-    @keyframes shimmer {
+    @keyframes shepherd-shimmer {
         100% {
             transform: translateX(100%);
         }
     }
 
 
-    .image-wrapper {
+    .shepherd-image-wrapper {
         height: var(--height);
         aspect-ratio: var(--aspect-ratio);
     }
 
-    .image-container {
+    .shepherd-image-container {
         max-width: 100%;
         height: auto;
         text-align: center;
@@ -91,7 +91,7 @@
         align-items: center;
     }
 
-    .img-fluid, .image-wrapper{
+    .shepherd-img, .shepherd-image-wrapper{
         border-radius: 0;
         max-height: 250px;
         object-fit: scale-down;
@@ -100,12 +100,12 @@
 
 </style>
 
-    <div class='image-container'>
+    <div class='shepherd-image-container'>
 
-        <div class="image-wrapper" class:skeleton-box={!imageLoaded} style="--height:{height}px; --aspect-ratio: {width}/{height};">
+        <div class="shepherd-image-wrapper" class:shepherd-skeleton-box={!imageLoaded} style="--height:{height}px; --aspect-ratio: {width}/{height};">
 
             <img 
-                class="img-fluid"
+                class="img-fluid shepherd-img"
                 height="{height}px"
                 width="{width}px"
                 src={url}
