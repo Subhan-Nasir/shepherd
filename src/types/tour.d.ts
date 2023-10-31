@@ -164,6 +164,11 @@ declare namespace Tour {
     useModalOverlay?: string | boolean;
 
     /**
+     * Controls opacity of overlay
+     */
+
+    overlayOpacity?: number
+    /**
      * Will cancel the tour when you click outside the tooltip.
      */
     cancelOnOutsideClick: boolean;

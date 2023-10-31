@@ -41,8 +41,9 @@ export class Tour extends Evented {
      * can remain interactive
      * 
      * @param {boolean} options.enableProgressBar Enables progress bar
-     * @param {string} options.progressBarStyle Enables progress bar
+     * @param {string} options.progressBarStyle Dots or Fill
      * @param {boolean} options.cancelOnOutsideClick Cancels the tour when you click outside tooltip
+     * @param {number} options.overlayOpacity Opacity of the background overlay
      * 
      * @returns {Tour}
      */
@@ -264,6 +265,7 @@ export class Tour extends Evented {
         const step = isString(key) ? this.getById(key) : this.steps[key];
 
         if (step) {
+            console.log("SHOWING STEP: " + step.id);
             this._updateStateBeforeShow();
 
             const shouldSkipStep =
@@ -360,15 +362,16 @@ export class Tour extends Evented {
             target: this.options.modalContainer || document.body,
             props: {
                 classPrefix: this.classPrefix,
-                styles: this.styles
-            }
+                styles: this.styles,
+                opacity: this.options.overlayOpacity
+            },
         });
 
         if(this.options.cancelOnOutsideClick){
 
-                    document.getElementById("tourModalOverlay")?.addEventListener("click", ()=>{
-                        this.cancel();
-                    })
+            document.getElementById("tourModalOverlay")?.addEventListener("click", ()=>{
+                this.cancel();
+            })
 
         }
     }

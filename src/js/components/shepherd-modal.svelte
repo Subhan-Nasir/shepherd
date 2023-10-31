@@ -2,7 +2,7 @@
     import { uuid } from '../utils/general.js';
     import { makeOverlayPath } from '../utils/overlay-path.js';
 
-    export let element, openingProperties;
+    export let element, openingProperties, opacity;
     const guid = uuid();
     let modalIsVisible = false;
     let rafId = undefined;
@@ -209,6 +209,7 @@
     class={`${
     modalIsVisible ? 'shepherd-modal-is-visible' : ''
     } shepherd-modal-overlay-container`}
+    style="--opacity: {opacity}"
     on:touchmove={_preventModalOverlayTouch}
 >
   <path d={pathDefinition} />
@@ -230,7 +231,7 @@
 
     .shepherd-modal-overlay-container.shepherd-modal-is-visible {
         height: 100vh;
-        opacity: 0.5;
+        opacity: var(--opacity, 0.5);
         transition: all 0.3s ease-out, height 0s 0s, opacity 0.3s 0s;
         transform: translateZ(0);
     }
