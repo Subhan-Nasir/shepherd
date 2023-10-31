@@ -1,6 +1,6 @@
 <script>
     export let url;
-
+    export let classes;
 </script>
 
 <style global>
@@ -12,7 +12,7 @@
 
 <div class="shepherd-video-container">
     
-    <div class="embed-responsive embed-responsive-16by9">
+    <div class="embed-responsive embed-responsive-16by9 {classes}">
         <iframe
             class="embed-responsive-item"
             width="500"

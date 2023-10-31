@@ -314,6 +314,7 @@ declare namespace Step {
     position?:string;
     width: number;
     height: number;
+    classes?: string;
 
   }
 
@@ -321,6 +322,7 @@ declare namespace Step {
     url: string,
     width: number;
     height: number;
+    classes: string;
   }
 
 }

@@ -5,6 +5,7 @@
     export let height;
     export let width;
     export let alt;
+    export let classes;
 
 
 
@@ -99,6 +100,14 @@
         z-index: 20;
     }
 
+    .rounded-corners {
+        border-radius: 0.25rem;
+    }
+
+    .grey-border {
+        border: 1px solid lightgrey;
+    }
+
 </style>
 
     <div class='shepherd-image-container'>
@@ -106,7 +115,7 @@
         <div class="shepherd-image-wrapper" class:shepherd-skeleton-box={!imageLoaded} style="--height:{height}px; --aspect-ratio: {width}/{height};">
 
             <img 
-                class="img-fluid shepherd-img"
+                class="img-fluid shepherd-img {classes}"
                 height="{height}px"
                 width="{width}px"
                 src={url}

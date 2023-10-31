@@ -47,13 +47,14 @@
             height={image.height}
             width={image.width}
             alt="random photo"
+            classes={image.classes}
         />
 
     {/if}
 
     {#if !isUndefined(video)}
 
-        <ShepherdVideo url={video.url} width={video.width}, height={video.height}/>
+        <ShepherdVideo url={video.url} width={video.width}, height={video.height} classes={video.classes}/>
 
     {/if}
 
