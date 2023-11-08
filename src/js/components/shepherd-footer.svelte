@@ -103,6 +103,15 @@
         /* padding-bottom: var(--padding-bottom); */
     }
 
+    .additional-buttons-container > * {
+        margin: 0;
+    }
+
+    .additional-buttons-container.align-right {
+        justify-content: end;
+        padding: 0 1rem;
+    }
+
 
     .footer-buttons-container {
         display: flex;
@@ -198,6 +207,22 @@
     }
 
 
+    .btn.text-arrow-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Arrow icon */
+    .text-arrow-button > span {
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 700,
+            'GRAD' 200,
+            'opsz' 48
+    }
+
+
 
 </style>
 
@@ -206,7 +231,7 @@
 
 
     {#if addtionalButtons && addtionalButtons.length > 0}
-        <div class="additional-buttons-container" style="padding-bottom: {footerPresent ? "0rem": "1rem"}">
+        <div class="additional-buttons-container" class:align-right={!footerPresent}  style="padding-bottom: {footerPresent ? "0rem": "1rem"}">
             {#each addtionalButtons as config}
                 <ShepherdButton
                     {config}
