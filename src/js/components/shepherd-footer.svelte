@@ -100,7 +100,7 @@
         /* flex-grow: 1; */
         width: 100%;
         justify-content: center;
-        /* padding-bottom: var(--padding-bottom); */
+        padding-bottom: var(--padding-bottom);
     }
 
     .additional-buttons-container > * {
@@ -109,9 +109,8 @@
 
     .additional-buttons-container.align-right {
         justify-content: end;
-        padding: 0 1rem;
+        padding: 1rem;
     }
-
 
     .footer-buttons-container {
         display: flex;
@@ -231,7 +230,7 @@
 
 
     {#if addtionalButtons && addtionalButtons.length > 0}
-        <div class="additional-buttons-container" class:align-right={!footerPresent}  style="padding-bottom: {footerPresent ? "0rem": "1rem"}">
+        <div class="additional-buttons-container" class:align-right={!footerPresent}>
             {#each addtionalButtons as config}
                 <ShepherdButton
                     {config}
