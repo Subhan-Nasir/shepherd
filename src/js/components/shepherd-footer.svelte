@@ -139,7 +139,7 @@
         padding: 0;
         margin: 0;
         font-size: 2.25rem !important;
-        background-color: hsl(200 50% 50%);
+        background-color: var(--cyan);
         color: white;
 
     }
@@ -151,11 +151,12 @@
     
     .icon-button:active {
         background-color: hsl(217, 100%, 37%) !important;
+        box-shadow: 0 0 0 4px var(--active-shadow-col);
     }
 
 
     .finish-button{
-        background-color: #67e213;
+        background-color: var(--tour-success);
     }
 
     .finish-button:hover,
@@ -165,6 +166,7 @@
 
     .finish-button:active{
         background-color: #485d3a !important;
+        box-shadow: 0 0 0 4px var(--active-shadow-col);
     }
 
     .spacer-small {

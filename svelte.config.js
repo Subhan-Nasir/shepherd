@@ -1,12 +1,7 @@
-// // vscode configuration
-// const sveltePreprocess = require('svelte-preprocess');
+// vscode configuration
+const sveltePreprocess = require('svelte-preprocess');
 
-// module.exports = {
-//   preprocess: sveltePreprocess()
-// };
-
-import sveltePreprocess from 'svelte-preprocess';
-
-export default {
-    preprocess: sveltePreprocess()
+module.exports = {
+  preprocess: sveltePreprocess()
 };
+

@@ -1,126 +1,187 @@
 <script>
-  import { onMount, afterUpdate } from 'svelte';
-  import ShepherdContent from './shepherd-content.svelte';
-  import { isUndefined, isString } from '../utils/type-check.js';
+    import { onMount, afterUpdate } from 'svelte';
+    import ShepherdContent from './shepherd-content.svelte';
+    import { isUndefined, isString } from '../utils/type-check.js';
 
-  const KEY_TAB = 9;
-  const KEY_ESC = 27;
-  const LEFT_ARROW = 37;
-  const RIGHT_ARROW = 39;
+    const KEY_TAB = 9;
+    const KEY_ESC = 27;
+    const LEFT_ARROW = 37;
+    const RIGHT_ARROW = 39;
 
-  export let classPrefix, element, descriptionId, firstFocusableElement,
-    focusableElements, labelId, lastFocusableElement, step, dataStepId;
+  export let classPrefix,
+        element,
+        descriptionId,
+        firstFocusableElement,
+        focusableElements,
+        labelId,
+        lastFocusableElement,
+        step,
+        dataStepId;
 
   let hasCancelIcon, hasTitle, classes;
 
   $: {
-    hasCancelIcon = step.options && step.options.cancelIcon && step.options.cancelIcon.enabled;
+    hasCancelIcon =
+        step.options &&
+        step.options.cancelIcon &&
+        step.options.cancelIcon.enabled;
+
     hasTitle = step.options && step.options.title;
   }
 
   export const getElement = () => element;
 
   onMount(() => {
-    // Get all elements that are focusable
-    dataStepId = { [`data-${classPrefix}shepherd-step-id`]: step.id };
-    focusableElements = element.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]');
-    firstFocusableElement = focusableElements[0];
-    lastFocusableElement = focusableElements[focusableElements.length - 1];
+        // Get all elements that are focusable
+        dataStepId = { [`data-${classPrefix}shepherd-step-id`]: step.id };
+        focusableElements = element.querySelectorAll(
+        'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
+        );
+        firstFocusableElement = focusableElements[0];
+        lastFocusableElement = focusableElements[focusableElements.length - 1];
   });
 
   afterUpdate(() => {
-    if(classes !== step.options.classes) {
-      updateDynamicClasses();
-    }
+        if (classes !== step.options.classes) {
+            updateDynamicClasses();
+        }
   });
 
-  function updateDynamicClasses() {
-      removeClasses(classes);
-      classes = step.options.classes;
-      addClasses(classes);
-  }
-
-  function removeClasses(classes) {
-    if (isString(classes)) {
-      const oldClasses = getClassesArray(classes);
-      if (oldClasses.length) {
-        element.classList.remove(...oldClasses);
-      }
+    function updateDynamicClasses() {
+        removeClasses(classes);
+        classes = step.options.classes;
+        addClasses(classes);
     }
-  }
 
-  function addClasses(classes) {
-    if(isString(classes)) {
-      const newClasses = getClassesArray(classes);
-      if (newClasses.length) {
-        element.classList.add(...newClasses);
-      }
+    function removeClasses(classes) {
+        if (isString(classes)) {
+            const oldClasses = getClassesArray(classes);
+            if (oldClasses.length) {
+                element.classList.remove(...oldClasses);
+            }
+        }
     }
-  }
 
-  function getClassesArray(classes) {
-     return classes.split(' ').filter(className => !!className.length);
-  }
-
-  /**
-   * Setup keydown events to allow closing the modal with ESC
-   *
-   * Borrowed from this great post! https://bitsofco.de/accessible-modal-dialog/
-   *
-   * @private
-   */
-  const handleKeyDown = (e) => {
-    const { tour } = step;
-    switch (e.keyCode) {
-      case KEY_TAB:
-        if (focusableElements.length === 0) {
-          e.preventDefault();
-          break;
+    function addClasses(classes) {
+        if (isString(classes)) {
+            const newClasses = getClassesArray(classes);
+            if (newClasses.length) {
+                element.classList.add(...newClasses);
+            }
         }
-        // Backward tab
-        if (e.shiftKey) {
-          if (document.activeElement === firstFocusableElement || document.activeElement.classList.contains('shepherd-element')) {
-            e.preventDefault();
-            lastFocusableElement.focus();
-          }
-        } else {
-          if (document.activeElement === lastFocusableElement) {
-            e.preventDefault();
-            firstFocusableElement.focus();
-          }
-        }
-        break;
-      case KEY_ESC:
-        if (tour.options.exitOnEsc) {
-          e.stopPropagation();
-          step.cancel();
-        }
-        break;
-      case LEFT_ARROW:
-        if (tour.options.keyboardNavigation) {
-          e.stopPropagation();
-          tour.back();
-        }
-        break;
-      case RIGHT_ARROW:
-        if (tour.options.keyboardNavigation) {
-          e.stopPropagation();
-          tour.next();
-        }
-        break;
-      default:
-        break;
     }
-  };
+
+    function getClassesArray(classes) {
+        return classes.split(' ').filter((className) => !!className.length);
+    }
+
+    /**
+     * Setup keydown events to allow closing the modal with ESC
+     *
+     * Borrowed from this great post! https://bitsofco.de/accessible-modal-dialog/
+     *
+     * @private
+     */
+    const handleKeyDown = (e) => {
+        const { tour } = step;
+        switch (e.keyCode) {
+        case KEY_TAB:
+            if (focusableElements.length === 0) {
+                e.preventDefault();
+                break;
+            }
+            // Backward tab
+            if (e.shiftKey) {
+                if (
+                    document.activeElement === firstFocusableElement ||
+                    document.activeElement.classList.contains('shepherd-element')
+                ) {
+                    e.preventDefault();
+                    lastFocusableElement.focus();
+                }
+            } else {
+                if (document.activeElement === lastFocusableElement) {
+                    e.preventDefault();
+                    firstFocusableElement.focus();
+                }
+            }
+            break;
+        case KEY_ESC:
+            if (tour.options.exitOnEsc) {
+                e.stopPropagation();
+                step.cancel();
+            }
+            break;
+        case LEFT_ARROW:
+            if (tour.options.keyboardNavigation) {
+                e.stopPropagation();
+                tour.back();
+            }
+            break;
+        case RIGHT_ARROW:
+            if (tour.options.keyboardNavigation) {
+                e.stopPropagation();
+                tour.next();
+            }
+            break;
+        default:
+            break;
+        }
+    };
 </script>
 
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
+
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+<div
+    aria-describedby={!isUndefined(step.options.text) ? descriptionId : null}
+    aria-labelledby={step.options.title ? labelId : null}
+    bind:this={element}
+    class:shepherd-has-cancel-icon={hasCancelIcon}
+    class:shepherd-has-title={hasTitle}
+    class:shepherd-element={true}
+    {...dataStepId}
+    on:keydown={handleKeyDown}
+    role="dialog"
+    tabindex="0"
+>
+    {#if step.options.arrow && step.options.attachTo && step.options.attachTo.element && step.options.attachTo.on}
+        <div class="shepherd-arrow" data-popper-arrow></div>
+    {/if}
+    <ShepherdContent {descriptionId} {labelId} {step} />
+</div>
+
 <style global>
+    :root {
 
-    :root{
-        --header-bg: #c8fffd;
-        --pointer-bg: var(--header-bg);
+        --primary : #007bff;
+
+        --grey-darkest     : #212529;
+        --grey-dark        : #60637C;
+        --grey-mid-darkest : #6C757D;
+        --grey-mid-dark    : #888888;
+        --grey-mid         : #C7C9D6;
+        --grey-mid-light   : #D6D6D6;
+        --grey-light       : #EFEFF4;
+        --grey-lightest    : #F8F9FA;
+
+        --blue-darkest  : #1F3674;
+        --blue-dark     : #004BB2;
+        --blue-mid      : var(--primary);
+        --blue-light    : #6EA9FF;
+        --blue-lightest : #F1F6FF;
+
+        --tour-success : #34c759;
+        --cyan         : #17a2b8;
+
+        --header-bg  : var(--blue-lightest);
+        --pointer-bg : var(--header-bg);
+
+        --active-shadow-col : #6161624d;
     }
-
 
     .shepherd-element {
         background: #fff;
@@ -130,7 +191,9 @@
         max-width: 400px;
         opacity: 0;
         outline: none;
-        transition: opacity 0.3s, visibility 0.3s;
+        transition:
+            opacity 0.3s,
+            visibility 0.3s;
         visibility: hidden;
         width: 100%;
         z-index: 9999;
@@ -152,7 +215,8 @@
         visibility: hidden;
     }
 
-    .shepherd-element, .shepherd-element *,
+    .shepherd-element,
+    .shepherd-element *,
     .shepherd-element *:after,
     .shepherd-element *:before {
         box-sizing: border-box;
@@ -169,7 +233,7 @@
     .shepherd-arrow:before {
         content: '';
         transform: rotate(45deg);
-        background: #fff  ;
+        background: #fff;
     }
 
     .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
@@ -192,10 +256,9 @@
         opacity: 0;
     }
 
-
-  /**
-  * Arrow on top of tooltip centered horizontally, with title color
-  */
+    /**
+    * Arrow on top of tooltip centered horizontally, with title color
+    */
     .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
         background-color: var(--pointer-bg);
     }
@@ -207,36 +270,9 @@
 
     .material-symbols-outlined {
         font-variation-settings:
-            'FILL' 0,
-            'wght' 200,
-            'GRAD' 0,
-            'opsz' 24
+        'FILL' 0,
+        'wght' 200,
+        'GRAD' 0,
+        'opsz' 24;
     }
-
 </style>
-
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<div
-    aria-describedby={!isUndefined(step.options.text) ? descriptionId : null}
-    aria-labelledby={step.options.title ? labelId : null}
-    bind:this={element}
-    class:shepherd-has-cancel-icon="{hasCancelIcon}"
-    class:shepherd-has-title="{hasTitle}"
-    class:shepherd-element="{true}"
-    {...dataStepId}
-    on:keydown={handleKeyDown}
-    role="dialog"
-    tabindex="0"
->
-    {#if step.options.arrow && step.options.attachTo && step.options.attachTo.element && step.options.attachTo.on}
-        <div class="shepherd-arrow" data-popper-arrow></div>
-    {/if}
-    <ShepherdContent
-        {descriptionId}
-        {labelId}
-        {step}
-    />
-</div>
