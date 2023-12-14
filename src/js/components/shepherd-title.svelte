@@ -15,7 +15,7 @@
 
 <style global>
   .shepherd-title {
-    color: var(--grey-dark);
+    color: var(--tour-grey-dark);
     display: flex;
     font-size: 1.5rem;
     font-family: sans-serif;

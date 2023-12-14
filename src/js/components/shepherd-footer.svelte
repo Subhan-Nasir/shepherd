@@ -139,7 +139,7 @@
         padding: 0;
         margin: 0;
         font-size: 2.25rem !important;
-        background-color: var(--cyan);
+        background-color: var(--tour-cyan);
         color: white;
 
     }
@@ -151,7 +151,7 @@
     
     .icon-button:active {
         background-color: hsl(217, 100%, 37%) !important;
-        box-shadow: 0 0 0 4px var(--active-shadow-col);
+        box-shadow: 0 0 0 4px var(--tour-btn-active-shadow-col);
     }
 
 

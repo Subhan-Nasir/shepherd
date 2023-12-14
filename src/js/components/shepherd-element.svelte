@@ -157,30 +157,30 @@
 <style global>
     :root {
 
-        --primary : #007bff;
+        --tour-primary : #007bff;
 
-        --grey-darkest     : #212529;
-        --grey-dark        : #60637C;
-        --grey-mid-darkest : #6C757D;
-        --grey-mid-dark    : #888888;
-        --grey-mid         : #C7C9D6;
-        --grey-mid-light   : #D6D6D6;
-        --grey-light       : #EFEFF4;
-        --grey-lightest    : #F8F9FA;
+        --tour-grey-darkest     : #212529;
+        --tour-grey-dark        : #60637C;
+        --tour-grey-mid-darkest : #6C757D;
+        --tour-grey-mid-dark    : #888888;
+        --tour-grey-mid         : #C7C9D6;
+        --tour-grey-mid-light   : #D6D6D6;
+        --tour-grey-light       : #EFEFF4;
+        --tour-grey-lightest    : #F8F9FA;
 
-        --blue-darkest  : #1F3674;
-        --blue-dark     : #004BB2;
-        --blue-mid      : var(--primary);
-        --blue-light    : #6EA9FF;
-        --blue-lightest : #F1F6FF;
+        --tour-blue-darkest  : #1F3674;
+        --tour-blue-dark     : #004BB2;
+        --tour-blue-mid      : var(--tour-primary);
+        --tour-blue-light    : #6EA9FF;
+        --tour-blue-lightest : #F1F6FF;
 
         --tour-success : #34c759;
-        --cyan         : #17a2b8;
+        --tour-cyan    : #17a2b8;
 
-        --header-bg  : var(--blue-lightest);
-        --pointer-bg : var(--header-bg);
+        --tour-header-bg  : var(--tour-blue-lightest);
+        --tour-pointer-bg : var(--tour-header-bg);
 
-        --active-shadow-col : #6161624d;
+        --tour-btn-active-shadow-col : #6161624d;
     }
 
     .shepherd-element {
@@ -260,7 +260,7 @@
     * Arrow on top of tooltip centered horizontally, with title color
     */
     .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
-        background-color: var(--pointer-bg);
+        background-color: var(--tour-pointer-bg);
     }
 
     .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
