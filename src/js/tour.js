@@ -41,7 +41,7 @@ export class Tour extends Evented {
      * can remain interactive
      * 
      * @param {boolean} options.enableProgressBar Enables progress bar
-     * @param {string} options.progressBarStyle Dots or Fill
+     * @param {string} options.progressBarStyle Dots, Fill or Text
      * @param {boolean} options.cancelOnOutsideClick Cancels the tour when you click outside tooltip
      * @param {number} options.overlayOpacity Opacity of the background overlay
      * 

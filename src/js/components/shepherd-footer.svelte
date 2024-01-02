@@ -2,6 +2,7 @@
     import ShepherdProgress from './shepherd-progress.svelte';
     import ShepherdProgressDots from './shepherd-progress-dots.svelte';
     import ShepherdButton from './shepherd-button.svelte';
+    import ShepherdProgressText from './shepherd-progress-text.svelte';
     
 
     export let step;
@@ -259,6 +260,8 @@
                         <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
                     {:else if progressBarStyle == "dots"}
                         <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
+                    {:else if progressBarStyle == "text"}
+                        <ShepherdProgressText currentStep={currentStepIndex + 1} numSteps={numSteps}></ShepherdProgressText>
                     {/if}
                 {/if}
             </div>
