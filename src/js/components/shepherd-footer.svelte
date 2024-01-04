@@ -82,10 +82,12 @@
 
 
         padding: 0;
-        margin-top: 1rem;
+
         overflow: hidden;
 
     }
+
+
 
     /* .shepherd-footer .shepherd-button:last-child {
         margin-right: 0;
@@ -110,7 +112,8 @@
 
     .additional-buttons-container.align-right {
         justify-content: end;
-        padding: 1rem;
+        padding: 0.5rem;
+        padding-bottom: 0.75rem;
     }
 
     .footer-buttons-container {
@@ -128,6 +131,11 @@
         background-color: transparent;
         padding: 0.5rem 1rem;
         overflow: hidden;
+    }
+
+
+    .grey-border-top {
+        border-top: 1px solid var(--tour-grey-lightest);
     }
 
     .icon-button {
@@ -155,9 +163,32 @@
         box-shadow: 0 0 0 4px var(--tour-btn-active-shadow-col);
     }
 
+    /* .text-button {
+        background-color: transparent;
+        color: var(--tour-primary);
+
+        outline: none;
+        padding: 0.625rem 0.75rem;
+        margin: 0;
+
+
+        text-align: center;
+        font-family:  Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+
+    .text-button:hover, .text-button:active {
+        background-color: transparent !important;
+        color: var(--tour-blue-darkest) !important;
+    } */
+
+
 
     .finish-button{
         background-color: var(--tour-success);
+        color: white;
     }
 
     .finish-button:hover,
@@ -209,10 +240,12 @@
     }
 
 
-    .btn.text-arrow-button {
+    .text-arrow-button {
         display: flex;
         justify-content: center;
         align-items: center;
+
+
     }
 
     /* Arrow icon */
@@ -233,7 +266,7 @@
 
 
     {#if addtionalButtons && addtionalButtons.length > 0}
-        <div class="additional-buttons-container" class:align-right={!footerPresent}>
+        <div class="additional-buttons-container" class:align-right={!footerPresent} class:grey-border-top={!footerPresent}>
             {#each addtionalButtons as config}
                 <ShepherdButton
                     {config}
@@ -245,7 +278,7 @@
 
     {#if footerPresent}
 
-        <div class="footer-buttons-container">
+        <div class="footer-buttons-container grey-border-top">
 
             <div class="left-button-container">
                 {#if leftButton}
@@ -257,11 +290,22 @@
             <div class="progress-bar-container">
                 {#if progressBarEnabled}
                     {#if progressBarStyle === "fill"}
-                        <ShepherdProgress previousPercentage={previousPercentage} newPercentage={newPercentage}/>
+                        <ShepherdProgress 
+                            currentStep={currentStepIndex + 1}
+                            previousStep={previousStepIndex + 1}
+                            numSteps={numSteps}
+                        />
                     {:else if progressBarStyle == "dots"}
-                        <ShepherdProgressDots currentStepIndex={currentStepIndex} numSteps={numSteps} previousStepIndex={previousStepIndex}/>
+                        <ShepherdProgressDots 
+                            currentStepIndex={currentStepIndex}
+                            previousStepIndex={previousStepIndex}
+                            numSteps={numSteps}
+                        />
                     {:else if progressBarStyle == "text"}
-                        <ShepherdProgressText currentStep={currentStepIndex + 1} numSteps={numSteps}></ShepherdProgressText>
+                        <ShepherdProgressText
+                            currentStep={currentStepIndex + 1}
+                            numSteps={numSteps}
+                        />
                     {/if}
                 {/if}
             </div>

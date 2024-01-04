@@ -24,19 +24,29 @@
 
 <style global>
     .shepherd-button {
-        background: rgb(50, 136, 230);
+
+        background-color: transparent;
+        color: var(--tour-primary);
+
         border: 0;
-        border-radius: 3px;
-        color: rgba(255, 255, 255, 1);
-        cursor: pointer;
+        border-radius: 0.25rem;
+        outline: none;
+        padding: 0.625rem 0.75rem;
+        margin: 0;
         margin-right: 0.5rem;
-        padding: 0.5rem 1.5rem;
+
+
+        text-align: center;
+        font-family:  Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 500;
+        font-size: 0.875rem;
+
         transition: all 0.5s ease;
+
     }
 
     .shepherd-button:not(:disabled):hover {
-        background: rgb(25, 111, 204);
-        color: rgba(255, 255, 255, 1);
+        color: var(--tour-blue-darkest);
     }
 
     .shepherd-button.shepherd-button-secondary {

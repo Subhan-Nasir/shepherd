@@ -21,10 +21,11 @@
 
 <style global>
   .shepherd-text {
-    color: rgb(102 102 102);
-    font-size: 1rem;
-    line-height: 1.3em;
-    padding: 1rem 2rem;
+    color: var(--tour-grey-darkest);
+    font-size: 0.875rem;
+    font-weight: 400;
+    /* line-height: 1.3em; */
+    padding: 0.75rem 1.5rem;
     padding-bottom: 0;
   }
 

@@ -2,8 +2,16 @@
 
     import ShepherdButton from './shepherd-button.svelte';
 
-    export let previousPercentage;
-    export let newPercentage;
+    // export let previousPercentage;
+    // export let newPercentage;
+
+    export let previousStep;
+    export let currentStep;
+    export let numSteps;
+
+    let previousPercentage = `${Math.round(100*previousStep/numSteps)}%`;
+    let newPercentage = `${Math.round(100*currentStep/numSteps)}%`;
+
 
     let percentage = previousPercentage;
     setTimeout(()=>{percentage = newPercentage}, 5);
@@ -65,9 +73,10 @@
 </style>
 
 <div class="shepherd-progress">
-    <div class="shepherd-progress-text">{percentage}</div>
+    <div class="shepherd-progress-text">{currentStep} of {numSteps}</div>
     <div class="shepherd-progress-bar" style="--width:{percentage};">
-        <div class="shepherd-progress-text">{percentage}</div>
+        <!-- <div class="shepherd-progress-text">{percentage}</div> -->
+        <div class="shepherd-progress-text">{currentStep} of {numSteps}</div>
     </div>
 </div>
 

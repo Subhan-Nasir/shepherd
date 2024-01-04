@@ -6,6 +6,7 @@
 <style global>
     .shepherd-video-container {
         padding: 0 2rem;
+        margin-bottom: 1rem;
     }
 
 </style>

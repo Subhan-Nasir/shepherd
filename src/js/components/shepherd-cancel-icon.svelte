@@ -12,6 +12,7 @@
 
 <style global>
     .shepherd-cancel-icon {
+        grid-area: close-btn;
         background: transparent;
         border: none;
         color: rgba(128, 128, 128, 0.75);
@@ -25,6 +26,8 @@
         width: 2rem;
         aspect-ratio: 1/1;
         border-radius: 50%;
+        
+        place-self: start center;
 
         font-variation-settings:
             'FILL' 0,

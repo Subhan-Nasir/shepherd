@@ -177,10 +177,31 @@
         --tour-success : #34c759;
         --tour-cyan    : #17a2b8;
 
+        /* --tour-header-bg  : var(--tour-blue-lightest); */
         --tour-header-bg  : var(--tour-blue-lightest);
-        --tour-pointer-bg : var(--tour-header-bg);
+        --tour-pointer-bg : #fcfcfc;
 
         --tour-btn-active-shadow-col : #6161624d;
+
+        --tour-font: "Helvetica Neue",
+            Helvetica, Arial, "Lucida Grande", sans-serif;
+    }
+
+    .shepherd-element,
+    .shepherd-header,
+    .shepherd-footer,
+    .shepherd-content {
+        border-radius: 0.75rem;
+    }
+
+    .shepherd-header {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .shepherd-footer {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
     }
 
     .shepherd-element {
@@ -233,7 +254,8 @@
     .shepherd-arrow:before {
         content: '';
         transform: rotate(45deg);
-        background: #fff;
+        background-color: var(--tour-pointer-bg);
+        --arrow-border-radius: 0.25rem;
     }
 
     .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
@@ -259,8 +281,17 @@
     /**
     * Arrow on top of tooltip centered horizontally, with title color
     */
+    .shepherd-element.shepherd-has-title[data-popper-placement^='top'] > .shepherd-arrow::before {
+        border-bottom-right-radius: var(--arrow-border-radius);
+    }
     .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
-        background-color: var(--tour-pointer-bg);
+        border-top-left-radius: var(--arrow-border-radius);
+    }
+    .shepherd-element.shepherd-has-title[data-popper-placement^='left'] > .shepherd-arrow::before {
+        border-top-right-radius: var(--arrow-border-radius);
+    }
+    .shepherd-element.shepherd-has-title[data-popper-placement^='right'] > .shepherd-arrow::before {
+        border-bottom-left-radius: var(--arrow-border-radius);
     }
 
     .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,

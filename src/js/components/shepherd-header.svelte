@@ -22,33 +22,31 @@
         padding: 0.75rem 0.75rem 0;
 
         display: grid;
-        grid-template-columns: 2rem 1fr 2rem;
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "title close-btn";
 
     }
 
     .shepherd-has-title .shepherd-content .shepherd-header {
         /* background: #eeeeee; */
         background: var(--tour-header-bg);
-        padding: 1em;
+        padding: 0.75rem 1.5rem;
     }
 </style>
 
 <header class="shepherd-header">
 
-    <!-- spacer to centre title using 3 column grid-->
-    <span></span>
-
     {#if title}
-      <ShepherdTitle
-        {labelId}
-        {title}
-      />
+        <ShepherdTitle
+            {labelId}
+            {title}
+        />
     {/if}
 
     {#if cancelIcon && cancelIcon.enabled}
-      <ShepherdCancelIcon
-        {cancelIcon}
-        {step}
-      />
+        <ShepherdCancelIcon
+            {cancelIcon}
+            {step}
+        />
     {/if}
 </header>
