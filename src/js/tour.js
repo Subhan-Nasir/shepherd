@@ -13,6 +13,8 @@ import ShepherdModal from './components/shepherd-modal.svelte';
 
 const Shepherd = new Evented();
 
+// Comment to check new ownership
+
 /**
  * Class representing the site tour
  * @extends {Evented}
