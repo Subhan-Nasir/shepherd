@@ -172,6 +172,7 @@ declare namespace Tour {
      * Will cancel the tour when you click outside the tooltip.
      */
     cancelOnOutsideClick: boolean;
+    cancelOnMouseLeave: boolean;
 
     enableProgressBar?: boolean;
     progressBarStyle?: string;

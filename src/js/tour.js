@@ -45,6 +45,7 @@ export class Tour extends Evented {
      * @param {boolean} options.enableProgressBar Enables progress bar
      * @param {string} options.progressBarStyle Dots, Fill or Text
      * @param {boolean} options.cancelOnOutsideClick Cancels the tour when you click outside tooltip
+     * @param {boolean} options.cancelOnMouseLeave Cancels the tour when mouse leaves tooltip
      * @param {number} options.overlayOpacity Opacity of the background overlay
      * 
      * @returns {Tour}
@@ -370,11 +371,16 @@ export class Tour extends Evented {
         });
 
         if(this.options.cancelOnOutsideClick){
-
             document.getElementById("tourModalOverlay")?.addEventListener("click", ()=>{
                 this.cancel();
             })
-
+        }
+        if(this.options.cancelOnMouseLeave){
+            console.log("CANCEL ON MOUSE LEAVE TRUE");
+            document.getElementById("tourModalOverlay")?.addEventListener("mouseenter", ()=>{
+                console.log("MOUSE ENTER OVERLAY");
+                this.cancel();
+            })
         }
     }
 
