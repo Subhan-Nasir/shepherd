@@ -178,7 +178,7 @@
         --tour-cyan    : #17a2b8;
 
 
-        --tour-header-bg  : blue;
+        --tour-header-bg  : var(--tour-blue-lightest);
         --tour-pointer-bg : #fcfcfc;
 
         --tour-btn-active-shadow-col : #6161624d;

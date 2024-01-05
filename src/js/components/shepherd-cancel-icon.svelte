@@ -4,10 +4,10 @@
   /**
    * Add a click listener to the cancel link that cancels the tour
    */
-  const handleCancelClick = (e) => {
-    e.preventDefault();
-    step.cancel();
-  };
+    const handleCancelClick = (e) => {
+        e.preventDefault();
+        step.cancel();
+    };
 </script>
 
 <style global>
@@ -37,9 +37,6 @@
 
     }
 
-
-
-
     .shepherd-cancel-icon:hover {
         background: #808080;
     }
@@ -53,15 +50,39 @@
         color: white;
     }
 
+    .shepherd-text-cancel {
+        background-color: transparent;
+        border: none;
+
+
+        color: var(--tour-primary);
+
+        font-family: var(--tour-font);
+        font-size: 0.875rem;
+        font-weight: 400;
+    }
+
 
 </style>
 
-<button
-  aria-label="{cancelIcon.label ? cancelIcon.label : 'Close Tour'}"
-  class="shepherd-cancel-icon material-symbols-outlined"
-  on:click={handleCancelClick}
-  type="button"
+<!-- <button
+    aria-label="{cancelIcon.label ? cancelIcon.label : 'Close Tour'}"
+    class="shepherd-cancel-icon material-symbols-outlined"
+    on:click={handleCancelClick}
+    type="button"
 >
 close
 
+</button> -->
+
+<button
+    aria-label="{cancelIcon.label ? cancelIcon.label : 'Close Tour'}"
+    class="shepherd-text-cancel"
+    on:click={handleCancelClick}
+    type="button"
+>
+    Dismiss
 </button>
+
+
+
