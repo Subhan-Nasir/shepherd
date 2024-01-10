@@ -257,6 +257,10 @@
             'opsz' 48
     }
 
+    .margin-top-1 {
+        margin-top: 1rem;
+    }
+
 
 
 </style>
@@ -266,7 +270,7 @@
 
 
     {#if addtionalButtons && addtionalButtons.length > 0}
-        <div class="additional-buttons-container" class:align-right={!footerPresent} class:grey-border-top={!footerPresent}>
+        <div class="additional-buttons-container margin-top-1" class:align-right={!footerPresent} class:grey-border-top={!footerPresent}>
             {#each addtionalButtons as config}
                 <ShepherdButton
                     {config}
@@ -278,7 +282,7 @@
 
     {#if footerPresent}
 
-        <div class="footer-buttons-container grey-border-top">
+        <div class="footer-buttons-container grey-border-top" class:margin-top-1={!addtionalButtons || addtionalButtons.length === 0}>
 
             <div class="left-button-container">
                 {#if leftButton}

@@ -80,8 +80,9 @@
 
 
     .shepherd-image-wrapper {
-        height: var(--height);
+        height: fit-content;
         aspect-ratio: var(--aspect-ratio);
+        padding: 1rem;
     }
 
     .shepherd-image-container {
@@ -91,14 +92,16 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 1rem;
+        /* margin-bottom: 1rem; */
     }
 
     .shepherd-img, .shepherd-image-wrapper{
         border-radius: 0;
+
         max-height: 250px;
         object-fit: scale-down;
         z-index: 20;
+        max-width: 100%;
     }
 
     .rounded-corners {

@@ -46,7 +46,7 @@
             url={image.url}
             height={image.height}
             width={image.width}
-            alt="random photo"
+            alt="Image/screenshot"
             classes={image.classes}
         />
 
