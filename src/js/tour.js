@@ -376,9 +376,7 @@ export class Tour extends Evented {
             })
         }
         if(this.options.cancelOnMouseLeave){
-            console.log("CANCEL ON MOUSE LEAVE TRUE");
             document.getElementById("tourModalOverlay")?.addEventListener("mouseenter", ()=>{
-                console.log("MOUSE ENTER OVERLAY");
                 this.cancel();
             })
         }
