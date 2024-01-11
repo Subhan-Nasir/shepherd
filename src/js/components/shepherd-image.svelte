@@ -14,7 +14,8 @@
 
     onMount(()=>{
         imageElement.onload = () => {
-            imageLoaded = true;
+            imageLoaded = true
+
         }
     })
 
@@ -82,7 +83,7 @@
     .shepherd-image-wrapper {
         height: fit-content;
         aspect-ratio: var(--aspect-ratio);
-        padding: 1rem;
+        /* padding: 1rem; */
     }
 
     .shepherd-image-container {
@@ -93,6 +94,7 @@
         justify-content: center;
         align-items: center;
         /* margin-bottom: 1rem; */
+        padding: 0.75rem 1.5rem;
     }
 
     .shepherd-img, .shepherd-image-wrapper{
@@ -116,10 +118,14 @@
 
     <div class='shepherd-image-container'>
 
-        <div class="shepherd-image-wrapper" class:shepherd-skeleton-box={!imageLoaded} style="--height:{height}px; --aspect-ratio: {width}/{height};">
+        <div 
+            class="shepherd-image-wrapper"
+            class:shepherd-skeleton-box={!imageLoaded} 
+            style="--width: {width}px; --height:{height}px; --aspect-ratio: {width}/{height};"
+        >
 
             <img 
-                class="img-fluid shepherd-img {classes}"
+                class="img-fluid shepherd-img {classes ?? ''}"
                 height="{height}px"
                 width="{width}px"
                 src={url}
