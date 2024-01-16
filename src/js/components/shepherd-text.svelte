@@ -14,7 +14,7 @@
     if (isHTMLElement(text)) {
       element.appendChild(text);
     } else {
-      element.innerHTML = text;
+      element.innerHTML = text.join(" ");
     }
   });
 </script>
