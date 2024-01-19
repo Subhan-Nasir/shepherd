@@ -97,12 +97,12 @@
                     document.activeElement.classList.contains('shepherd-element')
                 ) {
                     e.preventDefault();
-                    lastFocusableElement.focus();
+                    // lastFocusableElement.focus();
                 }
             } else {
                 if (document.activeElement === lastFocusableElement) {
                     e.preventDefault();
-                    firstFocusableElement.focus();
+                    // firstFocusableElement.focus();
                 }
             }
             break;

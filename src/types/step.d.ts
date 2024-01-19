@@ -108,6 +108,13 @@ declare namespace Step {
     attachTo?: StepOptionsAttachTo;
 
     /**
+    * When enabled, automatically forces focus on target element 300ms after modal opens.
+    */
+    autoFocus?: boolean,
+
+
+
+    /**
      * An action on the page which should advance shepherd to the next step.
      * It should be an object with a string `selector` and an `event` name
      * ```js

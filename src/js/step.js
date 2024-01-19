@@ -27,6 +27,7 @@ export class Step extends Evented {
    * @param {object} options The options for the step
    * @param {boolean} options.arrow Whether to display the arrow for the tooltip or not. Defaults to `true`.
    * @param {object} options.attachTo The element the step should be attached to on the page.
+   * @param {object} options.autoFocus When enabled, automatically forces focus state on target element 300ms after modal opens.
    * An object with properties `element` and `on`.
    *
    * ```js

@@ -101,7 +101,7 @@ function setPosition(target, step, floatingUIOptions, shouldCenter) {
       )
       // Replaces focusAfterRender modifier.
       .then((step) => {
-        if (step && step.el) {
+        if (step && step.el && step.options.autoFocus) {
           step.el.focus({ preventScroll: true });
         }
       })
