@@ -46,6 +46,10 @@
     window.removeEventListener("keydown", handleKeyDown);
   })
 
+  export function removeKeyboardListener(){
+    window.removeEventListener("keydown", handleKeyDown)
+  }
+
 
   afterUpdate(() => {
         if (classes !== step.options.classes) {
