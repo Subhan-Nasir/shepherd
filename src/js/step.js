@@ -171,6 +171,10 @@ export class Step extends Evented {
 
     this._updateStepTargetOnHide();
 
+    if(this.shepherdElementComponent){
+      this.shepherdElementComponent.$destroy();
+    }
+
     this.trigger('destroy');
   }
 
@@ -196,7 +200,13 @@ export class Step extends Evented {
 
     this._updateStepTargetOnHide();
 
+    console.log("SHEPHERD HIDE");
+    if(this.shepherdElementComponent){
+      this.shepherdElementComponent.removeKeyboardListener();
+    }
+
     this.trigger('hide');
+
   }
 
   /**

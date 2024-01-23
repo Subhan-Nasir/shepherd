@@ -1,5 +1,5 @@
 <script>
-    import { onMount, afterUpdate } from 'svelte';
+    import { onMount, afterUpdate, onDestroy } from 'svelte';
     import ShepherdContent from './shepherd-content.svelte';
     import { isUndefined, isString } from '../utils/type-check.js';
 
@@ -39,7 +39,13 @@
         );
         firstFocusableElement = focusableElements[0];
         lastFocusableElement = focusableElements[focusableElements.length - 1];
+        window.addEventListener("keydown", handleKeyDown);
   });
+
+  onDestroy(()=>{
+    window.removeEventListener("keydown", handleKeyDown);
+  })
+
 
   afterUpdate(() => {
         if (classes !== step.options.classes) {
@@ -144,7 +150,6 @@
     class:shepherd-has-title={hasTitle}
     class:shepherd-element={true}
     {...dataStepId}
-    on:keydown={handleKeyDown}
     role="dialog"
     tabindex="0"
 >
