@@ -83,10 +83,6 @@ close
 >
     Dismiss
 
-    {#if step.tour.options.exitOnEsc}
-        <b>(Esc)</b>
-    {/if}
-
 </button>
 
 
