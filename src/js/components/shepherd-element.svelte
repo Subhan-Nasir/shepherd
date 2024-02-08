@@ -235,7 +235,8 @@
     }
 
     .shepherd-enabled.shepherd-element {
-        opacity: 1;
+        /* opacity: 1; */
+        opacity: 0.2;
         visibility: visible;
     }
 

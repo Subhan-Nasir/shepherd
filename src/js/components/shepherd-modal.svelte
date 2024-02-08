@@ -8,7 +8,7 @@
     let rafId = undefined;
     let pathDefinition;
 
-    $: pathDefinition = makeOverlayPath(openingProperties);
+    $: pathDefinition = makeOverlayPath([openingProperties]);
 
     closeModalOpening();
 
