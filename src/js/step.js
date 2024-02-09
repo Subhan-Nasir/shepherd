@@ -26,7 +26,7 @@ export class Step extends Evented {
    * @param {Tour} tour The tour for the step
    * @param {object} options The options for the step
    * @param {boolean} options.arrow Whether to display the arrow for the tooltip or not. Defaults to `true`.
-   * @param {object} options.attachTo The element the step should be attached to on the page.
+   * @param {object[]} options.attachTo The element the step should be attached to on the page.
    * @param {object} options.autoFocus When enabled, automatically forces focus state on target element 300ms after modal opens.
    * An object with properties `element` and `on`.
    *
@@ -127,7 +127,7 @@ export class Step extends Evented {
     /**
      * Resolved attachTo options. Due to lazy evaluation, we only resolve the options during `before-show` phase.
      * Do not use this directly, use the _getResolvedAttachToOptions method instead.
-     * @type {null|{}|{element, to}}
+     * @type {null|[]|{element, to}[]}
      * @private
      */
     this._resolvedAttachTo = null;
@@ -211,7 +211,7 @@ export class Step extends Evented {
 
   /**
    * Resolves attachTo options.
-   * @returns {{}|{element, on}}
+   * @returns {[]|{element, on}[]}
    * @private
    */
   _resolveAttachToOptions() {
@@ -221,7 +221,7 @@ export class Step extends Evented {
 
   /**
    * A selector for resolved attachTo options.
-   * @returns {{}|{element, on}}
+   * @returns {[]|{element, on}[]}
    * @private
    */
   _getResolvedAttachToOptions() {

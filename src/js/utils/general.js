@@ -6,45 +6,84 @@ import { isFunction, isString } from './type-check';
  * @return {string} The prefix ending in `-`
  */
 export function normalizePrefix(prefix) {
-  if (!isString(prefix) || prefix === '') {
-    return '';
-  }
+    if (!isString(prefix) || prefix === '') {
+        return '';
+    }
 
-  return prefix.charAt(prefix.length - 1) !== '-' ? `${prefix}-` : prefix;
+    return prefix.charAt(prefix.length - 1) !== '-' ? `${prefix}-` : prefix;
 }
 
 /**
  * Resolves attachTo options, converting element option value to a qualified HTMLElement.
  * @param {Step} step The step instance
- * @returns {{}|{element, on}}
+ * @returns {[]|{element, on}[]}
  * `element` is a qualified HTML Element
  * `on` is a string position value
  */
 export function parseAttachTo(step) {
-  const options = step.options.attachTo || {};
-  const returnOpts = Object.assign({}, options);
 
-  if (isFunction(returnOpts.element)) {
-    // Bind the callback to step so that it has access to the object, to enable running additional logic
-    returnOpts.element = returnOpts.element.call(step);
-  }
+    const optionsList = step.options.attachTo || [];
+    const returnOptsList = [];
 
-  if (isString(returnOpts.element)) {
-    // Can't override the element in user opts reference because we can't
-    // guarantee that the element will exist in the future.
-    try {
-      returnOpts.element = document.querySelector(returnOpts.element);
-    } catch (e) {
-      // TODO
-    }
-    if (!returnOpts.element) {
-      console.error(
-        `The element for this Shepherd step was not found ${options.element}`
-      );
-    }
-  }
+    optionsList.forEach(options => {
+        let returnOptions = Object.assign({}, options);
 
-  return returnOpts;
+        if(isFunction(returnOptions.element)){
+            returnOptions.element = returnOptions.element.call(step);
+        }
+
+        if(isString(returnOptions.element)){
+            // Can't override the element in user opts reference because we can't
+            // guarantee that the element will exist in the future.
+            try {
+                returnOptions.element = document.querySelector(returnOptions.element);
+            } catch (e) {
+                // TODO
+            }
+            if (!returnOptions.element) {
+                console.error(
+                    `The element for this Shepherd step was not found ${options.element}`
+                );
+            }
+        }
+
+        returnOptsList.push(returnOptions);
+
+    });
+
+
+    return returnOptsList
+
+
+
+
+    // const options = step.options.attachTo || {};
+    // const returnOpts = Object.assign({}, options);
+
+    // if (isFunction(returnOpts.element)) {
+    //     // Bind the callback to step so that it has access to the object, to enable running additional logic
+    //     returnOpts.element = returnOpts.element.call(step);
+    // }
+
+    // if (isString(returnOpts.element)) {
+    //     // Can't override the element in user opts reference because we can't
+    //     // guarantee that the element will exist in the future.
+    //     try {
+    //         returnOpts.element = document.querySelector(returnOpts.element);
+    //     } catch (e) {
+    //         // TODO
+    //     }
+    //     if (!returnOpts.element) {
+    //         console.error(
+    //             `The element for this Shepherd step was not found ${options.element}`
+    //         );
+    //     }
+    // }
+
+    // console.log("PARSE ATTACH TO - RETURN OPTS: ");
+    // console.log(returnOpts);
+
+    // return returnOpts;
 }
 
 /**
@@ -54,14 +93,24 @@ export function parseAttachTo(step) {
  * @returns {boolean}
  */
 export function shouldCenterStep(resolvedAttachToOptions) {
-  if (
-    resolvedAttachToOptions === undefined ||
-    resolvedAttachToOptions === null
-  ) {
-    return true;
-  }
+    if (
+        resolvedAttachToOptions === undefined ||
+        resolvedAttachToOptions === null || 
+        resolvedAttachToOptions.length === 0
+    ) {
+        return true;
+    }
 
-  return !resolvedAttachToOptions.element || !resolvedAttachToOptions.on;
+    let attachableElementExists = resolvedAttachToOptions.some(attachTo => {
+        if(attachTo.element && attachTo.on){
+            return true;
+        }
+
+        return false;
+    })
+
+    // Don't center if tooltip can be attached to an element
+    return !attachableElementExists;
 }
 
 /**
@@ -69,10 +118,10 @@ export function shouldCenterStep(resolvedAttachToOptions) {
  * @return {string}
  */
 export function uuid() {
-  let d = Date.now();
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
+    let d = Date.now();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
 }

@@ -18,7 +18,7 @@
         step,
         dataStepId;
 
-  let hasCancelIcon, hasTitle, classes;
+  let hasCancelIcon, hasTitle, classes, attachingToElement;
 
   $: {
     hasCancelIcon =
@@ -27,7 +27,18 @@
         step.options.cancelIcon.enabled;
 
     hasTitle = step.options && step.options.title;
+
+
+    attachingToElement = step.options.attachTo.some(item => {
+        if(item?.element && item?.on){
+            return true;
+        }
+
+        return false;
+    });
   }
+
+
 
   export const getElement = () => element;
 
@@ -157,7 +168,7 @@
     role="dialog"
     tabindex="0"
 >
-    {#if step.options.arrow && step.options.attachTo && step.options.attachTo.element && step.options.attachTo.on}
+    {#if step.options.arrow && attachingToElement}
         <div class="shepherd-arrow" data-popper-arrow></div>
     {/if}
     <ShepherdContent {descriptionId} {labelId} {step} />
@@ -235,8 +246,7 @@
     }
 
     .shepherd-enabled.shepherd-element {
-        /* opacity: 1; */
-        opacity: 0.2;
+        opacity: 1;
         visibility: visible;
     }
 

@@ -8,20 +8,20 @@
     let rafId = undefined;
     let pathDefinition;
 
-    $: pathDefinition = makeOverlayPath([openingProperties]);
+    $: pathDefinition = makeOverlayPath(openingProperties);
 
     closeModalOpening();
 
     export const getElement = () => element;
 
     export function closeModalOpening() {
-        openingProperties = {
+        openingProperties = [{
         width: 0,
         height: 0,
         x: 0,
         y: 0,
         r: 0
-        };
+        }];
     }
 
     /**
@@ -34,34 +34,74 @@
         _cleanupStepEventListeners();
     }
 
+    // /**
+    //  * Uses the bounds of the element we want the opening overtop of to set the dimensions of the opening and position it
+    //  * @param {Number} modalOverlayOpeningPadding An amount of padding to add around the modal overlay opening
+    //  * @param {Number | { topLeft: Number, bottomLeft: Number, bottomRight: Number, topRight: Number }} modalOverlayOpeningRadius An amount of border radius to add around the modal overlay opening
+    //  * @param {HTMLElement} scrollParent The scrollable parent of the target element
+    //  * @param {HTMLElement[]} targetElements The element the opening will expose
+    //  */
+
     /**
-     * Uses the bounds of the element we want the opening overtop of to set the dimensions of the opening and position it
-     * @param {Number} modalOverlayOpeningPadding An amount of padding to add around the modal overlay opening
-     * @param {Number | { topLeft: Number, bottomLeft: Number, bottomRight: Number, topRight: Number }} modalOverlayOpeningRadius An amount of border radius to add around the modal overlay opening
-     * @param {HTMLElement} scrollParent The scrollable parent of the target element
-     * @param {HTMLElement} targetElement The element the opening will expose
+     * @typedef {Object} ModalProperties
+     * @property {Number} overlayOpeningPadding An amount of padding to add around the modal overlay opening
+     * @property { Number | { topLeft: Number, bottomLeft: Number, bottomRight: Number, topRight: Number }}overlayOpeningRadius An amount of border radius to add around the modal overlay opening
+     * @property {HTMLElement} scrollParent The scrollable parent of the target element
+     * @property {HTMLElement} targetElement The element the opening will expose
+     */
+
+
+    // modalOverlayOpeningPadding = 0,
+    // modalOverlayOpeningRadius = 0,
+    // scrollParent,
+    // targetElements
+    /**
+     * 
+     * @param {ModalProperties[]} modalPropsList
      */
     export function positionModal(
-        modalOverlayOpeningPadding = 0,
-        modalOverlayOpeningRadius = 0,
-        scrollParent,
-        targetElement
+        modalPropsList
     ) {
-        if (targetElement) {
-            const { y, height } = _getVisibleHeight(targetElement, scrollParent);
-            const { x, width, left } = targetElement.getBoundingClientRect();
+
+
+
+        if(!modalPropsList || modalPropsList.length === 0){
+            closeModalOpening();
+            return;
+        }
+
+        if(modalPropsList.length === 1 && !modalPropsList[0].targetElement){
+            closeModalOpening();
+            return;
+        }
+
+        openingProperties = [];
+
+        modalPropsList.forEach(propsObj => {
+            const {
+                overlayOpeningPadding: openingPadding = 0,
+                overlayOpeningRadius: openingRadius = 0,
+                scrollParent,
+                targetElement,
+            } = propsObj;
+
+            const {y, height} = _getVisibleHeight(targetElement, scrollParent);
+            const {x, width, left} = targetElement.getBoundingClientRect();
 
             // getBoundingClientRect is not consistent. Some browsers use x and y, while others use left and top
-            openingProperties = {
-                width: width + modalOverlayOpeningPadding * 2,
-                height: height + modalOverlayOpeningPadding * 2,
-                x: (x || left) - modalOverlayOpeningPadding,
-                y: y - modalOverlayOpeningPadding,
-                r: modalOverlayOpeningRadius
-            };
-        } else {
-            closeModalOpening();
+            openingProperties.push({
+                width: width + openingPadding * 2,
+                height: height + openingPadding * 2,
+                x: (x || left) - openingPadding,
+                y: y - openingPadding,
+                r: openingRadius
+            });
+        })
+
+        if(openingProperties.length === 0) {
+            closeModalOpening(); return;
         }
+
     }
 
     /**
@@ -137,12 +177,28 @@
     // Setup recursive function to call requestAnimationFrame to update the modal opening position
     const rafLoop = () => {
         rafId = undefined;
-        positionModal(
-            modalOverlayOpeningPadding,
-            modalOverlayOpeningRadius,
-            scrollParent,
-            step.target
-        );
+        // positionModal(
+        //     modalOverlayOpeningPadding,
+        //     modalOverlayOpeningRadius,
+        //     scrollParent,
+        //     step.target,
+        // );
+
+
+        let modalOpeningProps = step.options.attachTo.map(item => {
+            return {
+                overlayOpeningPadding: modalOverlayOpeningPadding,
+                overlayOpeningRadius: modalOverlayOpeningRadius,
+                scrollParent: scrollParent,
+                targetElement: document.querySelector(item?.element)
+            }
+        }).filter(props => props.targetElement);
+
+
+        positionModal(modalOpeningProps)
+
+
+
         rafId = requestAnimationFrame(rafLoop);
     };
 
