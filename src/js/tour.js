@@ -10,6 +10,7 @@ import {
 import { cleanupSteps } from './utils/cleanup.js';
 import { normalizePrefix, uuid } from './utils/general.js';
 import ShepherdModal from './components/shepherd-modal.svelte';
+import "./utils/jsdoc-types.js"
 
 const Shepherd = new Evented();
 
@@ -21,36 +22,12 @@ const Shepherd = new Evented();
  */
 export class Tour extends Evented {
     /**
-     * @param {Object} options The options for the tour
-     * @param {boolean | function(): boolean | Promise<boolean> | function(): Promise<boolean>} options.confirmCancel If true, will issue a `window.confirm` before cancelling.
-     * If it is a function(support Async Function), it will be called and wait for the return value, and will only be cancelled if the value returned is true
-     * @param {string} options.confirmCancelMessage The message to display in the `window.confirm` dialog
-     * @param {string} options.classPrefix The prefix to add to the `shepherd-enabled` and `shepherd-target` class names as well as the `data-shepherd-step-id`.
-     * @param {Object} options.defaultStepOptions Default options for Steps ({@link Step#constructor}), created through `addStep`
-     * @param {boolean} options.exitOnEsc Exiting the tour with the escape key will be enabled unless this is explicitly
-     * set to false.
-     * @param {boolean} options.keyboardNavigation Navigating the tour via left and right arrow keys will be enabled
-     * unless this is explicitly set to false.
-     * @param {HTMLElement} options.stepsContainer An optional container element for the steps.
-     * If not set, the steps will be appended to `document.body`.
-     * @param {HTMLElement} options.modalContainer An optional container element for the modal.
-     * If not set, the modal will be appended to `document.body`.
-     * @param {object[] | Step[]} options.steps An array of step options objects or Step instances to initialize the tour with
-     * @param {string} options.tourName An optional "name" for the tour. This will be appended to the the tour's
-     * dynamically generated `id` property.
-     * @param {boolean} options.useModalOverlay Whether or not steps should be placed above a darkened
-     * modal overlay. If true, the overlay will create an opening around the target element so that it
-     * can remain interactive
+     * @param {TourOptions} options The options for the tour
      * 
-     * @param {boolean} options.enableProgressBar Enables progress bar
-     * @param {string} options.progressBarStyle Dots, Fill or Text
-     * @param {boolean} options.cancelOnOutsideClick Cancels the tour when you click outside tooltip
-     * @param {boolean} options.cancelOnMouseLeave Cancels the tour when mouse leaves tooltip
-     * @param {number} options.overlayOpacity Opacity of the background overlay
-     * 
-     * @returns {Tour}
-     */
+    */
+    //  * @returns {Tour}
     constructor(options = {}) {
+        // @ts-ignore
         super(options);
 
         autoBind(this);
@@ -62,9 +39,11 @@ export class Tour extends Evented {
         };
 
         this.options = Object.assign({}, defaultTourOptions, options);
-        this.classPrefix = normalizePrefix(this.options.classPrefix);
+        this.classPrefix = normalizePrefix(this.options.classPrefix ?? "");
         this.steps = [];
-        this.addSteps(this.options.steps);
+        if(this.options.steps){
+            this.addSteps(this.options.steps);
+        }
 
         // Pass these events onto the global Shepherd object
         const events = [
@@ -77,7 +56,8 @@ export class Tour extends Evented {
         ];
         events.map((event) => {
             ((e) => {
-                this.on(e, (opts) => {
+
+                this.on(e, (/**@type {object} */opts) => {
                     opts = opts || {};
                     opts.tour = this;
                     Shepherd.trigger(e, opts);
@@ -95,7 +75,7 @@ export class Tour extends Evented {
     /**
      * Adds a new step to the tour
      * @param {Object|Step} options An object containing step options or a Step instance
-     * @param {number} index The optional index to insert the step at. If undefined, the step
+     * @param {number} [index] The optional index to insert the step at. If undefined, the step
      * is added to the end of the array.
      * @return {Step} The newly added step
      */
@@ -148,17 +128,29 @@ export class Tour extends Evented {
      */
     async cancel() {
         if (this.options.confirmCancel) {
-            const confirmCancelIsFunction =
-                typeof this.options.confirmCancel === 'function';
+
+
+            
+            
             const cancelMessage =
-                this.options.confirmCancelMessage ||
-                'Are you sure you want to stop the tour?';
-            const stopTour = confirmCancelIsFunction
-                ? await this.options.confirmCancel()
-                : window.confirm(cancelMessage);
-            if (stopTour) {
-                this._done('cancel');
+            this.options.confirmCancelMessage ||
+            'Are you sure you want to stop the tour?';
+            
+            // const confirmCancelIsFunction = typeof this.options.confirmCancel === 'function';
+            // const stopTour = isFunction(this.options.confirmCancel);
+            //     ? await this.options.confirmCancel()
+            //     : window.confirm(cancelMessage);
+            // if (stopTour) {
+            //     this._done('cancel');
+            // }
+
+            if(typeof this.options.confirmCancel === "function"){
+                await this.options.confirmCancel();
+                this._done("cancel");
+            } else {
+                window.confirm(cancelMessage);
             }
+
         } else {
             this._done('cancel');
         }
@@ -361,11 +353,17 @@ export class Tour extends Evented {
      * @private
      */
     _setupModal() {
+        // console.log("SHEPHERD MODAL PROPS");
+        // console.log("CLASS PREFIX: " + this.classPrefix);
+        // console.log("OPACITY: " + this.options.overlayOpacity);
+        // console.log("STYLES: " + this.styles);
+
+
         this.modal = new ShepherdModal({
             target: this.options.modalContainer || document.body,
             props: {
-                classPrefix: this.classPrefix,
-                styles: this.styles,
+                // classPrefix: this.classPrefix,
+                // styles: this.styles,
                 opacity: this.options.overlayOpacity
             },
         });

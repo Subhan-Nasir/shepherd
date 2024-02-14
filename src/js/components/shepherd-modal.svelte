@@ -2,7 +2,30 @@
     import { uuid } from '../utils/general.js';
     import { makeOverlayPath } from '../utils/overlay-path.js';
 
-    export let element, openingProperties, opacity;
+    export let opacity;
+
+
+    /**
+     * @type {HTMLElement}
+     */
+    let element;
+
+
+
+    /** 
+     * @typedef {object} OpeningPropsObj
+     * @property {number} width
+     * @property {number} height
+     * @property {number} x
+     * @property {number} y
+     * @property {number} r
+    */
+
+    /**
+     * @type {OpeningPropsObj[]}
+     */
+    let openingProperties;
+
     const guid = uuid();
     let modalIsVisible = false;
     let rafId = undefined;
@@ -63,8 +86,6 @@
         modalPropsList
     ) {
 
-
-
         if(!modalPropsList || modalPropsList.length === 0){
             closeModalOpening();
             return;
@@ -77,24 +98,18 @@
 
         openingProperties = [];
 
-        modalPropsList.forEach(propsObj => {
-            const {
-                overlayOpeningPadding: openingPadding = 0,
-                overlayOpeningRadius: openingRadius = 0,
-                scrollParent,
-                targetElement,
-            } = propsObj;
+        modalPropsList.forEach(props => {
 
-            const {y, height} = _getVisibleHeight(targetElement, scrollParent);
-            const {x, width, left} = targetElement.getBoundingClientRect();
+            const {y, height} = _getVisibleHeight(props.targetElement, props.scrollParent);
+            const {x, width, left} = props.targetElement.getBoundingClientRect();
 
             // getBoundingClientRect is not consistent. Some browsers use x and y, while others use left and top
             openingProperties.push({
-                width: width + openingPadding * 2,
-                height: height + openingPadding * 2,
-                x: (x || left) - openingPadding,
-                y: y - openingPadding,
-                r: openingRadius
+                width: width + props.overlayOpeningPadding * 2,
+                height: height + props.overlayOpeningPadding * 2,
+                x: (x || left) - props.overlayOpeningPadding,
+                y: y - props.overlayOpeningPadding,
+                r: props.overlayOpeningRadius
             });
         })
 

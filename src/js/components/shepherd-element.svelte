@@ -8,41 +8,63 @@
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
 
-  export let classPrefix,
-        element,
+    export let
+        classPrefix,
         descriptionId,
-        firstFocusableElement,
-        focusableElements,
         labelId,
-        lastFocusableElement,
-        step,
-        dataStepId;
+        step
+// ------------------------------------
 
-  let hasCancelIcon, hasTitle, classes, attachingToElement;
+    /*** @type {HTMLElement}*/
+    let element
 
-  $: {
-    hasCancelIcon =
+    /*** @type {NodeList<HTMLElement>}*/
+    let focusableElements
+
+    /*** @type {HTMLElement}*/
+    let firstFocusableElement
+
+    /*** @type {HTMLElement}*/
+    let lastFocusableElement
+
+    /*** @type {object}*/
+    let dataStepId
+
+    //----------------------------
+
+    /*** @type {boolean} */
+    let hasCancelIcon
+    
+    /*** @type {boolean} */
+    let hasTitle
+
+    /*** @type {string} */
+    let classes;
+
+    /*** @type {boolean} */
+    let attachingToElement
+
+
+    $: {
+        hasCancelIcon =
         step.options &&
         step.options.cancelIcon &&
         step.options.cancelIcon.enabled;
 
-    hasTitle = step.options && step.options.title;
+        hasTitle = step.options && step.options.title;
 
-
-    attachingToElement = step.options.attachTo.some(item => {
-        if(item?.element && item?.on){
+        attachingToElement = step.options.attachTo.some((item) => {
+        if (item?.element && item?.on) {
             return true;
         }
 
         return false;
-    });
-  }
+        });
+    }
 
+    export const getElement = () => element;
 
-
-  export const getElement = () => element;
-
-  onMount(() => {
+    onMount(() => {
         // Get all elements that are focusable
         dataStepId = { [`data-${classPrefix}shepherd-step-id`]: step.id };
         focusableElements = element.querySelectorAll(
@@ -50,23 +72,22 @@
         );
         firstFocusableElement = focusableElements[0];
         lastFocusableElement = focusableElements[focusableElements.length - 1];
-        window.addEventListener("keydown", handleKeyDown);
-  });
+        window.addEventListener('keydown', handleKeyDown);
+    });
 
-  onDestroy(()=>{
-    window.removeEventListener("keydown", handleKeyDown);
-  })
+    onDestroy(() => {
+        window.removeEventListener('keydown', handleKeyDown);
+    });
 
-  export function removeKeyboardListener(){
-    window.removeEventListener("keydown", handleKeyDown)
-  }
+    export function removeKeyboardListener() {
+        window.removeEventListener('keydown', handleKeyDown);
+    }
 
-
-  afterUpdate(() => {
+    afterUpdate(() => {
         if (classes !== step.options.classes) {
             updateDynamicClasses();
         }
-  });
+    });
 
     function updateDynamicClasses() {
         removeClasses(classes);
@@ -116,7 +137,7 @@
                 if (
                     document.activeElement === firstFocusableElement ||
                     document.activeElement.classList.contains('shepherd-element')
-                ) {
+                ){
                     e.preventDefault();
                     // lastFocusableElement.focus();
                 }
@@ -152,8 +173,8 @@
 </script>
 
 <link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
 />
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -176,35 +197,32 @@
 
 <style global>
     :root {
+        --tour-primary: #007bff;
 
-        --tour-primary : #007bff;
+        --tour-grey-darkest: #212529;
+        --tour-grey-dark: #60637c;
+        --tour-grey-mid-darkest: #6c757d;
+        --tour-grey-mid-dark: #888888;
+        --tour-grey-mid: #c7c9d6;
+        --tour-grey-mid-light: #d6d6d6;
+        --tour-grey-light: #efeff4;
+        --tour-grey-lightest: #f8f9fa;
 
-        --tour-grey-darkest     : #212529;
-        --tour-grey-dark        : #60637C;
-        --tour-grey-mid-darkest : #6C757D;
-        --tour-grey-mid-dark    : #888888;
-        --tour-grey-mid         : #C7C9D6;
-        --tour-grey-mid-light   : #D6D6D6;
-        --tour-grey-light       : #EFEFF4;
-        --tour-grey-lightest    : #F8F9FA;
+        --tour-blue-darkest: #1f3674;
+        --tour-blue-dark: #004bb2;
+        --tour-blue-mid: var(--tour-primary);
+        --tour-blue-light: #6ea9ff;
+        --tour-blue-lightest: #f1f6ff;
 
-        --tour-blue-darkest  : #1F3674;
-        --tour-blue-dark     : #004BB2;
-        --tour-blue-mid      : var(--tour-primary);
-        --tour-blue-light    : #6EA9FF;
-        --tour-blue-lightest : #F1F6FF;
+        --tour-success: #34c759;
+        --tour-cyan: #17a2b8;
 
-        --tour-success : #34c759;
-        --tour-cyan    : #17a2b8;
+        --tour-header-bg: var(--tour-blue-lightest);
+        --tour-pointer-bg: #fcfcfc;
 
+        --tour-btn-active-shadow-col: #6161624d;
 
-        --tour-header-bg  : var(--tour-blue-lightest);
-        --tour-pointer-bg : #fcfcfc;
-
-        --tour-btn-active-shadow-col : #6161624d;
-
-        --tour-font: "Helvetica Neue",
-            Helvetica, Arial, "Lucida Grande", sans-serif;
+        --tour-font: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
     }
 
     .shepherd-element,
@@ -233,8 +251,8 @@
         opacity: 0;
         outline: none;
         transition:
-            opacity 0.3s,
-            visibility 0.3s;
+        opacity 0.3s,
+        visibility 0.3s;
         visibility: hidden;
         width: 100%;
         z-index: 9999;
@@ -301,16 +319,20 @@
     /**
     * Arrow on top of tooltip centered horizontally, with title color
     */
-    .shepherd-element.shepherd-has-title[data-popper-placement^='top'] > .shepherd-arrow::before {
+    .shepherd-element.shepherd-has-title[data-popper-placement^='top']
+        > .shepherd-arrow::before {
         border-bottom-right-radius: var(--arrow-border-radius);
     }
-    .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
+    .shepherd-element.shepherd-has-title[data-popper-placement^='bottom']
+        > .shepherd-arrow::before {
         border-top-left-radius: var(--arrow-border-radius);
     }
-    .shepherd-element.shepherd-has-title[data-popper-placement^='left'] > .shepherd-arrow::before {
+    .shepherd-element.shepherd-has-title[data-popper-placement^='left']
+        > .shepherd-arrow::before {
         border-top-right-radius: var(--arrow-border-radius);
     }
-    .shepherd-element.shepherd-has-title[data-popper-placement^='right'] > .shepherd-arrow::before {
+    .shepherd-element.shepherd-has-title[data-popper-placement^='right']
+        > .shepherd-arrow::before {
         border-bottom-left-radius: var(--arrow-border-radius);
     }
 
