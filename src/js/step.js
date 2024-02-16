@@ -41,7 +41,7 @@ export class Step extends Evented {
         /**
          * Resolved attachTo options. Due to lazy evaluation, we only resolve the options during `before-show` phase.
          * Do not use this directly, use the _getResolvedAttachToOptions method instead.
-         * @type {null|[]|{element:string, on:string}[]}
+         * @type {null|[]|{element:HTMLElement, on?:string}[]}
          * @private
          */
         this._resolvedAttachTo = null;
@@ -131,7 +131,7 @@ export class Step extends Evented {
 
     /**
      * Resolves attachTo options.
-     * @returns {[]|{element: string, on: string}[]}
+     * @returns {[]|{element: HTMLElement, on?: string}[]}
      * @private
      */
     _resolveAttachToOptions() {
@@ -141,7 +141,7 @@ export class Step extends Evented {
 
     /**
      * A selector for resolved attachTo options.
-     * @returns {[]|{element:string, on:string}[]}
+     * @returns {[]|{element:HTMLElement, on?:string}[]}
      * @private
      */
     _getResolvedAttachToOptions() {
@@ -373,6 +373,11 @@ export class Step extends Evented {
         target.classList.add(`${this.classPrefix}shepherd-target`);
         content.classList.add('shepherd-enabled');
 
+        this._getResolvedAttachToOptions().forEach(attachTo => {
+            attachTo.element.classList.add(`${this.classPrefix}shepherd-enabled`);
+            attachTo.element.classList.add(`${this.classPrefix}shepherd-target`);
+        });
+
         this.trigger('show');
     }
 
@@ -380,7 +385,7 @@ export class Step extends Evented {
      * Modulates the styles of the passed step's target element, based on the step's options and
      * the tour's `modal` option, to visually emphasize the element
      *
-     * @param step The step object that attaches to the element
+     * @param {Step} step The step object that attaches to the element
      * @private
      */
     _styleTargetElementForStep(step) {
@@ -394,12 +399,39 @@ export class Step extends Evented {
             targetElement.classList.add(step.options.highlightClass);
         }
 
-        targetElement.classList.remove('shepherd-target-click-disabled');
+        // targetElement.classList.remove('shepherd-target-click-disabled');
+        this.enableClicks();
 
-        if (step.options.canClickTarget === false) {
-            targetElement.classList.add('shepherd-target-click-disabled');
+
+        // if (step.options.canClickTarget === false) {
+        //     targetElement.classList.add('shepherd-target-click-disabled');
+        // }
+
+        if(step.options.canClickTarget === false){
+            this.disableClicks();
         }
+
     }
+
+    disableClicks(){
+        this.target?.classList.add("shepherd-target-click-disabled");
+        this._getResolvedAttachToOptions().forEach(attachTo => {
+            attachTo.element.classList.add("shepherd-target-click-disabled");
+        })
+    }
+
+
+    enableClicks(){
+        this.target?.classList.remove("shepherd-target-click-disabled");
+        this._getResolvedAttachToOptions().forEach(attachTo => {
+            attachTo.element.classList.remove("shepherd-target-click-disabled");
+        })
+    }
+
+
+
+
+
 
     /**
      * When a step is hidden, remove the highlightClass and 'shepherd-enabled'
@@ -418,5 +450,13 @@ export class Step extends Evented {
             `${this.classPrefix}shepherd-enabled`,
             `${this.classPrefix}shepherd-target`
         );
+
+        this._getResolvedAttachToOptions().forEach(attachTo => {
+            attachTo.element.classList.remove(
+                'shepherd-target-click-disabled',
+                `${this.classPrefix}shepherd-enabled`,
+                `${this.classPrefix}shepherd-target`
+            )
+        })
     }
 }

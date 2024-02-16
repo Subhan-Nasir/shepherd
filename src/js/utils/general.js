@@ -1,3 +1,4 @@
+
 import { isFunction, isString } from './type-check';
 
 /**
@@ -15,8 +16,8 @@ export function normalizePrefix(prefix) {
 
 /**
  * Resolves attachTo options, converting element option value to a qualified HTMLElement.
- * @param {Step} step The step instance
- * @returns {[]|{element, on}[]}
+ * @param {object} step The step instance
+ * @returns {[]|{element: HTMLElement, on: PopperPlacement}[]}
  * `element` is a qualified HTML Element
  * `on` is a string position value
  */
