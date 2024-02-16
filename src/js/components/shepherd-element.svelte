@@ -251,8 +251,8 @@
         opacity: 0;
         outline: none;
         transition:
-        opacity 0.3s,
-        visibility 0.3s;
+            opacity 0.3s,
+            visibility 0.3s;
         visibility: hidden;
         width: 100%;
         z-index: 9999;
@@ -264,8 +264,8 @@
     }
 
     .shepherd-enabled.shepherd-element {
-        opacity: 1;
-        visibility: visible;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .shepherd-element[data-popper-reference-hidden]:not(.shepherd-centered) {

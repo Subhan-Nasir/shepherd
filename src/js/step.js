@@ -41,7 +41,7 @@ export class Step extends Evented {
         /**
          * Resolved attachTo options. Due to lazy evaluation, we only resolve the options during `before-show` phase.
          * Do not use this directly, use the _getResolvedAttachToOptions method instead.
-         * @type {null|[]|{element:string, on:string}[]}
+         * @type {null|[]|{element:HTMLElement, on:PopperPlacement}[]}
          * @private
          */
         this._resolvedAttachTo = null;
@@ -131,7 +131,7 @@ export class Step extends Evented {
 
     /**
      * Resolves attachTo options.
-     * @returns {[]|{element: string, on: string}[]}
+     * @returns {[]|{element: HTMLElement, on?: PopperPlacement}[]}
      * @private
      */
     _resolveAttachToOptions() {
@@ -141,7 +141,7 @@ export class Step extends Evented {
 
     /**
      * A selector for resolved attachTo options.
-     * @returns {[]|{element:string, on:string}[]}
+     * @returns {[]|{element:HTMLElement, on?:PopperPlacement}[]}
      * @private
      */
     _getResolvedAttachToOptions() {
@@ -168,7 +168,7 @@ export class Step extends Evented {
         if (isFunction(this.options.beforeShowPromise)) {
             return Promise.resolve(this.options.beforeShowPromise()).then(() =>
                 this._show()
-            );
+            ).catch(()=>{this.cancel()});
         }
         return Promise.resolve(this._show());
     }
@@ -371,6 +371,11 @@ export class Step extends Evented {
         const target = this.target || document.body;
         target.classList.add(`${this.classPrefix}shepherd-enabled`);
         target.classList.add(`${this.classPrefix}shepherd-target`);
+        this._getResolvedAttachToOptions().forEach(attach => {
+            if(!attach.element){return}
+            attach.element.classList.add("shepherd-target");
+            attach.element.classList.add("shepherd-enabled");
+        });
         content.classList.add('shepherd-enabled');
 
         this.trigger('show');
@@ -394,12 +399,44 @@ export class Step extends Evented {
             targetElement.classList.add(step.options.highlightClass);
         }
 
-        targetElement.classList.remove('shepherd-target-click-disabled');
+        step.enableTargetClicks();
 
-        if (step.options.canClickTarget === false) {
-            targetElement.classList.add('shepherd-target-click-disabled');
+        if(step.options.canClickTarget === false){
+            step.disableTargetClicks();
         }
+
+        // targetElement.classList.remove('shepherd-target-click-disabled');
+        // this._getResolvedAttachToOptions().forEach(attach => {
+        //     attach.element.classList.remove("shepherd-target-click-disabled");
+        // })
+
+        // if (step.options.canClickTarget === false) {
+        //     targetElement.classList.add('shepherd-target-click-disabled');
+        //     this._getResolvedAttachToOptions().forEach(attach => {
+        //         attach.element.classList.add("shepherd-target-click-disabled");
+        //     })
+        // }
     }
+
+
+    disableTargetClicks(){
+        this.target?.classList.add("shepehrd-target-click-disabled");
+        this._getResolvedAttachToOptions().forEach(attach => {
+            if(!attach.element){return}
+            attach.element.classList.add("shepherd-target-click-disabled");
+        })
+    }
+    
+    enableTargetClicks(){
+        this.target?.classList.remove("shepehrd-target-click-disabled");
+        this._getResolvedAttachToOptions().forEach(attach => {
+            if(!attach.element){return}
+            attach.element.classList.remove("shepherd-target-click-disabled");
+        })
+    }
+    
+
+
 
     /**
      * When a step is hidden, remove the highlightClass and 'shepherd-enabled'
@@ -418,5 +455,13 @@ export class Step extends Evented {
             `${this.classPrefix}shepherd-enabled`,
             `${this.classPrefix}shepherd-target`
         );
+
+        this._getResolvedAttachToOptions().forEach(attach => {
+            if(attach.element){
+                attach.element.classList.remove("shepherd-target");
+                attach.element.classList.remove("shepherd-enabled");
+            }
+
+        })
     }
 }
