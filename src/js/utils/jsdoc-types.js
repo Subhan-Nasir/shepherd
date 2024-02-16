@@ -110,7 +110,7 @@
  * @property {() => boolean} [showOn]
  * @property {string | ReadonlyArray<string> | HTMLElement | (() => string | ReadonlyArray<string> | HTMLElement)} [text]
  * @property {string | (() => string)} [title] 
- * @property {Object.<string, ((this: object) => void)>} [when]
+ * @property {Object.<string, ((this: unknown) => void)>} [when]
  * @property {ImageOptions} [image]
  * @property {VideoOptions} [video]
  * 
