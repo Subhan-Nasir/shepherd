@@ -31,18 +31,6 @@ export function makeOverlayPath(propertiesList) {
         Z\
     `;
 
-    // let secondProps = Object.assign({}, propertiesList[0]);
-
-    // secondProps.width = secondProps.width + 50;
-    // secondProps.height = secondProps.height + 25;
-    // secondProps.x = secondProps.x + 200;
-    // secondProps.y = secondProps.y + 200;
-    // secondProps.r = 20;
-
-    // propertiesList.push(secondProps);
-    // console.log("PROPERTIES LIST: ");
-    // console.log(propertiesList);
-
     propertiesList.forEach(props => {
 
         const { width, height, x = 0, y = 0, r = 0 } = props;
@@ -55,17 +43,33 @@ export function makeOverlayPath(propertiesList) {
                 ? { topLeft: r, topRight: r, bottomRight: r, bottomLeft: r }
                 : r;
 
-        path += `
-            M${x + topLeft},${y}\
-            a${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
-            V${height + y - bottomLeft}\
-            a${bottomLeft},${bottomLeft},0,0,0,${bottomLeft},${bottomLeft}\
-            H${width + x - bottomRight}\
-            a${bottomRight},${bottomRight},0,0,0,${bottomRight}-${bottomRight}\
-            V${y + topRight}\
-            a${topRight},${topRight},0,0,0-${topRight}-${topRight}\
-            Z\
-        `;
+
+        if(typeof r === "number" && (r >= 0.5 * width || r >= 0.5 * height)){
+
+            // Circle
+            path += `
+                M${x + (width/2)},${y + (height/2)}\
+                m ${r}, 0\
+                a ${r},${r} 0 1,0 -${r * 2},0\
+                a ${r},${r} 0 1,0  ${r * 2},0\
+            `
+
+        } else {
+
+            // Rectangle with rounded corners
+            path += `
+                M${x + topLeft},${y}\
+                a${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
+                V${height + y - bottomLeft}\
+                a${bottomLeft},${bottomLeft},0,0,0,${bottomLeft},${bottomLeft}\
+                H${width + x - bottomRight}\
+                a${bottomRight},${bottomRight},0,0,0,${bottomRight}-${bottomRight}\
+                V${y + topRight}\
+                a${topRight},${topRight},0,0,0-${topRight}-${topRight}\
+                Z\
+            `;
+
+        }
 
 
     });
@@ -104,5 +108,7 @@ export function makeOverlayPath(propertiesList) {
     // console.log("DRAWING PATH");
     // console.log(path);
 
+    // console.log("PATH = ");
+    // console.log(path);
     return path;
 }
