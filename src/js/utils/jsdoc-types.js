@@ -52,11 +52,6 @@
  * @property {HTMLElement | string | (()=>HTMLElement | string | null | undefined)} element
  * @property {PopperPlacement} [on]
 * /
-/**
- * @typedef {object} ResolvedAttachToOption
- * @property {HTMLElement} element
- * @property {PopperPlacement} [on]
-* /
 
 /**
  * @typedef {object} AdvanceOnOption

@@ -1,5 +1,4 @@
-import { element } from 'svelte/internal';
-import { isElement, isFunction, isHTMLElement, isString } from './type-check';
+import { isFunction, isString } from './type-check';
 
 /**
  * Ensure class prefix ends in `-`
@@ -16,49 +15,39 @@ export function normalizePrefix(prefix) {
 
 /**
  * Resolves attachTo options, converting element option value to a qualified HTMLElement.
- * @param {Object} step The step instance
- * @returns {[] | ResolvedAttachToOption[]}
+ * @param {Step} step The step instance
+ * @returns {[]|{element, on}[]}
  * `element` is a qualified HTML Element
  * `on` is a string position value
  */
 export function parseAttachTo(step) {
 
     const optionsList = step.options.attachTo || [];
-
-    /** @type { ResolvedAttachToOption[]} */
     const returnOptsList = [];
 
-    optionsList.forEach((/** @type {AttachToOption} */ options) => {
+    optionsList.forEach(options => {
+        let returnOptions = Object.assign({}, options);
 
-        if(!options){
-            return;
+        if(isFunction(returnOptions.element)){
+            returnOptions.element = returnOptions.element.call(step);
         }
 
-        /*** @type {HTMLElement | null} */
-        let el = null;
-
-        if(isFunction(options.element)){
-            el = options.element.call(step);
-        } else if(isString(options.element)){
+        if(isString(returnOptions.element)){
+            // Can't override the element in user opts reference because we can't
+            // guarantee that the element will exist in the future.
             try {
-                el = /**@type {HTMLElement} */ (document.querySelector(options.element));
+                returnOptions.element = document.querySelector(returnOptions.element);
             } catch (e) {
                 // TODO
             }
-        } else if(isElement(options.element)) {
-            el = /**@type {HTMLElement} */ (options.element);
-        } else if(isHTMLElement(options.element)) {
-            el = options.element;
+            if (!returnOptions.element) {
+                console.error(
+                    `The element for this Shepherd step was not found ${options.element}`
+                );
+            }
         }
 
-        if(!el){ return }
-
-        let attachObj = {element: el}
-        if(options.on){
-            attachObj.on = options.on;
-        }
-
-        returnOptsList.push(attachObj)
+        returnOptsList.push(returnOptions);
 
     });
 
@@ -100,7 +89,7 @@ export function parseAttachTo(step) {
 /**
  * Checks if the step should be centered or not. Does not trigger attachTo.element evaluation, making it a pure
  * alternative for the deprecated step.isCentered() method.
- * @param {object} resolvedAttachToOptions
+ * @param resolvedAttachToOptions
  * @returns {boolean}
  */
 export function shouldCenterStep(resolvedAttachToOptions) {
