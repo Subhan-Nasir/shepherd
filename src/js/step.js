@@ -41,10 +41,10 @@ export class Step extends Evented {
         /**
          * Resolved attachTo options. Due to lazy evaluation, we only resolve the options during `before-show` phase.
          * Do not use this directly, use the _getResolvedAttachToOptions method instead.
-         * @type {null|[]|{element:HTMLElement, on:PopperPlacement}[]}
+         * @type {[] | ResolvedAttachToOption[]}
          * @private
          */
-        this._resolvedAttachTo = null;
+        this._resolvedAttachTo = [];
 
         autoBind(this);
 
@@ -131,7 +131,7 @@ export class Step extends Evented {
 
     /**
      * Resolves attachTo options.
-     * @returns {[]|{element: HTMLElement, on?: PopperPlacement}[]}
+     * @returns {[] | ResolvedAttachToOption[]}
      * @private
      */
     _resolveAttachToOptions() {
