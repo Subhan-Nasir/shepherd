@@ -1,6 +1,7 @@
 <script>
     import { uuid } from '../utils/general.js';
     import { makeOverlayPath } from '../utils/overlay-path.js';
+    import { isElement, isHTMLElement, isString } from '../utils/type-check.js';
 
     export let opacity;
 
@@ -201,12 +202,34 @@
 
 
         let modalOpeningProps = step.options.attachTo.map(item => {
-            return {
+            let props = {
                 overlayOpeningPadding: modalOverlayOpeningPadding,
                 overlayOpeningRadius: modalOverlayOpeningRadius,
                 scrollParent: scrollParent,
-                targetElement: document.querySelector(item?.element)
+                targetElement: null
+
             }
+
+            if(isElement(item.element)){
+                props.targetElement = /**@type {HTMLELement}*/ (item.element);
+                return props;
+            }
+
+            if(isHTMLElement(item.element)){
+                props.targetElement = item.element;
+                return props;
+            }
+
+            if(isString(item.element)){
+                props.targetElement = document.querySelector(item.element);
+                return props;
+            }
+
+
+            return props;
+
+
+
         }).filter(props => props.targetElement);
 
 
