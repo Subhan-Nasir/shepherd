@@ -140,10 +140,10 @@
     };
 </script>
 
-<link
+<!-- <link
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-/>
+/> -->
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
@@ -164,6 +164,32 @@
 </div>
 
 <style global>
+
+    @font-face {
+        font-family: 'Material Symbols Outlined';
+        font-style: normal;
+        src: 
+            url('assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2') format('woff2'),
+            url('assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf') format('truetype');
+    }
+
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-variation-settings: "FILL" 0,"wght" 200,"GRAD" 0,"opsz" 24;
+        font-style: normal;
+        font-size: 24px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+    }
+
+
+
     :root {
 
         --tour-primary : #007bff;
@@ -308,11 +334,4 @@
         pointer-events: none;
     }
 
-    .material-symbols-outlined {
-        font-variation-settings:
-        'FILL' 0,
-        'wght' 200,
-        'GRAD' 0,
-        'opsz' 24;
-    }
 </style>
