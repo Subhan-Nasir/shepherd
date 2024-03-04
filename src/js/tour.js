@@ -228,10 +228,10 @@ export class Tour extends Evented {
      * @param {String} name The id for the step to remove
      */
     removeStep(name) {
-        console.log("REMOVE STEP CALLED");
+
         const current = this.getCurrentStep();
         const currentStepIndex = this.steps.indexOf(current);
-        console.log("CURRENT STEP INDEX: " + currentStepIndex);
+
 
         // Find the step, destroy it and remove it from this.steps
         this.steps.some((step, i) => {
@@ -268,7 +268,7 @@ export class Tour extends Evented {
         const step = isString(key) ? this.getById(key) : this.steps[key];
 
         if (step) {
-            // console.log("SHOWING STEP: " + step.id);
+
             this._updateStateBeforeShow();
 
             const shouldSkipStep =
