@@ -135,7 +135,7 @@
 
 
     .grey-border-top {
-        border-top: 1px solid var(--tour-grey-lightest);
+        border-top: 1px solid var(--tour-grey-light);
     }
 
     .icon-button {

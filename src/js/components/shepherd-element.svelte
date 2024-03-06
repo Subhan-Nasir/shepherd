@@ -213,7 +213,7 @@
         --tour-cyan    : #17a2b8;
 
 
-        --tour-header-bg  : var(--tour-blue-lightest);
+        --tour-header-bg  : var(--tour-grey-lightest);
         --tour-pointer-bg : #fcfcfc;
 
         --tour-btn-active-shadow-col : #6161624d;
@@ -244,7 +244,7 @@
         /* border-radius: 5px; */
 
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
+        max-width: 560px;
         opacity: 0;
         outline: none;
         transition:
@@ -256,7 +256,7 @@
     }
 
     .shepherd-large-container {
-        max-width: 500px;
+        max-width: 660px;
         max-height: 650px;
     }
 

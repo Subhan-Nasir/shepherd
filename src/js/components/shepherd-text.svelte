@@ -33,6 +33,10 @@
     margin-top: 0;
   }
 
+  .shepherd-text ul {
+    list-style-type: disc;
+  }
+
   .shepherd-text p:last-child {
     margin-bottom: 0;
   }
