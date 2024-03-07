@@ -25,7 +25,7 @@
     font-size: 0.875rem;
     font-weight: 400;
     /* line-height: 1.3em; */
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 1.5rem;
     padding-bottom: 0;
   }
 
