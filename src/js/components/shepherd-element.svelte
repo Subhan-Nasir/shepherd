@@ -172,10 +172,10 @@
     };
 </script>
 
-<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-/>
+<!-- <link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/> -->
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
@@ -196,33 +196,60 @@
 </div>
 
 <style global>
+
+    @font-face {
+        font-family: 'Material Symbols Outlined';
+        font-style: normal;
+        src: 
+            url('assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2') format('woff2'),
+            url('assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf') format('truetype');
+    }
+
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-variation-settings: "FILL" 0,"wght" 200,"GRAD" 0,"opsz" 24;
+        font-style: normal;
+        font-size: 24px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+    }
+
+
+
     :root {
-        --tour-primary: #007bff;
+        --tour-primary: #007BFF;
 
         --tour-grey-darkest: #212529;
-        --tour-grey-dark: #60637c;
-        --tour-grey-mid-darkest: #6c757d;
+        --tour-grey-dark: #60637C;
+        --tour-grey-mid-darkest: #6C757D;
         --tour-grey-mid-dark: #888888;
-        --tour-grey-mid: #c7c9d6;
-        --tour-grey-mid-light: #d6d6d6;
-        --tour-grey-light: #efeff4;
-        --tour-grey-lightest: #f8f9fa;
+        --tour-grey-mid: #C7C9D6;
+        --tour-grey-mid-light: #D6D6D6;
+        --tour-grey-light: #EFEFF4;
+        --tour-grey-lightest: #F8F9FA;
 
-        --tour-blue-darkest: #1f3674;
-        --tour-blue-dark: #004bb2;
+        --tour-blue-darkest: #1F3674;
+        --tour-blue-dark: #004BB2;
         --tour-blue-mid: var(--tour-primary);
-        --tour-blue-light: #6ea9ff;
-        --tour-blue-lightest: #f1f6ff;
+        --tour-blue-light: #6EA9FF;
+        --tour-blue-lightest: #F1F6FF;
 
-        --tour-success: #34c759;
-        --tour-cyan: #17a2b8;
+        --tour-success: #34C759;
+        --tour-cyan: #17A2B8;
 
-        --tour-header-bg: var(--tour-blue-lightest);
-        --tour-pointer-bg: #fcfcfc;
+        --tour-header-bg  : var(--tour-grey-lightest);
+        --tour-pointer-bg : #FCFCFC;
 
-        --tour-btn-active-shadow-col: #6161624d;
+        --tour-btn-active-shadow-col : #6161624D;
 
-        --tour-font: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+        --tour-font: "Helvetica Neue",
+            Helvetica, Arial, "Lucida Grande", sans-serif;
     }
 
     .shepherd-element,
@@ -247,7 +274,7 @@
         /* border-radius: 5px; */
 
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
+        max-width: 560px;
         opacity: 0;
         outline: none;
         transition:
@@ -259,7 +286,7 @@
     }
 
     .shepherd-large-container {
-        max-width: 500px;
+        max-width: 660px;
         max-height: 650px;
     }
 
@@ -341,11 +368,4 @@
         pointer-events: none;
     }
 
-    .material-symbols-outlined {
-        font-variation-settings:
-        'FILL' 0,
-        'wght' 200,
-        'GRAD' 0,
-        'opsz' 24;
-    }
 </style>

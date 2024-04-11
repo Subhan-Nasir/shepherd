@@ -21,10 +21,16 @@
         padding: 0;
         box-shadow: 16px 20px 20px 4px rgba(0,0,0,.15);
     }
+
+    .extra-padding {
+        padding-bottom: 1rem;
+    }
+
 </style>
 
 <div
   class="shepherd-content"
+  class:extra-padding={!(Array.isArray(step.options.buttons) && step.options.buttons.length)}
 >
     {#if !isUndefined(step.options.title) || (step.options.cancelIcon && step.options.cancelIcon.enabled)}
         <ShepherdHeader
