@@ -200,37 +200,41 @@
         //     step.target,
         // );
 
+        let modalOpeningProps = []
 
-        let modalOpeningProps = step.options.attachTo.map(item => {
-            let props = {
-                overlayOpeningPadding: modalOverlayOpeningPadding,
-                overlayOpeningRadius: modalOverlayOpeningRadius,
-                scrollParent: scrollParent,
-                targetElement: null
+        if(step.options.attachTo){
 
-            }
-
-            if(isElement(item.element)){
-                props.targetElement = /**@type {HTMLELement}*/ (item.element);
+            modalOpeningProps = step.options.attachTo.map(item => {
+                let props = {
+                    overlayOpeningPadding: modalOverlayOpeningPadding,
+                    overlayOpeningRadius: modalOverlayOpeningRadius,
+                    scrollParent: scrollParent,
+                    targetElement: null
+    
+                }
+    
+                if(isElement(item.element)){
+                    props.targetElement = /**@type {HTMLELement}*/ (item.element);
+                    return props;
+                }
+    
+                if(isHTMLElement(item.element)){
+                    props.targetElement = item.element;
+                    return props;
+                }
+    
+                if(isString(item.element)){
+                    props.targetElement = document.querySelector(item.element);
+                    return props;
+                }
+    
+    
                 return props;
-            }
-
-            if(isHTMLElement(item.element)){
-                props.targetElement = item.element;
-                return props;
-            }
-
-            if(isString(item.element)){
-                props.targetElement = document.querySelector(item.element);
-                return props;
-            }
-
-
-            return props;
-
-
-
-        }).filter(props => props.targetElement);
+    
+    
+    
+            }).filter(props => props.targetElement);
+        }
 
 
         positionModal(modalOpeningProps)

@@ -53,13 +53,17 @@
 
         hasTitle = step.options && step.options.title;
 
-        attachingToElement = step.options.attachTo.some((item) => {
-        if (item?.element && item?.on) {
-            return true;
+        attachingToElement = false;
+        if(step.options.attachTo){
+            attachingToElement = step.options.attachTo?.some((item) => {
+                if (item?.element && item?.on) {
+                    return true;
+                }
+    
+                return false;
+            });
         }
 
-        return false;
-        });
     }
 
     export const getElement = () => element;
@@ -244,6 +248,7 @@
         --tour-cyan: #17A2B8;
 
         --tour-header-bg  : var(--tour-grey-lightest);
+
         --tour-pointer-bg : #FCFCFC;
 
         --tour-btn-active-shadow-col : #6161624D;
