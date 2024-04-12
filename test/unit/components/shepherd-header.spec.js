@@ -1,8 +1,8 @@
+import { jest } from '@jest/globals';
 import { cleanup, fireEvent, render } from '@testing-library/svelte';
-import { spy } from 'sinon';
-import ShepherdHeader from '../../../src/js/components/shepherd-header.svelte';
-import { Tour } from '../../../src/js/tour.js';
-import { Step } from '../../../src/js/step.js';
+import ShepherdHeader from '../../../shepherd.js/src/components/shepherd-header.svelte';
+import { Tour } from '../../../shepherd.js/src/tour';
+import { Step } from '../../../shepherd.js/src/step';
 
 describe('components/ShepherdHeader', () => {
   beforeEach(cleanup);
@@ -64,17 +64,20 @@ describe('components/ShepherdHeader', () => {
       }
     });
 
-    expect(container.querySelector('.shepherd-cancel-icon')).toHaveAttribute('aria-label', 'Test');
+    expect(container.querySelector('.shepherd-cancel-icon')).toHaveAttribute(
+      'aria-label',
+      'Test'
+    );
   });
 
-  it('cancel icon cancels the tour', async() => {
+  it('cancel icon cancels the tour', async () => {
     const tour = new Tour();
     const step = new Step(tour, {
       cancelIcon: {
         enabled: true
       }
     });
-    const stepCancelSpy = spy(step, 'cancel');
+    const stepCancelSpy = jest.spyOn(step, 'cancel');
 
     const { container } = render(ShepherdHeader, {
       props: {
@@ -83,6 +86,6 @@ describe('components/ShepherdHeader', () => {
     });
 
     fireEvent.click(container.querySelector('.shepherd-cancel-icon'));
-    expect(stepCancelSpy.called).toBe(true);
+    expect(stepCancelSpy).toHaveBeenCalled();
   });
 });

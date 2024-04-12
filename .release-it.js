@@ -2,12 +2,14 @@
 
 module.exports = {
   hooks: {
-    'after:bump': 'yarn build'
+    'after:bump': 'pnpm build'
   },
   plugins: {
-    'release-it-lerna-changelog': {
-      infile: 'CHANGELOG.md',
-      launchEditor: true
+    '@release-it-plugins/workspaces': {
+      workspaces: ['shepherd.js']
+    },
+    '@release-it-plugins/lerna-changelog': {
+      infile: 'CHANGELOG.md'
     }
   },
   git: {
@@ -16,9 +18,12 @@ module.exports = {
   github: {
     release: true,
     tokenRef: 'GITHUB_AUTH',
-    assets: ['dist/**/*.css', 'dist/**/*.js', 'dist/**/*.map']
+    assets: [
+      'shepherd.js/dist/**/*.css',
+      'shepherd.js/dist/**/*.js',
+      'shepherd.js/dist/**/*.ts',
+      'shepherd.js/dist/**/*.map'
+    ]
   },
-  npm: {
-    publish: true
-  }
+  npm: false
 };

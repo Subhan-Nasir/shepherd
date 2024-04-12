@@ -1,0 +1,101 @@
+{
+  "name": "shepherd.js",
+  "version": "12.0.0-alpha.13",
+  "description": "Guide your users through a tour of your app.",
+  "keywords": [
+    "site tour",
+    "tour",
+    "tutorial",
+    "shepherd"
+  ],
+  "homepage": "https://shepherdjs.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shepherd-pro/shepherd.git"
+  },
+  "license": "MIT",
+  "authors": [
+    "Robbie Wagner <rwwagner90@gmail.com>",
+    "Chuck Carpenter <chuck@shipshape.io>"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/shepherd.d.ts",
+      "require": "./dist/shepherd.js",
+      "import": "./dist/shepherd.mjs",
+      "default": "./dist/shepherd.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.js",
+      "import": "./dist/*.mjs",
+      "default": "./dist/*.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "pnpm clean && rollup -c",
+    "clean": "rimraf ./dist",
+    "esdoc": "esdoc",
+    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
+    "lint:js": "eslint . --cache",
+    "lint:js:fix": "eslint . --fix",
+    "lint:prettier": "prettier --check '**/*.{js,svelte,ts}'",
+    "lint:prettier:fix": "prettier --write '**/*.{js,svelte,ts}'",
+    "types:check": "pnpm tsc",
+    "watch": "pnpm clean && rollup -c --environment DEVELOPMENT --watch"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.5.3",
+    "deepmerge-ts": "^5.1.0",
+    "idb": "^8.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-typescript": "^7.24.1",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "autoprefixer": "^10.4.19",
+    "cssnano": "^6.1.2",
+    "del": "^7.1.0",
+    "eslint-plugin-svelte": "^2.35.1",
+    "jsdoc": "^4.0.2",
+    "jsdoc-template-ship-shape": "^0.1.1",
+    "postcss": "^8.4.38",
+    "postinstall-postinstall": "^2.1.0",
+    "prettier": "^3.1.1",
+    "prettier-plugin-svelte": "^3.2.2",
+    "replace": "^1.2.2",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.13.2",
+    "rollup-plugin-analyzer": "^4.0.0",
+    "rollup-plugin-filesize": "^10.0.0",
+    "rollup-plugin-license": "^3.3.1",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-serve": "^2.0.2",
+    "rollup-plugin-svelte": "^7.2.0",
+    "rollup-plugin-visualizer": "^5.11.0",
+    "svelte": "^4.2.12",
+    "svelte-preprocess": "^5.1.3",
+    "typescript": "^5.4.2"
+  },
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": "18.* || >= 20"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  }
+}

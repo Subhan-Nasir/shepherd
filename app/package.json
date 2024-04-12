@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "api",
+      "web"
+    ]
+  },
+  "devDependencies": {
+    "@redwoodjs/auth-dbauth-setup": "7.3.2",
+    "@redwoodjs/cli-storybook": "7.3.2",
+    "@redwoodjs/core": "7.3.2",
+    "@redwoodjs/realtime": "7.3.2",
+    "@redwoodjs/studio": "11",
+    "prettier-plugin-tailwindcss": "0.4.1"
+  },
+  "eslintConfig": {
+    "extends": "@redwoodjs/eslint-config",
+    "root": true
+  },
+  "engines": {
+    "node": ">=20.x"
+  },
+  "prisma": {
+    "seed": "yarn rw exec seed"
+  },
+  "packageManager": "yarn@4.1.1"
+}

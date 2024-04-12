@@ -1,0 +1,60 @@
+{
+  "name": "react-shepherd",
+  "version": "5.0.0-alpha.3",
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shepherd-pro/shepherd.git"
+  },
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "test:ci": "vitest --run",
+    "test:dev": "vitest",
+    "release": "release-it"
+  },
+  "dependencies": {
+    "shepherd.js": "workspace:^"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/react": "^14.1.2",
+    "@types/react": "^18.2.46",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/ui": "^1.1.1",
+    "happy-dom": "^14.3.9",
+    "typescript": "^5.4.2",
+    "vite": "^5.2.8",
+    "vite-plugin-dts": "^3.7.1",
+    "vitest": "^1.1.1"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
+  },
+  "release-it": {
+    "hooks": {
+      "after:bump": "pnpm build",
+      "after:release": "pnpm publish"
+    },
+    "npm": {
+      "publish": false
+    }
+  }
+}

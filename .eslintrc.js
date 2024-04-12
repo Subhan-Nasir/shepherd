@@ -1,20 +1,17 @@
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  extends: ['eslint:recommended', 'plugin:svelte/recommended'],
   env: {
-    browser: true,
-    es6: true,
-    node: true
+    browser: true
   },
-  plugins: ['svelte3'],
   rules: {
     'max-lines': [
       'warn',
-      { max: 250, skipBlankLines: true, skipComments: true }
+      { max: 500, skipBlankLines: true, skipComments: true }
     ],
     'no-console': 'off',
     'prefer-const': 'off'
@@ -23,23 +20,35 @@ module.exports = {
     // svelte files
     {
       files: ['**/*.svelte'],
-      processor: 'svelte3/svelte3'
+      processor: 'svelte/svelte'
+    },
+    // Typescript files
+    {
+      parser: '@typescript-eslint/parser',
+      files: ['**/*.ts'],
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { argsIgnorePattern: '^_' }
+        ],
+        'prefer-rest-params': 'off'
+      }
     },
     // node files
     {
       files: [
         '.eslintrc.js',
         '.prettierrc.js',
-        '.release-it.js',
         'babel.config.js',
         'jest.config.js',
-        'rollup.config.js',
         'svelte.config.js',
         'tailwind.config.js'
       ],
       parserOptions: {
         sourceType: 'module',
-        ecmaVersion: 2015
+        ecmaVersion: 2020
       },
       env: {
         node: true

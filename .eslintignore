@@ -3,4 +3,5 @@
 /dist/
 /docs/
 /landing/
-/test/dummy/
+/site/
+/test/cypress/dummy/
