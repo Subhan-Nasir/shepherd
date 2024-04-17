@@ -185,6 +185,20 @@ export interface StepOptions {
    * ```
    */
   when?: StepOptionsWhen;
+
+
+  // When enabled, automatically forces focus state on target element 300ms after modal opens.
+  autoFocus?: boolean;
+
+
+  // image settings, needs url, width height
+  image?: StepOptionsImage;
+
+  // embeded video settings, needs url
+  video?: StepOptionsVideo;
+  
+
+
 }
 
 type PopperPlacement =
@@ -254,6 +268,9 @@ export interface StepOptionsButton {
    * The HTML text of the button
    */
   text?: StringOrStringFunction;
+
+
+  position?: string;
 }
 
 export interface StepOptionsButtonEvent {
@@ -268,6 +285,25 @@ export interface StepOptionsCancelIcon {
 export interface StepOptionsWhen {
   [key: string]: (this: Step) => void;
 }
+
+
+export interface StepOptionsImage {
+  url: string;
+  position?:string;
+  width: number;
+  height: number;
+  classes?: string;
+
+}
+
+export interface StepOptionsVideo {
+  url: string,
+  width: number;
+  height: number;
+  classes?: string;
+}
+
+
 
 /**
  * A class representing steps to be added to a tour.
@@ -341,6 +377,12 @@ export class Step extends Evented {
 
     this._updateStepTargetOnHide();
 
+    // @ts-expect-error
+    if(this.shepherdElementComponent){
+      // @ts-expect-error
+      this.shepherdElementComponent.$destroy();
+    }
+
     this.trigger('destroy');
   }
 
@@ -365,6 +407,12 @@ export class Step extends Evented {
     }
 
     this._updateStepTargetOnHide();
+
+    // @ts-expect-error
+    if(this.shepherdElementComponent){
+      // @ts-expect-error
+      this.shepherdElementComponent.removeKeyboardListener();
+    }
 
     this.trigger('hide');
   }
@@ -406,7 +454,7 @@ export class Step extends Evented {
     if (isFunction(this.options.beforeShowPromise)) {
       return Promise.resolve(this.options.beforeShowPromise()).then(() =>
         this._show()
-      );
+      ).catch(() => {this.cancel()});
     }
     return Promise.resolve(this._show());
   }

@@ -89,13 +89,26 @@ export interface TourOptions {
    * An optional "name" for the tour. This will be appended to the the tour's
    * dynamically generated `id` property.
    */
-  tourName?: string;
+  tourName: string;
   /**
    * Whether or not steps should be placed above a darkened
    * modal overlay. If true, the overlay will create an opening around the target element so that it
    * can remain interactive
    */
   useModalOverlay?: boolean;
+
+
+
+  overlayOpacity?: number;
+
+  cancelOnOutsideClick?: boolean;
+  cancelOnMouseLeave?: boolean;
+
+  enableProgressBar?: boolean;
+  progressBarStyle?: string;
+
+
+
 }
 
 const SHEPHERD_DEFAULT_API = 'https://shepherdpro.com' as const;
@@ -202,14 +215,15 @@ export class Tour extends Evented {
   options: TourOptions;
   steps: Array<Step>;
 
-  constructor(options: TourOptions = {}) {
+  constructor(options: TourOptions) {
     super();
 
     autoBind(this);
 
     const defaultTourOptions = {
       exitOnEsc: true,
-      keyboardNavigation: true
+      keyboardNavigation: true,
+      enableProgressBar: false,
     };
 
     this.options = Object.assign({}, defaultTourOptions, options);
@@ -411,6 +425,10 @@ export class Tour extends Evented {
    */
   removeStep(name: string) {
     const current = this.getCurrentStep();
+    let currentStepIndex = -1;
+    if(current){
+      currentStepIndex = this.steps.indexOf(current);
+    }
 
     // Find the step, destroy it and remove it from this.steps
     this.steps.some((step, i) => {
@@ -429,8 +447,10 @@ export class Tour extends Evented {
     if (current && current.id === name) {
       this.currentStep = undefined;
 
+      const newStepIndex = currentStepIndex - 1 >= 0 ? currentStepIndex - 1 : 0;
+
       // If we have steps left, show the first one, otherwise just cancel the tour
-      this.steps.length ? this.show(0) : this.cancel();
+      this.steps.length ? this.show(newStepIndex) : this.cancel();
     }
   }
 
@@ -439,7 +459,7 @@ export class Tour extends Evented {
    * @param {number | string} key - The key to look up the step by
    * @param {boolean} forward - True if we are going forward, false if backward
    */
-  show(key: number | string = 0, forward = true) {
+  show(key: number | string = 0, forward: boolean = true) {
     const step = isString(key) ? this.getById(key) : this.steps[key];
 
     if (step) {
@@ -545,9 +565,23 @@ export class Tour extends Evented {
       target: this.options.modalContainer || document.body,
       props: {
         // @ts-expect-error TODO: investigate where styles comes from
-        styles: this.styles
+        styles: this.styles,
+        opacity: this.options.overlayOpacity
       }
     });
+
+    if (this.options.cancelOnOutsideClick) {
+      document.getElementById("tourModalOverlay")?.addEventListener("click", () => {
+        this.cancel();
+      })
+    }
+    if (this.options.cancelOnMouseLeave) {
+      document.getElementById("tourModalOverlay")?.addEventListener("mouseenter", () => {
+        this.cancel();
+      })
+    }
+
+
   }
 
   /**
@@ -592,6 +626,14 @@ export class Tour extends Evented {
     const tourId = optionsId || uuid();
 
     this.id = `${tourName}--${tourId}`;
+  }
+
+  getName(): string{
+    return this.options.tourName;
+  }
+
+  getID(){
+    return this.id;
   }
 }
 

@@ -45,7 +45,7 @@ export function setupTooltip(step: Step): ComputePositionConfig {
     }
 
     setPosition(target, step, floatingUIOptions, shouldCenter);
-  });
+  }, {animationFrame: true, layoutShift: true, });
 
   step.target = attachToOptions.element as HTMLElement;
 
@@ -103,7 +103,7 @@ function setPosition(
       )
       // Replaces focusAfterRender modifier.
       .then((step: Step) => {
-        if (step?.el) {
+        if (step?.el && step.options.autoFocus) {
           step.el.focus({ preventScroll: true });
         }
       })
