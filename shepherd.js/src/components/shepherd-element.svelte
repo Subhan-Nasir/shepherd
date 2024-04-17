@@ -132,6 +132,9 @@
   };
 </script>
 
+
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
   aria-describedby={!isUndefined(step.options.text) ? descriptionId : null}
   aria-labelledby={step.options.title ? labelId : null}

@@ -14,7 +14,6 @@ import DataRequest from './utils/datarequest';
 import { normalizePrefix, uuid } from './utils/general';
 // -----@ts-expect-error TODO: not yet typed
 // @ts-ignore
-// import ShepherdModal from './components/shepherd-modal.svelte';
 import ShepherdModal from './components/shepherd-modal.svelte';
 
 

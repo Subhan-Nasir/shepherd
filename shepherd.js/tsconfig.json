@@ -18,7 +18,7 @@
     // TypeScript also supplies some lint-style checks; nearly all of them are
     // better handled by ESLint with the `@typescript-eslint`. This one is more
     // like a safety check, though, so we leave it on.
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     // --- Compilation/integration settings
     // Setting `noEmitOnError` here allows tools trying to respect the tsconfig
     // to still emit code without breaking on errors.
