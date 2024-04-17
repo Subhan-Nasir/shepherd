@@ -13,7 +13,10 @@
 
     if (isHTMLElement(text)) {
       element.appendChild(text);
-    } else {
+    } if(Array.isArray(text)){
+      element.innerHTML = text.join("");
+    }
+     else {
       element.innerHTML = text;
     }
   });

@@ -1,17 +1,20 @@
-import { Evented } from './evented.ts';
-import { Step, type StepOptions } from './step.ts';
-import autoBind from './utils/auto-bind.ts';
-import { getContext } from './utils/context.ts';
+import 'svelte';
+import { Evented } from './evented';
+import { Step, type StepOptions } from './step';
+import autoBind from './utils/auto-bind';
+import { getContext } from './utils/context';
 import {
   isHTMLElement,
   isFunction,
   isString,
   isUndefined
-} from './utils/type-check.ts';
-import { cleanupSteps } from './utils/cleanup.ts';
-import DataRequest from './utils/datarequest.ts';
-import { normalizePrefix, uuid } from './utils/general.ts';
-// @ts-expect-error TODO: not yet typed
+} from './utils/type-check';
+import { cleanupSteps } from './utils/cleanup';
+import DataRequest from './utils/datarequest';
+import { normalizePrefix, uuid } from './utils/general';
+// -----@ts-expect-error TODO: not yet typed
+// @ts-ignore
+// import ShepherdModal from './components/shepherd-modal.svelte';
 import ShepherdModal from './components/shepherd-modal.svelte';
 
 

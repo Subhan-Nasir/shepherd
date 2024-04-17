@@ -1,22 +1,23 @@
 import { deepmerge } from 'deepmerge-ts';
-import { Evented } from './evented.ts';
-import autoBind from './utils/auto-bind.ts';
+import { Evented } from './evented';
+import autoBind from './utils/auto-bind';
 import {
   isElement,
   isHTMLElement,
   isFunction,
   isUndefined
-} from './utils/type-check.ts';
-import { bindAdvance } from './utils/bind.ts';
-import { parseAttachTo, normalizePrefix, uuid } from './utils/general.ts';
+} from './utils/type-check';
+import { bindAdvance } from './utils/bind';
+import { parseAttachTo, normalizePrefix, uuid } from './utils/general';
 import {
   setupTooltip,
   destroyTooltip,
   mergeTooltipConfig
-} from './utils/floating-ui.ts';
-// @ts-expect-error TODO: not yet typed
+} from './utils/floating-ui';
+// ---@ts-expect-error TODO: not yet typed
+// @ts-ignore
 import ShepherdElement from './components/shepherd-element.svelte';
-import { type Tour } from './tour.ts';
+import { type Tour } from './tour';
 
 type StepText =
   | string
@@ -355,7 +356,7 @@ export class Step extends Evented {
    * Hide the step
    */
   hide() {
-    this.tour.modal.hide();
+    this.tour.modal?.hide();
 
     this.trigger('before-hide');
 

@@ -1,5 +1,5 @@
-import type { Step } from '../step.ts';
-import { isUndefined } from './type-check.ts';
+import type { Step } from '../step';
+import { isUndefined } from './type-check';
 
 /**
  * Sets up the handler to determine if we should advance the tour

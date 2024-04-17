@@ -1,4 +1,4 @@
-import { isUndefined } from './utils/type-check.ts';
+import { isUndefined } from './utils/type-check';
 
 type Bindings = {
   [key: string]: Array<{ handler: () => void; ctx?: unknown; once?: boolean }>;

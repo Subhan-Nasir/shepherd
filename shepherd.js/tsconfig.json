@@ -11,7 +11,7 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "allowSyntheticDefaultImports": false,
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "esModuleInterop": true,
     // --- Lint-style rules
 
@@ -32,7 +32,7 @@
     // If you were to change this to `true`, it could lead to accidentally
     // generating code with `tsc` instead of Babel, and could thereby
     // result in broken code at runtime.
-    "noEmit": true,
+    "noEmit": false,
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "dist",
