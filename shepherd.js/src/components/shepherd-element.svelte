@@ -146,6 +146,36 @@
 
 <style global>
 
+    @font-face {
+        font-family: "Material Symbols Outlined";
+        font-style: normal;
+        src:
+            url("assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2") format("woff2"),
+            url("assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf") format("truetype");
+    }
+
+
+    .materia-symbols-outlined {
+        font-family: "Material Symbols Outlined";
+        font-weight: normal;
+        font-variation-settings: "FILL" 0,"wght" 200,"GRAD" 0,"opsz" 24;
+        font-style: normal;
+        font-size: 24px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+    }
+
+
+
+
+
+
+
     :root {
         --tour-primary : #007bff;
 
