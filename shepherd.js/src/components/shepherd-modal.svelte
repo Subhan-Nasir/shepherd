@@ -1,25 +1,20 @@
-<script>
-    import { makeOverlayPath } from '../utils/overlay-path.ts';
+<script lang="ts">
+    import type { Step } from 'src/step';
+    import { makeOverlayPath, type ModalOpeningRadiusType, type OverlayPathParams } from '../utils/overlay-path';
 
-    export let element, openingProperties, opacity;
+    export let element: SVGSVGElement, openingPropsList: OverlayPathParams[], opacity: number;
     let modalIsVisible = false;
-    let rafId = undefined;
-    let pathDefinition;
+    let rafId: number | undefined = undefined;
+    let pathDefinition: string;
 
-    $: pathDefinition = makeOverlayPath(openingProperties);
+    $: pathDefinition = makeOverlayPath(openingPropsList);
 
     closeModalOpening();
 
     export const getElement = () => element;
 
     export function closeModalOpening() {
-        openingProperties = {
-        width: 0,
-        height: 0,
-        x: 0,
-        y: 0,
-        r: 0
-        };
+        openingPropsList = [{ width: 0, height: 0, x: 0, y: 0, r: 0}];
     }
 
     /**
@@ -43,26 +38,34 @@
      * @param {HTMLElement} targetElement The element the opening will expose
      */
     export function positionModal(
-        modalOverlayOpeningPadding = 0,
-        modalOverlayOpeningRadius = 0,
-        modalOverlayOpeningXOffset = 0,
-        modalOverlayOpeningYOffset = 0,
-        scrollParent,
-        targetElement
+        modalOverlayOpeningPadding: number = 0,
+        modalOverlayOpeningRadius: ModalOpeningRadiusType = 0,
+        modalOverlayOpeningXOffset: number = 0,
+        modalOverlayOpeningYOffset: number = 0,
+        scrollParent: HTMLElement | null,
+        elements: HTMLElement[],
+
     ) {
-        if (targetElement) {
-            const { y, height } = _getVisibleHeight(targetElement, scrollParent);
-            const { x, width, left } = targetElement.getBoundingClientRect();
+
+        openingPropsList = elements.map(el => {
+
+            const { y, height } = _getVisibleHeight(el, scrollParent);
+            const { x, width, left } = el.getBoundingClientRect();
 
             // getBoundingClientRect is not consistent. Some browsers use x and y, while others use left and top
-            openingProperties = {
+            const props: OverlayPathParams = {
                 width: width + modalOverlayOpeningPadding * 2,
                 height: height + modalOverlayOpeningPadding * 2,
                 x: (x || left) + modalOverlayOpeningXOffset - modalOverlayOpeningPadding,
                 y: y + modalOverlayOpeningYOffset - modalOverlayOpeningPadding,
                 r: modalOverlayOpeningRadius
             };
-        } else {
+
+            return props;
+
+        })
+
+        if(!elements || elements.length === 0 ){
             closeModalOpening();
         }
     }
@@ -71,7 +74,7 @@
      * If modal is enabled, setup the svg mask opening and modal overlay for the step
      * @param {Step} step The step instance
      */
-    export function setupForStep(step) {
+    export function setupForStep(step: Step) {
         // Ensure we move listeners from the previous step, before we setup new ones
         _cleanupStepEventListeners();
 
@@ -90,11 +93,11 @@
         modalIsVisible = true;
     }
 
-    const _preventModalBodyTouch = (e) => {
+    const _preventModalBodyTouch = (e: Event) => {
         e.preventDefault();
     };
 
-    const _preventModalOverlayTouch = (e) => {
+    const _preventModalOverlayTouch = (e: Event) => {
         e.stopPropagation();
     };
 
@@ -119,7 +122,11 @@
             rafId = undefined;
         }
 
-        window.removeEventListener('touchmove', _preventModalBodyTouch, {
+        // window.removeEventListener('touchmove', _preventModalBodyTouch, {
+        //     passive: false
+        // });
+
+        (<any>window).removeEventListener('touchmove', _preventModalBodyTouch, {
             passive: false
         });
     }
@@ -129,7 +136,7 @@
      * @param {Step} step The step to style the opening for
      * @private
      */
-    function _styleForStep(step) {
+    function _styleForStep(step: Step) {
         const {
             modalOverlayOpeningPadding,
             modalOverlayOpeningRadius,
@@ -137,8 +144,15 @@
             modalOverlayOpeningYOffset = 0
         } = step.options;
 
-        const iframeOffset = _getIframeOffset(step.target);
-        const scrollParent = _getScrollParent(step.target);
+
+        const iframeOffset = _getIframeOffset(step.target ?? null);
+        const scrollParent = _getScrollParent(step.target ?? null);
+        const elements: HTMLElement[] = [...step.highlight.map(item => item.element)];
+        if(step.target){
+            elements.push(step.target);
+        }
+
+
 
         // Setup recursive function to call requestAnimationFrame to update the modal opening position
         const rafLoop = () => {
@@ -149,7 +163,7 @@
                 modalOverlayOpeningXOffset + iframeOffset.left,
                 modalOverlayOpeningYOffset + iframeOffset.top,
                 scrollParent,
-                step.target
+                elements
             );
             rafId = requestAnimationFrame(rafLoop);
         };
@@ -165,7 +179,7 @@
      * @returns {HTMLElement}
      * @private
      */
-    function _getScrollParent(element) {
+    function _getScrollParent(element: HTMLElement | null): HTMLElement | null {
         if (!element) {
             return null;
         }
@@ -178,7 +192,12 @@
             return element;
         }
 
-        return _getScrollParent(element.parentElement);
+        if(element.parentElement){
+            return _getScrollParent(element.parentElement);
+        }
+
+        return null;
+
     }
 
     /**
@@ -187,7 +206,7 @@
      * @param {HTMLElement} element The target element
      * @private
      */
-    function _getIframeOffset(element) {
+    function _getIframeOffset(element: HTMLElement | null) {
         let offset = {
             top: 0,
             left: 0
@@ -197,19 +216,27 @@
             return offset;
         }
 
-        let targetWindow = element.ownerDocument.defaultView;
+        let targetWindow: Window | null = element.ownerDocument.defaultView;
 
         while (targetWindow !== window.top) {
             const targetIframe = targetWindow?.frameElement;
 
             if (targetIframe) {
-                const targetIframeRect = targetIframe.getBoundingClientRect();
+                // const targetIframeRect = (targetIframe as HTMLElement).getBoundingClientRect();
 
-                offset.top += targetIframeRect.top + (targetIframeRect.scrollTop ?? 0);
-                offset.left += targetIframeRect.left + (targetIframeRect.scrollLeft ?? 0);
+                // offset.top += targetIframeRect.top + (targetIframeRect.scrollTop ?? 0);
+                // offset.left += targetIframeRect.left + (targetIframeRect.scrollLeft ?? 0);
+
+                const targetIframeEl = targetIframe as HTMLElement;
+                const tragetIframeRect = targetIframeEl.getBoundingClientRect();
+
+                offset.top += tragetIframeRect.top + (targetIframeEl.scrollTop ?? 0);
+                offset.left += tragetIframeRect.top + (targetIframeEl.scrollTop ?? 0);
+
             }
 
-            targetWindow = targetWindow.parent;
+                targetWindow = targetWindow?.parent ?? null;
+
         }
 
         return offset;
@@ -224,7 +251,7 @@
      * @returns {{y: number, height: number}}
      * @private
      */
-    function _getVisibleHeight(element, scrollParent) {
+    function _getVisibleHeight(element: HTMLElement, scrollParent: HTMLElement | null): { y: number; height: number; } {
         const elementRect = element.getBoundingClientRect();
         let top = elementRect.y || elementRect.top;
         let bottom = elementRect.bottom || top + elementRect.height;

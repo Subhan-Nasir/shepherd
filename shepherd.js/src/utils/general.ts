@@ -1,17 +1,21 @@
 import { type Tour, type TourOptions } from '../tour';
 import {
-  type StepOptionsAttachTo,
-  type Step,
-  type StepOptions
+    type StepOptionsAttachTo,
+    Step,
+    type StepOptions,
+    type PopperPlacement,
+    type StepOptionsHighlight,
+    type ResolvedHighlight,
+    isResolvedHighlight
 } from '../step';
-import { isFunction, isString } from './type-check';
+import { isFunction, isHTMLElement, isString } from './type-check';
 
 export class StepNoOp {
-  constructor(_options: StepOptions) {}
+    constructor(_options: StepOptions) { }
 }
 
 export class TourNoOp {
-  constructor(_tour: Tour, _options: TourOptions) {}
+    constructor(_tour: Tour, _options: TourOptions) { }
 }
 
 /**
@@ -20,11 +24,11 @@ export class TourNoOp {
  * @return The prefix ending in `-`
  */
 export function normalizePrefix(prefix?: string) {
-  if (!isString(prefix) || prefix === '') {
-    return '';
-  }
+    if (!isString(prefix) || prefix === '') {
+        return '';
+    }
 
-  return prefix.charAt(prefix.length - 1) !== '-' ? `${prefix}-` : prefix;
+    return prefix.charAt(prefix.length - 1) !== '-' ? `${prefix}-` : prefix;
 }
 
 /**
@@ -34,58 +38,99 @@ export function normalizePrefix(prefix?: string) {
  * `element` is a qualified HTML Element
  * `on` is a string position value
  */
-export function parseAttachTo(step: Step) {
-  const options = step.options.attachTo || {};
-  const returnOpts = Object.assign({}, options);
+export function parseAttachTo(step: Step): {} | { element: HTMLElement; on: PopperPlacement; } {
+    const options = step.options.attachTo || {};
+    const returnOpts = Object.assign({}, options);
 
-  if (isFunction(returnOpts.element)) {
-    // Bind the callback to step so that it has access to the object, to enable running additional logic
-    returnOpts.element = returnOpts.element.call(step);
-  }
-
-  if (isString(returnOpts.element)) {
-    // Can't override the element in user opts reference because we can't
-    // guarantee that the element will exist in the future.
-    try {
-      returnOpts.element = document.querySelector(
-        returnOpts.element
-      ) as HTMLElement;
-    } catch (e) {
-      // TODO
+    if (isFunction(returnOpts.element)) {
+        // Bind the callback to step so that it has access to the object, to enable running additional logic
+        returnOpts.element = returnOpts.element.call(step);
     }
-    if (!returnOpts.element) {
-      console.error(
-        `The element for this Shepherd step was not found ${options.element}`
-      );
-    }
-  }
 
-  return returnOpts;
+    if (isString(returnOpts.element)) {
+        // Can't override the element in user opts reference because we can't
+        // guarantee that the element will exist in the future.
+        try {
+            returnOpts.element = document.querySelector(
+                returnOpts.element
+            ) as HTMLElement;
+        } catch (e) {
+            // TODO
+        }
+        if (!returnOpts.element) {
+            console.error(
+                `The element for this Shepherd step was not found ${options.element}`
+            );
+        }
+    }
+
+    return returnOpts;
 }
+
+export function parseHighlightElements(step: Step): ResolvedHighlight[]{
+    const options = step.options.highlightElements || [];
+    const returnOptionsList: ResolvedHighlight[]  = [];
+
+    options.forEach(option => {
+        const returnOption = Object.assign({}, option);
+
+        if(isFunction(returnOption.element)){
+            returnOption.element = returnOption.element.call(step);
+        }
+
+        if(isString(returnOption.element)){
+            try {
+                returnOption.element = document.querySelector<HTMLElement>(returnOption.element);
+            } catch (e) {
+                // TODO
+            }
+        }
+
+        if (!returnOption.element) {
+            console.error(
+                `Secondary element for this Shepherd step was not found ${returnOption.element}`
+            );
+        }
+
+
+        if(isResolvedHighlight(returnOption)){
+            returnOptionsList.push(returnOption);
+        }
+
+
+    });
+
+    return returnOptionsList;
+
+
+}
+
+
+
 
 /**
  * Checks if the step should be centered or not. Does not trigger attachTo.element evaluation, making it a pure
  * alternative for the deprecated step.isCentered() method.
  */
 export function shouldCenterStep(resolvedAttachToOptions: StepOptionsAttachTo) {
-  if (
-    resolvedAttachToOptions === undefined ||
-    resolvedAttachToOptions === null
-  ) {
-    return true;
-  }
+    if (
+        resolvedAttachToOptions === undefined ||
+        resolvedAttachToOptions === null
+    ) {
+        return true;
+    }
 
-  return !resolvedAttachToOptions.element || !resolvedAttachToOptions.on;
+    return !resolvedAttachToOptions.element || !resolvedAttachToOptions.on;
 }
 
 /**
  * Create a unique id for steps, tours, modals, etc
  */
 export function uuid() {
-  let d = Date.now();
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
+    let d = Date.now();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
 }
