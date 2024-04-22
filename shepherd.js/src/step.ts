@@ -227,12 +227,21 @@ export interface StepOptionsAttachTo {
 }
 
 export interface StepOptionsHighlight {
-    element?: UnresolvedElement,
-    clickable?: boolean
+    element?: UnresolvedElement;
+    clickable?: boolean;
+    modalOverlayOpeningRadius?: number
+        | {
+            topLeft?: number;
+            bottomLeft?: number;
+            bottomRight?: number;
+            topRight?: number;
+        };
+
+    modalOverlayOpeningPadding?: number;
 }
 
 export interface ResolvedHighlight extends StepOptionsHighlight {
-    element: HTMLElement,
+    element: HTMLElement;
 }
 
 export function isResolvedHighlight(
