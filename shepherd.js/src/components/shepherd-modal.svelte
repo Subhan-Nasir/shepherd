@@ -1,14 +1,22 @@
 <script lang="ts">
     import type { Step } from 'src/step';
-    import { makeOverlayPath, type ModalOpeningRadiusType, type OverlayPathParams } from '../utils/overlay-path';
+    import { makeOutlinePath, makeOverlayPath, type ModalOpeningRadiusType, type OverlayPathParams } from '../utils/overlay-path';
+    import { blur } from 'svelte/transition';
 
-    export let element: SVGSVGElement, openingPropsList: OverlayPathParams[], opacity: number;
+
+    export let element: SVGSVGElement, openingPropsList: OverlayPathParams[], opacity: number | undefined;
 
     let modalIsVisible = false;
     let rafId: number | undefined = undefined;
     let pathDefinition: string;
+    let x: number;
+    let targetOpeningProps: OverlayPathParams | null = null;
+
 
     $: pathDefinition = makeOverlayPath(openingPropsList);
+    $: outlinePath = makeOutlinePath(openingPropsList);
+    $: targetOpeningProps = openingPropsList.find(p => p.isTarget) ?? null;
+
 
     closeModalOpening();
 
@@ -36,6 +44,7 @@
         modalOverlayOpeningYOffset: number;
         scrollParent: HTMLElement | null;
         element: HTMLElement;
+        isTarget?: boolean;
     }
 
 
@@ -69,7 +78,8 @@
                 modalOverlayOpeningXOffset = 0,
                 modalOverlayOpeningYOffset = 0,
                 scrollParent,
-                element
+                element,
+                isTarget
             } = propsObj;
 
             const { y, height } = _getVisibleHeight(element, scrollParent);
@@ -81,7 +91,8 @@
                 height: height + modalOverlayOpeningPadding * 2,
                 x: (x || left) + modalOverlayOpeningXOffset - modalOverlayOpeningPadding,
                 y: y + modalOverlayOpeningYOffset - modalOverlayOpeningPadding,
-                r: modalOverlayOpeningRadius
+                r: modalOverlayOpeningRadius,
+                isTarget: isTarget
             };
 
             return pathParams;
@@ -179,10 +190,11 @@
                 modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
                 scrollParent: scrollParent,
                 element: step.target,
+                isTarget: true,
             });
         }
 
-        step.highlight.forEach(item => {
+        step.highlightElements.forEach(item => {
             positionPropsList.push({
                 modalOverlayOpeningPadding: item.modalOverlayOpeningPadding ?? modalOverlayOpeningPadding,
                 modalOverlayOpeningRadius: item.modalOverlayOpeningRadius ?? modalOverlayOpeningRadius,
@@ -190,6 +202,7 @@
                 modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
                 scrollParent: scrollParent,
                 element: item.element,
+                isTarget: false
             });
         });
 
@@ -324,14 +337,39 @@
 
     .shepherd-modal-overlay-container.shepherd-modal-is-visible {
         height: 100vh;
-        opacity: var(--opacity, 0.5);
+        /* opacity: var(--opacity, 0.5); */
+        opacity: 1;
         transition: all 0.3s ease-out, height 0s 0s, opacity 0.3s 0s;
         transform: translateZ(0);
     }
 
     .shepherd-modal-overlay-container.shepherd-modal-is-visible path {
         pointer-events: all;
+        opacity: var(--opacity, 0.5);
     }
+
+    /* .shepherd-modal-overlay-container.shepherd-modal-is-visible .outline-box {
+        pointer-events: none;
+    } */
+
+    .outline-box {
+
+        fill: none;
+        stroke: cyan;
+        stroke-width: 4;
+        /* stroke-dasharray: 4; */
+
+        transform-origin: center;
+
+        transition: all 350ms ease-in-out;
+
+        pointer-events: none !important;
+    }
+
+
+
+
+
 
 </style>
 
@@ -347,4 +385,40 @@
     on:touchmove={_preventModalOverlayTouch}
 >
     <path d={pathDefinition} />
+
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- <path class="outline-path" d={outlinePath} on:click={consolelog} /> -->
+
+    {#if targetOpeningProps}
+
+        <rect
+            class="outline-box"
+            x={targetOpeningProps.x ?? '50%'}
+            y={targetOpeningProps.y ?? '50%'}
+            height={targetOpeningProps.height}
+            width={targetOpeningProps.width}
+            rx={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
+            ry={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
+        />
+
+    {/if}
+
+    <!-- {#each openingPropsList as props}
+
+        <rect
+            class="outline-box"
+            class:is-target={props.isTarget}
+            x={props.x ?? '50%'}
+            y={props.y ?? '50%'}
+            height={props.height}
+            width={props.width}
+            rx={typeof props.r === "number" ? props.r : 0 }
+            ry={typeof props.r === "number" ? props.r : 0 }
+        />
+
+
+    {/each} -->
+
 </svg>
+

@@ -55,7 +55,7 @@ export function setupTooltip(step: Step): ComputePositionConfig {
 
 
     step.target = element;
-    step.highlight = step._getResolvedHighlight();
+    step.highlightElements = step._getResolvedHighlight();
 
 
     return floatingUIOptions;

@@ -348,7 +348,7 @@ export class Step extends Evented {
     declare id: string;
     declare options: StepOptions;
     target?: HTMLElement | null;
-    highlight: ResolvedHighlight[] = [];
+    highlightElements: ResolvedHighlight[] = [];
     tour: Tour;
 
     constructor(tour: Tour, options: StepOptions = {}) {
@@ -720,7 +720,7 @@ export class Step extends Evented {
         // @ts-expect-error TODO: get types for Svelte components
         const content = this.shepherdElementComponent.getElement();
         const target = this.target || document.body;
-        const highlighted = this.highlight;
+        const highlighted = this.highlightElements;
 
         target.classList.add(`${this.classPrefix}shepherd-enabled`);
         target.classList.add(`${this.classPrefix}shepherd-target`);
@@ -745,7 +745,7 @@ export class Step extends Evented {
      */
     _styleTargetElementForStep(step: Step) {
         const targetElement = step.target;
-        const highlighted = step.highlight;
+        const highlighted = step.highlightElements;
 
         if (!targetElement) {
             return;
@@ -778,7 +778,7 @@ export class Step extends Evented {
      */
     _updateStepTargetOnHide() {
         const target = this.target || document.body;
-        const highlighted = this.highlight;
+        const highlighted = this.highlightElements;
 
         if (this.options.highlightClass) {
             target.classList.remove(this.options.highlightClass);
