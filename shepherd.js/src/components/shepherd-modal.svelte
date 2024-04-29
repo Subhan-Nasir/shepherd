@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { Step } from 'src/step';
-    import { makeOutlinePath, makeOverlayPath, type ModalOpeningRadiusType, type OverlayPathParams } from '../utils/overlay-path';
-    import { blur } from 'svelte/transition';
+    import { makeOverlayPath, type ModalOpeningRadiusType, type OverlayPathParams } from '../utils/overlay-path';
 
 
     export let element: SVGSVGElement, openingPropsList: OverlayPathParams[], opacity: number | undefined;
@@ -14,7 +13,6 @@
 
 
     $: pathDefinition = makeOverlayPath(openingPropsList);
-    $: outlinePath = makeOutlinePath(openingPropsList);
     $: targetOpeningProps = openingPropsList.find(p => p.isTarget) ?? null;
 
 
@@ -355,15 +353,16 @@
     .outline-box {
 
         fill: none;
-        stroke: cyan;
+        stroke: var(--tour-primary);
         stroke-width: 4;
-        /* stroke-dasharray: 4; */
-
+ 
         transform-origin: center;
 
         transition: all 350ms ease-in-out;
 
         pointer-events: none !important;
+
+        filter:url(#glow);
     }
 
 
@@ -384,6 +383,20 @@
     style="--opacity: {opacity}"
     on:touchmove={_preventModalOverlayTouch}
 >
+
+    <defs>
+        <!-- a transparent glow that takes on the colour of the object it's applied to -->
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+    </defs>
+
+
     <path d={pathDefinition} />
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -400,7 +413,9 @@
             width={targetOpeningProps.width}
             rx={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
             ry={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
-        />
+        >
+        </rect>
+
 
     {/if}
 
