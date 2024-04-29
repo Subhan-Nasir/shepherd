@@ -8,8 +8,20 @@
     let modalIsVisible = false;
     let rafId: number | undefined = undefined;
     let pathDefinition: string;
-    let x: number;
     let targetOpeningProps: OverlayPathParams | null = null;
+
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    let isScrolling = false;
+    window.addEventListener('scroll', function() {
+        isScrolling = true;
+        if(timer !== null) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(function() {
+            isScrolling = false;
+        }, 150);
+    }, false);
 
 
     $: pathDefinition = makeOverlayPath(openingPropsList);
@@ -57,16 +69,8 @@
      * @param {HTMLElement} targetElement The element the opening will expose
      */
     export function positionModal(
-        // modalOverlayOpeningPadding: number = 0,
-        // modalOverlayOpeningRadius: ModalOpeningRadiusType = 0,
-        // modalOverlayOpeningXOffset: number = 0,
-        // modalOverlayOpeningYOffset: number = 0,
-        // scrollParent: HTMLElement | null,
-        // elements: HTMLElement[],
         positionPropsList: PositionModalProps[]
-
     ) {
-
 
         openingPropsList = positionPropsList.map(propsObj => {
 
@@ -179,7 +183,10 @@
 
         const iframeOffset = _getIframeOffset(step.target ?? null);
         const scrollParent = _getScrollParent(step.target ?? null);
-        const positionPropsList: PositionModalProps[] = []
+
+
+        const positionPropsList: PositionModalProps[] = [];
+
         if(step.target){
             positionPropsList.push({
                 modalOverlayOpeningPadding: modalOverlayOpeningPadding,
@@ -363,11 +370,12 @@
         pointer-events: none !important;
 
         filter:url(#glow);
+
     }
 
-
-
-
+    .outline-box.no-animation {
+        transition: none;
+    }
 
 
 </style>
@@ -407,33 +415,16 @@
 
         <rect
             class="outline-box"
+            class:no-animation={isScrolling}
             x={targetOpeningProps.x ?? '50%'}
             y={targetOpeningProps.y ?? '50%'}
             height={targetOpeningProps.height}
             width={targetOpeningProps.width}
             rx={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
             ry={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
-        >
-        </rect>
-
-
-    {/if}
-
-    <!-- {#each openingPropsList as props}
-
-        <rect
-            class="outline-box"
-            class:is-target={props.isTarget}
-            x={props.x ?? '50%'}
-            y={props.y ?? '50%'}
-            height={props.height}
-            width={props.width}
-            rx={typeof props.r === "number" ? props.r : 0 }
-            ry={typeof props.r === "number" ? props.r : 0 }
         />
 
-
-    {/each} -->
+    {/if}
 
 </svg>
 
