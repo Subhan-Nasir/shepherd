@@ -351,7 +351,13 @@
     .shepherd-modal-overlay-container.shepherd-modal-is-visible path {
         pointer-events: all;
         opacity: var(--opacity, 0.5);
+        transition: all 500ms ease-in-out, opacity 0s;
     }
+
+    .shepherd-modal-overlay-container.shepherd-modal-is-visible.is-scrolling path {
+        transition: none;
+    }
+
 
     /* .shepherd-modal-overlay-container.shepherd-modal-is-visible .outline-box {
         pointer-events: none;
@@ -365,7 +371,7 @@
  
         transform-origin: center;
 
-        transition: all 350ms ease-in-out;
+        transition: all 500ms ease-in-out;
 
         pointer-events: none !important;
 
@@ -388,6 +394,7 @@
         ${modalIsVisible ? 'shepherd-modal-is-visible' : ''}
         shepherd-modal-overlay-container
     `}
+    class:is-scrolling={isScrolling}
     style="--opacity: {opacity}"
     on:touchmove={_preventModalOverlayTouch}
 >
@@ -407,22 +414,26 @@
 
     <path d={pathDefinition} />
 
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <!-- <path class="outline-path" d={outlinePath} on:click={consolelog} /> -->
+    {#if targetOpeningProps &&  typeof targetOpeningProps.r === "number"}
 
-    {#if targetOpeningProps}
-
-        <rect
-            class="outline-box"
-            class:no-animation={isScrolling}
-            x={targetOpeningProps.x ?? '50%'}
-            y={targetOpeningProps.y ?? '50%'}
-            height={targetOpeningProps.height}
-            width={targetOpeningProps.width}
-            rx={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
-            ry={typeof targetOpeningProps.r === "number" ? targetOpeningProps.r : 0 }
-        />
+            <rect
+                class="outline-box"
+                class:no-animation={ isScrolling }
+                x={ targetOpeningProps.x ?? '50%' }
+                y={ targetOpeningProps.y ?? '50%' }
+                height={
+                    targetOpeningProps.r >= Math.min(0.5*targetOpeningProps.width, 0.5*targetOpeningProps.height) 
+                        ? (2 * targetOpeningProps.r)
+                        : targetOpeningProps.height
+                }
+                width={
+                    targetOpeningProps.r >= Math.min(0.5*targetOpeningProps.width, 0.5*targetOpeningProps.height) 
+                        ? (2 * targetOpeningProps.r)
+                        : targetOpeningProps.width
+                }
+                rx={ targetOpeningProps.r }
+                ry={ targetOpeningProps.r }
+            />
 
     {/if}
 

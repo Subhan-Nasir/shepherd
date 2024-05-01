@@ -38,18 +38,33 @@ export function makeOverlayPath(paramsList: OverlayPathParams[]) {
         ? { topLeft: r, topRight: r, bottomRight: r, bottomLeft: r }
         : r;
 
+        if(width === 0 && height === 0 && x === 0 && y === 0 && typeof r === "number"){
 
-        if(typeof r === "number" && r >= Math.min(0.5*width, 0.5*height)){
-            // Circle
             path += `
-                M${x + 0.5*width},${y + 0.5*height}\
+                M${x},${y}\
                 m${r}, 0\
                 a${r},${r} 0 1,0 -${r * 2},0\
                 a${r},${r} 0 1,0 ${r * 2},0\
             `;
 
+        } else if(typeof r === "number" && r >= Math.min(0.5*width, 0.5*height)){
+            // Circle
+            // Uses rectangle path (0 side length, 4 arcs) to animate between rectangle and circle
+            path += `
+                M${x + topLeft},${y}\
+                a${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
+                V${y + bottomLeft }\
+                a${bottomLeft},${bottomLeft},0,0,0,${bottomLeft},${bottomLeft}\
+                H${x + bottomRight}\
+                a${bottomRight},${bottomRight},0,0,0,${bottomRight}-${bottomRight}\
+                V${y + topRight}\
+                a${topRight},${topRight},0,0,0-${topRight}-${topRight}\
+                Z\
+            `;
+
         } else {
 
+            // Rectangle
             path += `
                 M${x + topLeft},${y}\
                 a${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
