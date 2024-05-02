@@ -191,7 +191,7 @@
 
         const positionPropsList: PositionModalProps[] = [];
 
-        if(step.target){
+        if(step.target && step.highlightElements.length === 0){
             positionPropsList.push({
                 modalOverlayOpeningPadding: modalOverlayOpeningPadding,
                 modalOverlayOpeningRadius: modalOverlayOpeningRadius,
@@ -211,7 +211,7 @@
                 modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
                 scrollParent: scrollParent,
                 element: item.element,
-                isTarget: false
+                isTarget: item.element === step.target
             });
         });
 
