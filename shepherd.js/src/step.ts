@@ -705,13 +705,13 @@ export class Step extends Evented {
         }
 
         // start scrolling to target before showing the step
-        if (this.options.scrollTo) {
-            setTimeout(() => {
-                this._scrollTo(
-                    this.options.scrollTo as boolean | ScrollIntoViewOptions
-                );
-            });
-        }
+        // if (this.options.scrollTo) {
+        //     setTimeout(() => {
+        //         this._scrollTo(
+        //             this.options.scrollTo as boolean | ScrollIntoViewOptions
+        //         );
+        //     });
+        // }
 
         if (this.el) {
             this.el.hidden = false;
@@ -734,6 +734,21 @@ export class Step extends Evented {
 
 
         this.trigger('show');
+
+        if (this.options.scrollTo) {
+
+            const allSteps = this.tour.steps.map(step => step.id);
+            let scrollDelay = this.tour.options.overlayAnimationLength ?? 500;
+            if(allSteps.indexOf(this.id) === 0){
+                scrollDelay = 0;
+            }
+
+            setTimeout(() => {
+                this._scrollTo(
+                    this.options.scrollTo as boolean | ScrollIntoViewOptions
+                );
+            }, scrollDelay);
+        }
     }
 
     /**

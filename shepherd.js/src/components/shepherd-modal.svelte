@@ -3,7 +3,11 @@
     import { makeOverlayPath, type ModalOpeningRadiusType, type OverlayPathParams } from '../utils/overlay-path';
 
 
-    export let element: SVGSVGElement, openingPropsList: OverlayPathParams[], opacity: number | undefined;
+    export let
+        element: SVGSVGElement,
+        openingPropsList: OverlayPathParams[],
+        opacity: number | undefined,
+        animationLength: number = 500;
 
     let modalIsVisible = false;
     let rafId: number | undefined = undefined;
@@ -94,12 +98,12 @@
                 x: (x || left) + modalOverlayOpeningXOffset - modalOverlayOpeningPadding,
                 y: y + modalOverlayOpeningYOffset - modalOverlayOpeningPadding,
                 r: modalOverlayOpeningRadius,
-                isTarget: isTarget
+                isTarget: isTarget,
             };
 
             return pathParams;
 
-        })
+        });
 
         if(!positionPropsList || positionPropsList.length === 0 ){
             closeModalOpening();
@@ -351,11 +355,12 @@
     .shepherd-modal-overlay-container.shepherd-modal-is-visible path {
         pointer-events: all;
         opacity: var(--opacity, 0.5);
-        transition: all 500ms ease-in-out, opacity 0s;
+        transition: all var(--animationLength) ease-in-out, opacity 0s;
     }
 
-    .shepherd-modal-overlay-container.shepherd-modal-is-visible.is-scrolling path {
+    .shepherd-modal-overlay-container.shepherd-modal-is-visible.no-animation path {
         transition: none;
+        /* transition-duration: 50ms; */
     }
 
 
@@ -371,7 +376,7 @@
  
         transform-origin: center;
 
-        transition: all 500ms ease-in-out;
+        transition: all var(--animationLength) ease-in-out;
 
         pointer-events: none !important;
 
@@ -381,6 +386,7 @@
 
     .outline-box.no-animation {
         transition: none;
+        /* transition-duration: 50ms; */
     }
 
 
@@ -394,8 +400,11 @@
         ${modalIsVisible ? 'shepherd-modal-is-visible' : ''}
         shepherd-modal-overlay-container
     `}
-    class:is-scrolling={isScrolling}
-    style="--opacity: {opacity}"
+    class:no-animation={isScrolling}
+    style="
+        --opacity: {opacity};
+        --animationLength: {animationLength}ms;
+    "
     on:touchmove={_preventModalOverlayTouch}
 >
 
@@ -419,6 +428,9 @@
             <rect
                 class="outline-box"
                 class:no-animation={ isScrolling }
+                style="
+                    --animationLength: {animationLength}ms
+                "
                 x={ targetOpeningProps.x ?? '50%' }
                 y={ targetOpeningProps.y ?? '50%' }
                 height={

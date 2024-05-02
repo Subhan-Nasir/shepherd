@@ -100,6 +100,7 @@ export interface TourOptions {
 
 
   overlayOpacity?: number;
+  overlayAnimationLength?: number;
 
   cancelOnOutsideClick?: boolean;
   cancelOnMouseLeave?: boolean;
@@ -566,7 +567,8 @@ export class Tour extends Evented {
       props: {
         // @ts-expect-error TODO: investigate where styles comes from
         styles: this.styles,
-        opacity: this.options.overlayOpacity
+        opacity: this.options.overlayOpacity,
+        animationLength: this.options.overlayAnimationLength
       }
     });
 
