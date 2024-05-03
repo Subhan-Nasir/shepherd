@@ -11,7 +11,7 @@ import {
     type MiddlewareData,
     type Placement
 } from '@floating-ui/dom';
-import type { Step, StepOptions, StepOptionsAttachTo } from '../step';
+import type { ResolvedAttachTo, Step, StepOptions, StepOptionsAttachTo } from '../step';
 import { isHTMLElement } from './type-check';
 
 /**
@@ -26,7 +26,8 @@ export function setupTooltip(step: Step): ComputePositionConfig {
 
     const attachToOptions = step._getResolvedAttachToOptions();
 
-    let element: HTMLElement | null = "element" in attachToOptions ? attachToOptions.element : null;
+    // let element: HTMLElement | null = "element" in attachToOptions ? attachToOptions.element : null;
+    let element = attachToOptions?.find(item => item.isTarget)?.element ?? null;
     let target: HTMLElement | null = element;
 
     const floatingUIOptions = getFloatingUIOptions(attachToOptions, step);
@@ -55,7 +56,7 @@ export function setupTooltip(step: Step): ComputePositionConfig {
 
 
     step.target = element;
-    step.highlightElements = step._getResolvedHighlight();
+    // step.highlightElements = step._getResolvedHighlight();
 
 
     return floatingUIOptions;
@@ -175,7 +176,7 @@ function placeArrow(el: HTMLElement, middlewareData: MiddlewareData) {
  * @private
  */
 export function getFloatingUIOptions(
-    attachToOptions: StepOptionsAttachTo,
+    attachToOptions: ResolvedAttachTo[] | null,
     step: Step
 ): ComputePositionConfig {
     const options: ComputePositionConfig = {
@@ -202,7 +203,10 @@ export function getFloatingUIOptions(
             options.middleware.push(arrow({ element: arrowEl }));
         }
 
-        options.placement = attachToOptions.on;
+        if(attachToOptions){
+            options.placement = attachToOptions.find(item => item.isTarget)?.on;
+        }
+
     }
 
     return deepmerge(step.options.floatingUIOptions || {}, options);

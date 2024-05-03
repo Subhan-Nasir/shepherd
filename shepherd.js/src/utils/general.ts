@@ -4,9 +4,7 @@ import {
     Step,
     type StepOptions,
     type PopperPlacement,
-    type StepOptionsHighlight,
-    type ResolvedHighlight,
-    isResolvedHighlight
+    type ResolvedAttachTo
 } from '../step';
 import { isFunction, isHTMLElement, isString } from './type-check';
 
@@ -38,72 +36,68 @@ export function normalizePrefix(prefix?: string) {
  * `element` is a qualified HTML Element
  * `on` is a string position value
  */
-export function parseAttachTo(step: Step): {} | { element: HTMLElement; on: PopperPlacement; } {
-    const options = step.options.attachTo || {};
-    const returnOpts = Object.assign({}, options);
+export function parseAttachTo(step: Step): null | ResolvedAttachTo[] {
+    // const options = step.options.attachTo || {};
+    // const returnOpts = Object.assign({}, options);
 
-    if (isFunction(returnOpts.element)) {
-        // Bind the callback to step so that it has access to the object, to enable running additional logic
-        returnOpts.element = returnOpts.element.call(step);
+    // if (isFunction(returnOpts.element)) {
+    //     // Bind the callback to step so that it has access to the object, to enable running additional logic
+    //     returnOpts.element = returnOpts.element.call(step);
+    // }
+
+    // if (isString(returnOpts.element)) {
+    //     // Can't override the element in user opts reference because we can't
+    //     // guarantee that the element will exist in the future.
+    //     try {
+    //         returnOpts.element = document.querySelector(
+    //             returnOpts.element
+    //         ) as HTMLElement;
+    //     } catch (e) {
+    //         // TODO
+    //     }
+    //     if (!returnOpts.element) {
+    //         console.error(
+    //             `The element for this Shepherd step was not found ${options.element}`
+    //         );
+    //     }
+    // }
+
+    // return returnOpts;
+
+    if(!step.options.attachTo || step.options.attachTo.length === 0){
+        return null;
     }
 
-    if (isString(returnOpts.element)) {
-        // Can't override the element in user opts reference because we can't
-        // guarantee that the element will exist in the future.
-        try {
-            returnOpts.element = document.querySelector(
-                returnOpts.element
-            ) as HTMLElement;
-        } catch (e) {
-            // TODO
-        }
-        if (!returnOpts.element) {
-            console.error(
-                `The element for this Shepherd step was not found ${options.element}`
-            );
-        }
-    }
+    return step.options.attachTo.map(item => {
+        const result = Object.assign({}, item);
 
-    return returnOpts;
-}
-
-export function parseHighlightElements(step: Step): ResolvedHighlight[]{
-    const options = step.options.highlightElements || [];
-    const returnOptionsList: ResolvedHighlight[]  = [];
-
-    options.forEach(option => {
-        const returnOption = Object.assign({}, option);
-
-        if(isFunction(returnOption.element)){
-            returnOption.element = returnOption.element.call(step);
+        if (isFunction(result.element)) {
+            // Bind the callback to step so that it has access to the object, to enable running additional logic
+            result.element = result.element.call(step);
         }
 
-        if(isString(returnOption.element)){
+        if (isString(result.element)) {
+            // Can't override the element in user opts reference because we can't
+            // guarantee that the element will exist in the future.
             try {
-                returnOption.element = document.querySelector<HTMLElement>(returnOption.element);
+                result.element = document.querySelector<HTMLElement>(result.element);
+
             } catch (e) {
                 // TODO
             }
+            if (!result.element) {
+                console.error(
+                    `The element for this Shepherd step was not found ${result.element}`
+                );
+            }
         }
 
-        if (!returnOption.element) {
-            console.error(
-                `Secondary element for this Shepherd step was not found ${returnOption.element}`
-            );
-        }
+        return result;
 
-
-        if(isResolvedHighlight(returnOption)){
-            returnOptionsList.push(returnOption);
-        }
-
-
-    });
-
-    return returnOptionsList;
-
+    }) as ResolvedAttachTo[];
 
 }
+
 
 
 
@@ -112,15 +106,22 @@ export function parseHighlightElements(step: Step): ResolvedHighlight[]{
  * Checks if the step should be centered or not. Does not trigger attachTo.element evaluation, making it a pure
  * alternative for the deprecated step.isCentered() method.
  */
-export function shouldCenterStep(resolvedAttachToOptions: StepOptionsAttachTo) {
+export function shouldCenterStep(resolvedAttachToOptions: ResolvedAttachTo[] | null) {
     if (
         resolvedAttachToOptions === undefined ||
-        resolvedAttachToOptions === null
+        resolvedAttachToOptions === null ||
+        resolvedAttachToOptions.length === 0
     ) {
         return true;
     }
 
-    return !resolvedAttachToOptions.element || !resolvedAttachToOptions.on;
+    // return !resolvedAttachToOptions.element || !resolvedAttachToOptions.on;
+    
+    return !resolvedAttachToOptions.some(item => {
+        return item.isTarget && item.element && item.on;
+    });
+
+
 }
 
 /**
@@ -133,4 +134,17 @@ export function uuid() {
         d = Math.floor(d / 16);
         return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
     });
+}
+
+
+export default function elementInViewport(el: HTMLElement): boolean {
+    const rect = el.getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= window.innerHeight &&
+        rect.right <= window.innerWidth
+    );
+
 }

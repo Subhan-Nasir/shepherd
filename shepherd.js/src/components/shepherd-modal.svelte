@@ -187,33 +187,49 @@
 
         const iframeOffset = _getIframeOffset(step.target ?? null);
         const scrollParent = _getScrollParent(step.target ?? null);
-
+        const attachToOptions = step._getResolvedAttachToOptions();
 
         const positionPropsList: PositionModalProps[] = [];
 
-        if(step.target && step.highlightElements.length === 0){
-            positionPropsList.push({
-                modalOverlayOpeningPadding: modalOverlayOpeningPadding,
-                modalOverlayOpeningRadius: modalOverlayOpeningRadius,
-                modalOverlayOpeningXOffset: modalOverlayOpeningXOffset,
-                modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
-                scrollParent: scrollParent,
-                element: step.target,
-                isTarget: true,
+        // if(step.target && step.highlightElements.length === 0){
+        //     positionPropsList.push({
+        //         modalOverlayOpeningPadding: modalOverlayOpeningPadding,
+        //         modalOverlayOpeningRadius: modalOverlayOpeningRadius,
+        //         modalOverlayOpeningXOffset: modalOverlayOpeningXOffset,
+        //         modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
+        //         scrollParent: scrollParent,
+        //         element: step.target,
+        //         isTarget: true,
+        //     });
+        // }
+
+        // step.highlightElements.forEach(item => {
+        //     positionPropsList.push({
+        //         modalOverlayOpeningPadding: item.modalOverlayOpeningPadding ?? modalOverlayOpeningPadding,
+        //         modalOverlayOpeningRadius: item.modalOverlayOpeningRadius ?? modalOverlayOpeningRadius,
+        //         modalOverlayOpeningXOffset: modalOverlayOpeningXOffset,
+        //         modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
+        //         scrollParent: scrollParent,
+        //         element: item.element,
+        //         isTarget: item.element === step.target
+        //     });
+        // });
+
+        if(step.target && attachToOptions){
+            attachToOptions.forEach(item => {
+                positionPropsList.push({
+                    modalOverlayOpeningPadding: item.modalOverlayOpeningPadding ?? modalOverlayOpeningPadding,
+                    modalOverlayOpeningRadius: item.modalOverlayOpeningRadius ?? modalOverlayOpeningRadius,
+                    modalOverlayOpeningXOffset: modalOverlayOpeningXOffset,
+                    modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
+                    scrollParent: scrollParent,
+                    element: item.element,
+                    isTarget: item.isTarget,
+                });
             });
         }
 
-        step.highlightElements.forEach(item => {
-            positionPropsList.push({
-                modalOverlayOpeningPadding: item.modalOverlayOpeningPadding ?? modalOverlayOpeningPadding,
-                modalOverlayOpeningRadius: item.modalOverlayOpeningRadius ?? modalOverlayOpeningRadius,
-                modalOverlayOpeningXOffset: modalOverlayOpeningXOffset,
-                modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
-                scrollParent: scrollParent,
-                element: item.element,
-                isTarget: item.element === step.target
-            });
-        });
+
 
 
 

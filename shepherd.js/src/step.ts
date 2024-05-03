@@ -8,7 +8,7 @@ import {
     isUndefined
 } from './utils/type-check';
 import { bindAdvance } from './utils/bind';
-import { parseAttachTo, normalizePrefix, uuid, parseHighlightElements } from './utils/general';
+import elementInViewport, { parseAttachTo, normalizePrefix, uuid } from './utils/general';
 import {
     setupTooltip,
     destroyTooltip,
@@ -46,10 +46,8 @@ export interface StepOptions {
      * If you omit the `on` portion of `attachTo`, the element will still be highlighted, but the tooltip will appear
      * in the middle of the screen, without an arrow pointing to the target.
      */
-    attachTo?: StepOptionsAttachTo;
+    attachTo?: StepOptionsAttachTo[];
 
-
-    highlightElements?: StepOptionsHighlight[];
 
 
     /**
@@ -223,11 +221,8 @@ export type PopperPlacement =
 export type UnresolvedElement = HTMLElement | string | null | (() => HTMLElement | string | null | undefined);
 export interface StepOptionsAttachTo {
     element?: UnresolvedElement;
+    isTarget?: boolean;
     on?: PopperPlacement;
-}
-
-export interface StepOptionsHighlight {
-    element?: UnresolvedElement;
     clickable?: boolean;
     modalOverlayOpeningRadius?: number
         | {
@@ -240,17 +235,11 @@ export interface StepOptionsHighlight {
     modalOverlayOpeningPadding?: number;
 }
 
-export interface ResolvedHighlight extends StepOptionsHighlight {
+export interface ResolvedAttachTo extends StepOptionsAttachTo {
     element: HTMLElement;
 }
 
-export function isResolvedHighlight(
-    highlight: StepOptionsHighlight | ResolvedHighlight
-): highlight is ResolvedHighlight{
 
-    return isHTMLElement(highlight.element);
-
-}
 
 export interface StepOptionsAdvanceOn {
     event: string;
@@ -337,8 +326,7 @@ export interface StepOptionsVideo {
  * @extends {Evented}
  */
 export class Step extends Evented {
-    _resolvedAttachTo: StepOptionsAttachTo | null;
-    _resolvedHighlight: ResolvedHighlight[];
+    _resolvedAttachTo: ResolvedAttachTo[] | null;
 
 
     classPrefix?: string;
@@ -348,7 +336,7 @@ export class Step extends Evented {
     declare id: string;
     declare options: StepOptions;
     target?: HTMLElement | null;
-    highlightElements: ResolvedHighlight[] = [];
+
     tour: Tour;
 
     constructor(tour: Tour, options: StepOptions = {}) {
@@ -368,7 +356,6 @@ export class Step extends Evented {
          * @private
          */
         this._resolvedAttachTo = null;
-        this._resolvedHighlight = [];
 
         autoBind(this);
 
@@ -453,35 +440,23 @@ export class Step extends Evented {
      * Resolves attachTo options.
      * @returns {{}|{element, on}}
      */
-    _resolveAttachToOptions(): {} | { element: HTMLElement; on: PopperPlacement; } {
+    _resolveAttachToOptions(): ResolvedAttachTo[] | null {
         this._resolvedAttachTo = parseAttachTo(this);
         return this._resolvedAttachTo;
     }
 
-    _resolveHighlight(): ResolvedHighlight[]{
-        this._resolvedHighlight = parseHighlightElements(this);
-        return this._resolvedHighlight;
-    }
 
     /**
      * A selector for resolved attachTo options.
      * @returns {{}|{element, on}}
      * @private
      */
-    _getResolvedAttachToOptions(): {} | { element: HTMLElement; on: PopperPlacement; } {
+    _getResolvedAttachToOptions(): ResolvedAttachTo[] | null {
         if (this._resolvedAttachTo === null) {
             return this._resolveAttachToOptions();
         }
 
         return this._resolvedAttachTo;
-    }
-
-    _getResolvedHighlight(): ResolvedHighlight[]{
-        if(this._resolvedHighlight.length === 0){
-            return this._resolveHighlight();
-        }
-
-        return this._resolvedHighlight;
     }
 
     /**
@@ -585,20 +560,21 @@ export class Step extends Evented {
         //   element.scrollIntoView(scrollToOptions);
         // }
 
-        let element: HTMLElement | null = null;
+        // let element: HTMLElement | null = null;
         let attachToOptions = this._getResolvedAttachToOptions();
-        if ("element" in attachToOptions) {
-            element = attachToOptions.element;
-        }
+        let element = attachToOptions?.find(item => item.isTarget)?.element ?? null
+
+        // if ("element" in attachToOptions) {
+        //     element = attachToOptions.element;
+        // }
 
         if (!element) return;
 
         if (isFunction(this.options.scrollToHandler)) {
             this.options.scrollToHandler(element);
 
-        } else if (typeof element.scrollIntoView === "function") {
+        } else if (typeof element.scrollIntoView === "function" && !elementInViewport(element)) {
             element.scrollIntoView(scrollToOptions);
-
         }
 
 
@@ -690,7 +666,6 @@ export class Step extends Evented {
 
         // Force resolve to make sure the options are updated on subsequent shows.
         this._resolveAttachToOptions();
-        this._resolveHighlight();
         this._setupElements();
 
         if (!this.tour.modal) {
@@ -720,17 +695,17 @@ export class Step extends Evented {
         // @ts-expect-error TODO: get types for Svelte components
         const content = this.shepherdElementComponent.getElement();
         const target = this.target || document.body;
-        const highlighted = this.highlightElements;
+
 
         target.classList.add(`${this.classPrefix}shepherd-enabled`);
         target.classList.add(`${this.classPrefix}shepherd-target`);
 
         content.classList.add('shepherd-enabled');
-        highlighted.forEach(item => {
+
+        this._getResolvedAttachToOptions()?.map(item => {
             item.element.classList.add(`${this.classPrefix}shepherd-enabled`);
             item.element.classList.add(`${this.classPrefix}shepherd-target`);
-        })
-
+        });
 
 
         this.trigger('show');
@@ -760,9 +735,8 @@ export class Step extends Evented {
      */
     _styleTargetElementForStep(step: Step) {
         const targetElement = step.target;
-        const highlighted = step.highlightElements;
-
-        if (!targetElement) {
+        const attachToOptions = this._getResolvedAttachToOptions();
+        if (!targetElement || !attachToOptions) {
             return;
         }
 
@@ -770,18 +744,18 @@ export class Step extends Evented {
             targetElement.classList.add(step.options.highlightClass);
         }
 
-        targetElement.classList.remove('shepherd-target-click-disabled');
-        highlighted.forEach(item => {
+        // targetElement.classList.remove('shepherd-target-click-disabled');
+        attachToOptions.forEach(item => {
             item.element.classList.remove("shepherd-target-click-disabled");
         })
 
+        // if (step.options.canClickTarget === false) {
+        //     targetElement.classList.add('shepherd-target-click-disabled');
+        // }
 
-        if (step.options.canClickTarget === false) {
-            targetElement.classList.add('shepherd-target-click-disabled');
-        }
+        attachToOptions.forEach(item => {
+            if(item.clickable || (item.isTarget && step.options.canClickTarget)) return;
 
-        highlighted.forEach(item => {
-            if(item.clickable) return;
             item.element.classList.add("shepherd-target-click-disabled");
         });
     }
@@ -793,7 +767,7 @@ export class Step extends Evented {
      */
     _updateStepTargetOnHide() {
         const target = this.target || document.body;
-        const highlighted = this.highlightElements;
+        const attachToOptions = this._getResolvedAttachToOptions();
 
         if (this.options.highlightClass) {
             target.classList.remove(this.options.highlightClass);
@@ -805,7 +779,9 @@ export class Step extends Evented {
             `${this.classPrefix}shepherd-target`
         );
 
-        highlighted.forEach(item => {
+        if(!attachToOptions) return;
+
+        attachToOptions.forEach(item => {
             item.element.classList.remove(`${this.classPrefix}shepherd-enabled`);
             item.element.classList.remove(`${this.classPrefix}shepherd-target`);
             item.element.classList.remove("shepherd-target-click-disabled");
