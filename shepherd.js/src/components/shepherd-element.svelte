@@ -1,31 +1,40 @@
-<script>
+<script lang="ts">
     import { onMount, afterUpdate, onDestroy } from 'svelte';
     import ShepherdContent from './shepherd-content.svelte';
-    import { isUndefined, isString } from '../utils/type-check.ts';
+    import { isUndefined, isString } from '../utils/type-check';
+    import type { Step } from 'src/step';
 
-    const KEY_TAB = 9;
-    const KEY_ESC = 27;
-    const LEFT_ARROW = 37;
-    const RIGHT_ARROW = 39;
+    // const KEY_TAB = 9;
+    // const KEY_ESC = 27;
+    // const LEFT_ARROW = 37;
+    // const RIGHT_ARROW = 39;
 
-    export let classPrefix,
-        element,
-        descriptionId,
-        firstFocusableElement,
-        focusableElements,
-        labelId,
-        lastFocusableElement,
-        step,
-        dataStepId;
+    const KEY_TAB = "Tab";
+    const KEY_ESC = "Escape";
+    const LEFT_ARROW = "ArrowLeft";
+    const RIGHT_ARROW = "ArrowRight";
 
-    let hasCancelIcon, hasTitle, classes;
+    export let classPrefix: string | undefined,
+        element: HTMLElement,
+        descriptionId: string,
+        firstFocusableElement: HTMLElement | undefined,
+        focusableElements: HTMLElement[],
+        labelId: string,
+        lastFocusableElement: HTMLElement | undefined,
+        step: Step,
+        dataStepId: { [x: string]: string; };
+
+    let hasCancelIcon: boolean, hasTitle: boolean, classes: string | undefined;
+
 
     $: {
         hasCancelIcon =
-            step.options &&
+            (step.options &&
             step.options.cancelIcon &&
-            step.options.cancelIcon.enabled;
-            hasTitle = step.options && step.options.title;
+            step.options.cancelIcon.enabled) ?? false;
+
+        // hasTitle = (step.options && step.options.title) ?? false;
+        hasTitle = (step.options && step.options.title) ? true : false;
     }
 
     export const getElement = () => element;
@@ -33,9 +42,9 @@
     onMount(() => {
         // Get all elements that are focusable
         dataStepId = { [`data-${classPrefix}shepherd-step-id`]: step.id };
-        focusableElements = element.querySelectorAll(
+        focusableElements = Array.from(element.querySelectorAll<HTMLElement>(
             'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
-        );
+        ));
         firstFocusableElement = focusableElements[0];
         lastFocusableElement = focusableElements[focusableElements.length - 1];
         window.addEventListener("keydown", handleKeyDown);
@@ -63,7 +72,7 @@
         addClasses(classes);
     }
 
-    function removeClasses(classes) {
+    function removeClasses(classes: string | undefined) {
         if (isString(classes)) {
             const oldClasses = getClassesArray(classes);
             if (oldClasses.length) {
@@ -72,7 +81,7 @@
         }
     }
 
-    function addClasses(classes) {
+    function addClasses(classes: string | undefined) {
         if (isString(classes)) {
             const newClasses = getClassesArray(classes);
             if (newClasses.length) {
@@ -81,7 +90,9 @@
         }
     }
 
-    function getClassesArray(classes) {
+    function getClassesArray(classes: string | undefined) {
+        if(!classes) return [];
+
         return classes.split(' ').filter((className) => !!className.length);
     }
 
@@ -92,9 +103,10 @@
      *
      * @private
      */
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
         const { tour } = step;
-        switch (e.keyCode) {
+        // switch (e.keyCode) {
+        switch (e.key) {
             case KEY_TAB:
                 if (focusableElements.length === 0) {
                     e.preventDefault();
@@ -104,15 +116,15 @@
                 if (e.shiftKey) {
                     if (
                         document.activeElement === firstFocusableElement ||
-                        document.activeElement.classList.contains('shepherd-element')
+                        document.activeElement?.classList.contains('shepherd-element')
                     ) {
                         e.preventDefault();
-                        lastFocusableElement.focus();
+                        lastFocusableElement?.focus();
                     }
                 } else {
                     if (document.activeElement === lastFocusableElement) {
                         e.preventDefault();
-                        firstFocusableElement.focus();
+                        firstFocusableElement?.focus();
                     }
                 }
                 break;
@@ -342,7 +354,11 @@
     tabindex="0"
 >
 
-    {#if step.options.arrow && step.options.attachTo && step.options.attachTo.element && step.options.attachTo.on}
+    {#if
+        step.options.arrow &&
+        step.options.attachTo &&
+        step.options.attachTo.some(item => item.isTarget && item.on)
+    }
         <div class="shepherd-arrow" data-popper-arrow></div>
     {/if}
     <ShepherdContent {descriptionId} {labelId} {step}/>
