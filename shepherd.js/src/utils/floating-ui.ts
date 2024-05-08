@@ -191,11 +191,15 @@ export function getFloatingUIOptions(
 
     if (!shouldCenter) {
         options.middleware.push(
-            flip(),
+            flip({
+                fallbackStrategy: "initialPlacement",
+            }),
             // Replicate PopperJS default behavior.
             shift({
-                limiter: limitShift(),
-                crossAxis: true
+                // limiter: limitShift(),
+                crossAxis: true,
+                mainAxis: true,
+                padding: 24
             })
         );
 

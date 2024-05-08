@@ -49,16 +49,16 @@ export function makeOverlayPath(paramsList: OverlayPathParams[]) {
 
         } else if(typeof r === "number" && r >= Math.min(0.5*width, 0.5*height)){
             // Circle
-            // Uses rectangle path (0 side length, 4 arcs) to animate between rectangle and circle
+            // Needs the same number of points as rectangle for morph animations
             path += `
-                M${x + topLeft},${y}\
-                a${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
-                V${y + bottomLeft }\
-                a${bottomLeft},${bottomLeft},0,0,0,${bottomLeft},${bottomLeft}\
-                H${x + bottomRight}\
-                a${bottomRight},${bottomRight},0,0,0,${bottomRight}-${bottomRight}\
-                V${y + topRight}\
-                a${topRight},${topRight},0,0,0-${topRight}-${topRight}\
+                M ${x + topLeft},${y}\
+                a ${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
+                V ${y + bottomLeft }\
+                a ${bottomLeft},${bottomLeft},0,0,0,${bottomLeft},${bottomLeft}\
+                H ${x + bottomRight}\
+                a ${bottomRight},${bottomRight},0,0,0,${bottomRight}-${bottomRight}\
+                V ${y + topRight}\
+                a ${topRight},${topRight},0,0,0-${topRight}-${topRight}\
                 Z\
             `;
 
@@ -66,14 +66,14 @@ export function makeOverlayPath(paramsList: OverlayPathParams[]) {
 
             // Rectangle
             path += `
-                M${x + topLeft},${y}\
-                a${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
-                V${height + y - bottomLeft}\
-                a${bottomLeft},${bottomLeft},0,0,0,${bottomLeft},${bottomLeft}\
-                H${width + x - bottomRight}\
-                a${bottomRight},${bottomRight},0,0,0,${bottomRight}-${bottomRight}\
-                V${y + topRight}\
-                a${topRight},${topRight},0,0,0-${topRight}-${topRight}\
+                M ${x + topLeft},${y}\
+                a ${topLeft},${topLeft},0,0,0-${topLeft},${topLeft}\
+                V ${height + y - bottomLeft}\
+                a ${bottomLeft},${bottomLeft},0,0,0,${bottomLeft},${bottomLeft}\
+                H ${width + x - bottomRight}\
+                a ${bottomRight},${bottomRight},0,0,0,${bottomRight}-${bottomRight}\
+                V ${y + topRight}\
+                a ${topRight},${topRight},0,0,0-${topRight}-${topRight}\
                 Z\
             `;
 

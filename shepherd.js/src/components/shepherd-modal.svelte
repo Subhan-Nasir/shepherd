@@ -7,7 +7,8 @@
         element: SVGSVGElement,
         openingPropsList: OverlayPathParams[],
         opacity: number | undefined,
-        animationLength: number = 500;
+        animationLength: number = 500,
+        showOutline = false;
 
     let modalIsVisible = false;
     let rafId: number | undefined = undefined;
@@ -439,7 +440,7 @@
 
     <path d={pathDefinition} />
 
-    {#if targetOpeningProps &&  typeof targetOpeningProps.r === "number"}
+    {#if targetOpeningProps &&  typeof targetOpeningProps.r === "number" && showOutline}
 
             <rect
                 class="outline-box"

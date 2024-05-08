@@ -97,6 +97,7 @@ export interface TourOptions {
    */
   useModalOverlay?: boolean;
 
+  showOutline?: boolean;
 
 
   overlayOpacity?: number;
@@ -568,7 +569,8 @@ export class Tour extends Evented {
         // @ts-expect-error TODO: investigate where styles comes from
         styles: this.styles,
         opacity: this.options.overlayOpacity,
-        animationLength: this.options.overlayAnimationLength
+        animationLength: this.options.overlayAnimationLength,
+        showOutline: this.options.showOutline
       }
     });
 
