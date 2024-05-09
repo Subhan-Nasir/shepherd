@@ -277,33 +277,63 @@
     .shepherd-arrow,
     .shepherd-arrow::before {
         position: absolute;
-        width: 16px;
-        height: 16px;
+
+        --arrow-size: 32px;
+        --arrow-border-radius: 0.25rem;
+
+        width: var(--arrow-size);
+        height: var(--arrow-size);
         z-index: -1;
+
     }
 
-    .shepherd-arrow:before {
+    .shepherd-arrow::before {
         content: '';
-        transform: rotate(45deg);
-        background-color: var(--tour-pointer-bg);
-        --arrow-border-radius: 0.25rem;
+        /* transform: rotate(45deg); */
+
+        /* background-color: var(--tour-pointer-bg); */
+        background-color: transparent;
+
+        border-bottom: calc(0.5* var(--arrow-size)) solid transparent;
+        border-top: calc(0.5* var(--arrow-size)) solid transparent;
+        border-left: calc(0.5* var(--arrow-size)) solid transparent;
+        border-right: calc(0.5* var(--arrow-size)) solid transparent;
+
+        outline: 2px solid coral;
     }
 
     .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
-        bottom: -8px;
+        bottom: calc(-1 * var(--arrow-size));
     }
 
     .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow {
-        top: -8px;
+        top: calc(-1 * var(--arrow-size));
     }
 
     .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow {
-        right: -8px;
+        right: calc(-1 * var(--arrow-size));
     }
 
     .shepherd-element[data-popper-placement^='right'] > .shepherd-arrow {
-        left: -8px;
+        left: calc(-1 * var(--arrow-size));
     }
+
+
+
+    .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow::before {
+        border-top-color: red;
+    }
+    .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow::before {
+        border-bottom-color: red;
+    }
+    .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow::before {
+        border-left-color: red;
+    }
+    .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow::before {
+        border-left-color: red;
+    }
+
+
 
     .shepherd-element.shepherd-centered > .shepherd-arrow {
         opacity: 0;
@@ -312,7 +342,7 @@
     /**
     * Arrow on top of tooltip centered horizontally, with title color
     */
-    .shepherd-element.shepherd-has-title[data-popper-placement^='top'] > .shepherd-arrow::before {
+    /* .shepherd-element.shepherd-has-title[data-popper-placement^='top'] > .shepherd-arrow::before {
         border-bottom-right-radius: var(--arrow-border-radius);
     }
     .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
@@ -323,7 +353,7 @@
     }
     .shepherd-element.shepherd-has-title[data-popper-placement^='right'] > .shepherd-arrow::before {
         border-bottom-left-radius: var(--arrow-border-radius);
-    }
+    } */
 
     .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
     .shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
