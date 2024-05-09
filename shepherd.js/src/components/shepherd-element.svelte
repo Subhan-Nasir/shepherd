@@ -278,7 +278,7 @@
     .shepherd-arrow::before {
         position: absolute;
 
-        --arrow-size: 32px;
+        --arrow-size: 16px;
         --arrow-border-radius: 0.25rem;
 
         width: var(--arrow-size);
@@ -291,46 +291,53 @@
         content: '';
         /* transform: rotate(45deg); */
 
-        /* background-color: var(--tour-pointer-bg); */
-        background-color: transparent;
+        background-color: var(--tour-pointer-bg);
 
-        border-bottom: calc(0.5* var(--arrow-size)) solid transparent;
-        border-top: calc(0.5* var(--arrow-size)) solid transparent;
-        border-left: calc(0.5* var(--arrow-size)) solid transparent;
-        border-right: calc(0.5* var(--arrow-size)) solid transparent;
+        clip-path: polygon(
+            0% 0%,
+            100% 100%,
+            0% 100%
+        );
 
-        outline: 2px solid coral;
+        border-bottom-left-radius: 0.25rem;
+
     }
 
     .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
-        bottom: calc(-1 * var(--arrow-size));
+        bottom: calc(-0.5 * var(--arrow-size));
     }
 
     .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow {
-        top: calc(-1 * var(--arrow-size));
+        top: calc(-0.5 * var(--arrow-size));
     }
 
     .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow {
-        right: calc(-1 * var(--arrow-size));
+        right: calc(-0.5 * var(--arrow-size));
     }
 
     .shepherd-element[data-popper-placement^='right'] > .shepherd-arrow {
-        left: calc(-1 * var(--arrow-size));
+        left: calc(-0.5 * var(--arrow-size));
     }
 
 
 
     .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow::before {
         border-top-color: red;
+        transform: rotate(315deg);
+
     }
     .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow::before {
         border-bottom-color: red;
+        transform: rotate(135deg);
     }
     .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow::before {
         border-left-color: red;
+        transform: rotate(225deg);
+
     }
-    .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow::before {
+    .shepherd-element[data-popper-placement^='right'] > .shepherd-arrow::before {
         border-left-color: red;
+        transform: rotate(45deg);
     }
 
 
