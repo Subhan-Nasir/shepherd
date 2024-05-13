@@ -148,3 +148,61 @@ export default function elementInViewport(el: HTMLElement): boolean {
     );
 
 }
+
+
+export function getYouTubeID(url: string): string | null {
+    let reg = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/
+    let results = url.match(reg);
+
+    if(!results) {
+        return null;
+    }
+    
+    return results[1] ?? null;
+
+}
+
+export function getVimeoID(url: string): string | null {
+    let reg = /(?:http:|https:|)\/\/(?:player.|www.)?vimeo\.com\/(?:video\/|embed\/|watch\?\S*v=|v\/)?(\d*)/
+    let results = url.match(reg);
+    if(!results){
+        return null;
+    }
+
+    return  results[1] ?? null;
+}
+
+
+export function getEmbedURL(sourceURL: string){
+    let youtubeID = getYouTubeID(sourceURL);
+    let vimeoID = getVimeoID(sourceURL);
+
+    if(youtubeID){
+        return `https://www.youtube.com/embed/${youtubeID}/?rel=0`
+    }
+
+    if(vimeoID){
+        let hash = new URL(sourceURL).searchParams.get("h");
+
+        let urlObj = new URL(`https://player.vimeo.com/video/${vimeoID}`);
+
+        if(hash){
+            urlObj.searchParams.append("h", hash);
+        }
+
+        urlObj.searchParams.append("title", "1");
+        urlObj.searchParams.append("byline", "1");
+        urlObj.searchParams.append("controls", "1");
+        urlObj.searchParams.append("dnt", "1");
+        urlObj.searchParams.append("portrait", "0");
+        urlObj.searchParams.append("color", "EFEFF4");
+        urlObj.searchParams.append("keyboard", "1");
+        urlObj.searchParams.append("speed", "1");
+        urlObj.searchParams.append("pip", "0");
+
+
+        return urlObj.toString();
+    }
+
+    return  null;
+}

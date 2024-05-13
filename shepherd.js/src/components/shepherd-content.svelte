@@ -28,7 +28,7 @@
 
 <div
     class="shepherd-content"
-    class:extra-padding={!(Array.isArray(step.options.buttons) && step.options.buttons.length)}
+    class:extra-padding={!(Array.isArray(step.options.buttons) && step.options.buttons.length > 0)}
 >
     {#if !isUndefined(step.options.title) || (step.options.cancelIcon && step.options.cancelIcon.enabled)}
         <ShepherdHeader {labelId} {step}/>

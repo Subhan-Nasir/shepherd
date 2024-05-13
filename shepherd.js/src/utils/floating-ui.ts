@@ -48,7 +48,6 @@ export function setupTooltip(step: Step): ComputePositionConfig {
                 step.cleanup?.();
                 return;
             }
-    
             setPosition(target, step, floatingUIOptions, shouldCenter);
         }, { animationFrame: true, layoutShift: true, });
 
@@ -144,7 +143,7 @@ function floatingUIposition(step: Step, shouldCenter: boolean) {
             });
         } else {
             Object.assign(step.el.style, {
-                position: 'absolute',
+                position: 'fixed',
                 left: `${x}px`,
                 top: `${y}px`
             });
@@ -180,7 +179,7 @@ export function getFloatingUIOptions(
     step: Step
 ): ComputePositionConfig {
     const options: ComputePositionConfig = {
-        strategy: 'absolute'
+        strategy: 'fixed'
     };
 
     options.middleware = [];
