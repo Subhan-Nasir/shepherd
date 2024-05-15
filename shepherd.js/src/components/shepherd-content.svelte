@@ -49,7 +49,7 @@
     {/if}
 
     {#if !isUndefined(video)}
-        <ShepherdVideo url={video.url} width={video.width}, height={video.height} classes={video.classes}/>
+        <ShepherdVideo url={video.url} width={video.width} height={video.height} classes={video.classes}/>
     {/if}
 
     {#if Array.isArray(step.options.buttons) && step.options.buttons.length}
