@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Step } from 'src/step';
     import { makeOverlayPath, type ModalOpeningRadiusType, type OverlayPathParams } from '../utils/overlay-path';
+    import type { Tour } from 'src/tour';
 
 
     export let
@@ -8,12 +9,20 @@
         openingPropsList: OverlayPathParams[],
         opacity: number | undefined,
         animationLength: number = 500,
-        showOutline = false;
+        showOutline = false,
+        outlineColor = "";
 
     let modalIsVisible = false;
     let rafId: number | undefined = undefined;
     let pathDefinition: string;
     let targetOpeningProps: OverlayPathParams | null = null;
+    let outlineRect: SVGRectElement | null = null;
+    let outlineLength = 0;
+    let stepIndex: number | null = null;
+
+    let stepId: Step["id"] | null = null;
+    let stepsHistory: Tour["stepsHistory"] = [];
+    let animateStroke = false;
 
     let timer: ReturnType<typeof setTimeout> | null = null;
 
@@ -33,12 +42,14 @@
     $: targetOpeningProps = openingPropsList.find(p => p.isTarget) ?? null;
 
 
+
     closeModalOpening();
 
     export const getElement = () => element;
 
     export function closeModalOpening() {
         openingPropsList = [{ width: 0, height: 0, x: 0, y: 0, r: 0}];
+        outlineLength = 0;
     }
 
     /**
@@ -106,8 +117,13 @@
 
         });
 
+        if(outlineRect){
+            outlineLength = outlineRect.getTotalLength();
+        }
+
         if(!positionPropsList || positionPropsList.length === 0 ){
             closeModalOpening();
+
         }
     }
 
@@ -125,6 +141,12 @@
         } else {
             hide();
         }
+
+        stepIndex = step.tour.steps.findIndex(s => s.id === step.id);
+        stepId = step.id;
+        stepsHistory = step.tour.stepsHistory;
+        animateStroke = (stepIndex === 0 && stepId && !stepsHistory.includes(stepId)) ? true : false;
+
     }
 
     /**
@@ -191,30 +213,6 @@
         const attachToOptions = step._getResolvedAttachToOptions();
 
         const positionPropsList: PositionModalProps[] = [];
-
-        // if(step.target && step.highlightElements.length === 0){
-        //     positionPropsList.push({
-        //         modalOverlayOpeningPadding: modalOverlayOpeningPadding,
-        //         modalOverlayOpeningRadius: modalOverlayOpeningRadius,
-        //         modalOverlayOpeningXOffset: modalOverlayOpeningXOffset,
-        //         modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
-        //         scrollParent: scrollParent,
-        //         element: step.target,
-        //         isTarget: true,
-        //     });
-        // }
-
-        // step.highlightElements.forEach(item => {
-        //     positionPropsList.push({
-        //         modalOverlayOpeningPadding: item.modalOverlayOpeningPadding ?? modalOverlayOpeningPadding,
-        //         modalOverlayOpeningRadius: item.modalOverlayOpeningRadius ?? modalOverlayOpeningRadius,
-        //         modalOverlayOpeningXOffset: modalOverlayOpeningXOffset,
-        //         modalOverlayOpeningYOffset: modalOverlayOpeningYOffset,
-        //         scrollParent: scrollParent,
-        //         element: item.element,
-        //         isTarget: item.element === step.target
-        //     });
-        // });
 
         if(step.target && attachToOptions){
             attachToOptions.forEach(item => {
@@ -388,18 +386,45 @@
     .outline-box {
 
         fill: none;
-        stroke: var(--tour-primary);
+        stroke: var(--outline-color, var(--tour-primary));
         stroke-width: 4;
- 
+
         transform-origin: center;
 
-        transition: all var(--animationLength) ease-in-out;
+        transition:
+            all var(--animationLength) ease-in-out;
 
         pointer-events: none !important;
 
         filter:url(#glow);
 
     }
+
+    .animate-stroke {
+
+        stroke-dasharray: var(--outline-length);
+        /* stroke-dashoffset: var(--outline-length); */
+
+        transition:
+            all var(--animationLength) ease-in-out,
+            stroke-dasharray 0ms,
+            stroke-dashhoffset var(--animationLength) ease-in-out;
+
+        animation: pathAnimation 1000ms ease-in-out forwards;
+        /* stroke-dashoffset: var(--outline-length); */
+    }
+
+    @keyframes pathAnimatino {
+        from {
+            stroke-dashoffset: var(--outline-length);
+        }
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+
+
 
     .outline-box.no-animation {
         transition: none;
@@ -428,7 +453,8 @@
     <defs>
         <!-- a transparent glow that takes on the colour of the object it's applied to -->
         <filter id="glow">
-            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+            <!-- <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/> -->
+            <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
             <feMerge>
                 <feMergeNode in="coloredBlur"/>
                 <feMergeNode in="SourceGraphic"/>
@@ -443,10 +469,17 @@
     {#if targetOpeningProps &&  typeof targetOpeningProps.r === "number" && showOutline}
 
             <rect
+                bind:this={outlineRect}
                 class="outline-box"
                 class:no-animation={ isScrolling }
+                class:animate-stroke={
+                    // stepIndex === 0
+                    animateStroke
+                }
                 style="
-                    --animationLength: {animationLength}ms
+                    --animationLength: {animationLength}ms;
+                    --outline-color: {outlineColor};
+                    --outline-length: {outlineLength};
                 "
                 x={ targetOpeningProps.x ?? '50%' }
                 y={ targetOpeningProps.y ?? '50%' }
