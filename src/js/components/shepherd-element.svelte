@@ -173,7 +173,7 @@
             url('assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf') format('truetype');
     }
 
-    .material-symbols-outlined {
+    .shepherd-material-symbols-outlined {
         font-family: 'Material Symbols Outlined';
         font-weight: normal;
         font-variation-settings: "FILL" 0,"wght" 200,"GRAD" 0,"opsz" 24;

@@ -67,7 +67,7 @@
 
 <!-- <button
     aria-label="{cancelIcon.label ? cancelIcon.label : 'Close Tour'}"
-    class="shepherd-cancel-icon material-symbols-outlined"
+    class="shepherd-cancel-icon shepherd-material-symbols-outlined"
     on:click={handleCancelClick}
     type="button"
 >
