@@ -50,7 +50,7 @@
         list-style: none;
     }
 
-    ol > li:before {
+    .shepherd-text ol > li:before {
         content: counter(list) ") ";
         counter-increment: list;
     }
