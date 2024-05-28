@@ -129,7 +129,7 @@ function floatingUIposition(step, shouldCenter) {
       });
     } else {
       Object.assign(step.el.style, {
-        position: 'absolute',
+        position: 'fixed',
         left: `${x}px`,
         top: `${y}px`
       });
@@ -168,7 +168,7 @@ function placeArrow(el, middlewareData) {
  */
 export function getFloatingUIOptions(attachToOptions, step) {
   const options = {
-    strategy: 'absolute',
+    strategy: 'fixed',
     middleware: []
   };
 
@@ -178,11 +178,15 @@ export function getFloatingUIOptions(attachToOptions, step) {
 
   if (!shouldCenter) {
     options.middleware.push(
-      flip(),
+      flip({
+        fallbackStrategy: "bestFit"
+      }),
       // Replicate PopperJS default behavior.
       shift({
-        limiter: limitShift(),
-        crossAxis: true
+        // limiter: limitShift(),
+        crossAxis: true,
+        mainAxis: true,
+        padding: 24
       })
     );
 
