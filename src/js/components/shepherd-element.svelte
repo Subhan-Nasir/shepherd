@@ -214,7 +214,9 @@
 
 
         --tour-header-bg  : var(--tour-grey-lightest);
-        --tour-pointer-bg : #fcfcfc;
+        /* --tour-pointer-bg : #fcfcfc; */
+        --tour-pointer-bg: white;
+
 
         --tour-btn-active-shadow-col : #6161624d;
 
@@ -243,7 +245,8 @@
         background: #fff;
         /* border-radius: 5px; */
 
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); */
+        box-shadow: 0px 0px 20px 2px rgb(0 0 0 / 15%);
         max-width: 560px;
         opacity: 0;
         outline: none;
@@ -278,35 +281,63 @@
         box-sizing: border-box;
     }
 
-    .shepherd-arrow,
-    .shepherd-arrow::before {
+    .shepherd-arrow {
+        --arrow-size: 1.5rem;
+
         position: absolute;
-        width: 16px;
-        height: 16px;
+        width: var(--arrow-size);
+        height: var(--arrow-size);
+        background-color: var(--tour-pointer-bg);
         z-index: -1;
+
     }
 
-    .shepherd-arrow:before {
-        content: '';
-        transform: rotate(45deg);
-        background-color: var(--tour-pointer-bg);
-        --arrow-border-radius: 0.25rem;
-    }
+
+
 
     .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
-        bottom: -8px;
+        bottom: calc(-0.5 * var(--arrow-size));
+        clip-path: polygon(
+            0% 0%,
+            0% 50%,
+            50% 100%,
+            100% 50%,
+            100% 0%
+        );
     }
 
     .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow {
-        top: -8px;
+        top: calc(-0.5 * var(--arrow-size));
+        clip-path: polygon(
+            0% 100%,
+            0% 50%,
+            50% 0%,
+            100% 50%,
+            100% 100%
+        );
+
     }
 
     .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow {
-        right: -8px;
+        right: calc(-0.5 * var(--arrow-size));
+        clip-path: polygon(
+            0% 0%,
+            50% 0%,
+            100% 50%,
+            50% 100%,
+            0% 100%
+        );
     }
 
     .shepherd-element[data-popper-placement^='right'] > .shepherd-arrow {
-        left: -8px;
+        left: calc(-0.5 * var(--arrow-size));
+        clip-path: polygon(
+            100% 0,
+            50% 0,
+            0% 50%,
+            50% 100%,
+            100% 100%
+        );
     }
 
     .shepherd-element.shepherd-centered > .shepherd-arrow {

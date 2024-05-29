@@ -137,7 +137,7 @@ function floatingUIposition(step, shouldCenter) {
 
     step.el.dataset.popperPlacement = placement;
 
-    placeArrow(step.el, middlewareData);
+    placeArrow(step.el, middlewareData, placement);
 
     return step;
   };
@@ -147,15 +147,71 @@ function floatingUIposition(step, shouldCenter) {
  *
  * @param el
  * @param middlewareData
+ * @param {string} placement
  */
-function placeArrow(el, middlewareData) {
+function placeArrow(el, middlewareData, placement) {
   const arrowEl = el.querySelector('.shepherd-arrow');
   if (arrowEl && middlewareData.arrow) {
-    const { x: arrowX, y: arrowY } = middlewareData.arrow;
+    const { x: arrowX, y: arrowY, centerOffset } = middlewareData.arrow;
+    console.log("CENTER OFFSET: " + centerOffset + " PLACEMENT: " + placement);
+
+
+    const getPath = (...points) => {
+
+      let distances = {
+        T: "0%",
+        B: "100%",
+        L: "0%",
+        R: "100%",
+        M: "50%"
+      }
+      
+      let pathStr = "";
+      for(var point of points){
+        const firstLetter = point.charAt(0);
+        const secondLetter = point.charAt(1);
+
+        const xCoord = distances[secondLetter] ?? "";
+        const yCoord = distances[firstLetter] ?? "";
+
+        if(xCoord && yCoord){
+          pathStr += `${xCoord} ${yCoord},`
+        }
+
+      }
+
+      pathStr = pathStr.substring(0, pathStr.length - 1);
+
+      return `polygon(${pathStr})`;
+
+    }
+
+
+    let clipPath = "";
+
+    if(centerOffset < 0 && placement.startsWith("left")){
+      clipPath = getPath("TL", "TR", "BM", "BL");
+    }
+    if(centerOffset < 0 && placement.startsWith("right")){
+
+      // polygon(100% 0, 100% 100%, 50% 100%, 0 0)
+      clipPath = getPath("TR", "BR", "BM", "TL");
+    }
+    if(centerOffset > 0 && placement.startsWith("left")){
+      clipPath = getPath("TL", "BL", "BR", "TM");
+    }
+    if(centerOffset > 0 && placement.startsWith("right")){
+      clipPath = getPath("TM", "TR", "BR", "BL");
+    }
+
+
     Object.assign(arrowEl.style, {
       left: arrowX != null ? `${arrowX}px` : '',
-      top: arrowY != null ? `${arrowY}px` : ''
+      top: arrowY != null ? `${arrowY}px` : '',
+      clipPath: clipPath ?? ''
     });
+
+
   }
 }
 
