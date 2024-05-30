@@ -253,9 +253,12 @@
         transition:
             opacity 0.3s,
             visibility 0.3s;
+
         visibility: hidden;
         width: 100%;
         z-index: 9999;
+
+
     }
 
     .shepherd-large-container {
@@ -283,6 +286,7 @@
 
     .shepherd-arrow {
         --arrow-size: 1.5rem;
+        --shift: -1;
 
         position: absolute;
         width: var(--arrow-size);
@@ -290,55 +294,65 @@
         background-color: var(--tour-pointer-bg);
         z-index: -1;
 
+        /* clip-path: polygon(100% 0%, 100% 100%, 50% 50%); */
+
+        transition: clip-path 275ms ease-in-out;
+
     }
 
 
 
 
     .shepherd-element[data-popper-placement^='top'] > .shepherd-arrow {
-        bottom: calc(-0.5 * var(--arrow-size));
-        clip-path: polygon(
+        bottom: calc(var(--shift) * var(--arrow-size));
+        /* clip-path: polygon(
             0% 0%,
             0% 50%,
             50% 100%,
             100% 50%,
             100% 0%
-        );
+        ); */
+
+        clip-path: polygon(100% 0, 50% 50%, 0 0);
+
     }
 
     .shepherd-element[data-popper-placement^='bottom'] > .shepherd-arrow {
-        top: calc(-0.5 * var(--arrow-size));
-        clip-path: polygon(
-            0% 100%,
-            0% 50%,
-            50% 0%,
-            100% 50%,
-            100% 100%
-        );
+        top: calc(var(--shift) * var(--arrow-size));
+        clip-path: polygon(100% 100%, 50% 50%, 0 100%);
+
+
 
     }
 
     .shepherd-element[data-popper-placement^='left'] > .shepherd-arrow {
-        right: calc(-0.5 * var(--arrow-size));
-        clip-path: polygon(
-            0% 0%,
-            50% 0%,
-            100% 50%,
-            50% 100%,
-            0% 100%
-        );
+        right: calc(var(--shift) * var(--arrow-size));
+        clip-path: polygon(0 100%, 50% 50%, 0 0);
+
     }
 
     .shepherd-element[data-popper-placement^='right'] > .shepherd-arrow {
-        left: calc(-0.5 * var(--arrow-size));
-        clip-path: polygon(
-            100% 0,
-            50% 0,
-            0% 50%,
-            50% 100%,
-            100% 100%
-        );
+        left: calc(var(--shift) * var(--arrow-size));
+        /* clip-path: polygon(100% 100%, 50% 50%, 100% 0); */
+        clip-path: polygon(50% 40%, 100% 100%, 100% 0);
+
     }
+
+
+    .shepherd-element[data-sharp-corner='TL'] {
+        border-top-left-radius: 0;
+    }
+    .shepherd-element[data-sharp-corner='TR'] {
+        border-top-right-radius: 0;
+    }
+    .shepherd-element[data-sharp-corner='BL'] {
+        border-bottom-left-radius: 0;
+    }
+    .shepherd-element[data-sharp-corner='BR'] {
+        border-bottom-right-radius: 0;
+    }
+
+
 
     .shepherd-element.shepherd-centered > .shepherd-arrow {
         opacity: 0;
@@ -347,7 +361,7 @@
     /**
     * Arrow on top of tooltip centered horizontally, with title color
     */
-    .shepherd-element.shepherd-has-title[data-popper-placement^='top'] > .shepherd-arrow::before {
+    /* .shepherd-element.shepherd-has-title[data-popper-placement^='top'] > .shepherd-arrow::before {
         border-bottom-right-radius: var(--arrow-border-radius);
     }
     .shepherd-element.shepherd-has-title[data-popper-placement^='bottom'] > .shepherd-arrow::before {
@@ -358,7 +372,7 @@
     }
     .shepherd-element.shepherd-has-title[data-popper-placement^='right'] > .shepherd-arrow::before {
         border-bottom-left-radius: var(--arrow-border-radius);
-    }
+    } */
 
     .shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
     .shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
