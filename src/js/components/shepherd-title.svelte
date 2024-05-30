@@ -25,8 +25,23 @@
         flex: 1 0 auto;
         margin: 0;
         padding: 0;
+
+
         place-content: center;
+        /* place-items: center center; */
     }
+
+    /* .shepherd-badge {
+        background-color: lightblue;
+
+        margin-right: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+
+        font-size: 0.7rem;
+    } */
+
+
 </style>
 
     <h3
