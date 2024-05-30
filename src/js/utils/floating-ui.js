@@ -1,12 +1,12 @@
 import merge from 'deepmerge';
 import { shouldCenterStep } from './general';
 import {
-    autoUpdate,
-    arrow,
-    computePosition,
-    flip,
-    limitShift,
-    shift
+  autoUpdate,
+  arrow,
+  computePosition,
+  flip,
+  limitShift,
+  shift
 } from '@floating-ui/dom';
 
 /**
@@ -23,35 +23,35 @@ import {
  * @return {FloatingUIOptions}
  */
 export function setupTooltip(step) {
-    if (step.cleanup) {
-        step.cleanup();
+  if (step.cleanup) {
+    step.cleanup();
+  }
+
+  const attachToOptions = step._getResolvedAttachToOptions();
+
+  let target = attachToOptions.element;
+  const floatingUIOptions = getFloatingUIOptions(attachToOptions, step);
+  const shouldCenter = shouldCenterStep(attachToOptions);
+
+  if (shouldCenter) {
+    target = document.body;
+    const content = step.shepherdElementComponent.getElement();
+    content.classList.add('shepherd-centered');
+  }
+
+  step.cleanup = autoUpdate(target, step.el, () => {
+    // The element might have already been removed by the end of the tour.
+    if (!step.el) {
+      step.cleanup();
+      return;
     }
 
-    const attachToOptions = step._getResolvedAttachToOptions();
+    setPosition(target, step, floatingUIOptions, shouldCenter);
+  }, {animationFrame: true, layoutShift: true, });
 
-    let target = attachToOptions.element;
-    const floatingUIOptions = getFloatingUIOptions(attachToOptions, step);
-    const shouldCenter = shouldCenterStep(attachToOptions);
+  step.target = attachToOptions.element;
 
-    if (shouldCenter) {
-        target = document.body;
-        const content = step.shepherdElementComponent.getElement();
-        content.classList.add('shepherd-centered');
-    }
-
-    step.cleanup = autoUpdate(target, step.el, () => {
-        // The element might have already been removed by the end of the tour.
-        if (!step.el) {
-            step.cleanup();
-            return;
-        }
-
-        setPosition(target, step, floatingUIOptions, shouldCenter);
-    }, { animationFrame: true, layoutShift: true, });
-
-    step.target = attachToOptions.element;
-
-    return floatingUIOptions;
+  return floatingUIOptions;
 }
 
 /**
@@ -63,12 +63,12 @@ export function setupTooltip(step) {
  * @return {floatingUIOptions: FloatingUIOptions}
  */
 export function mergeTooltipConfig(tourOptions, options) {
-    return {
-        floatingUIOptions: merge(
-            tourOptions.floatingUIOptions || {},
-            options.floatingUIOptions || {}
-        )
-    };
+  return {
+    floatingUIOptions: merge(
+      tourOptions.floatingUIOptions || {},
+      options.floatingUIOptions || {}
+    )
+  };
 }
 
 /**
@@ -77,11 +77,11 @@ export function mergeTooltipConfig(tourOptions, options) {
  * @param {Step} step
  */
 export function destroyTooltip(step) {
-    if (step.cleanup) {
-        step.cleanup();
-    }
+  if (step.cleanup) {
+    step.cleanup();
+  }
 
-    step.cleanup = null;
+  step.cleanup = null;
 }
 
 /**
@@ -89,23 +89,23 @@ export function destroyTooltip(step) {
  * @return {Promise<*>}
  */
 function setPosition(target, step, floatingUIOptions, shouldCenter) {
-    return (
-        computePosition(target, step.el, floatingUIOptions)
-            .then(floatingUIposition(step, shouldCenter))
-            // Wait before forcing focus.
-            .then(
-                (step) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => resolve(step), 300);
-                    })
-            )
-            // Replaces focusAfterRender modifier.
-            .then((step) => {
-                if (step && step.el && step.options.autoFocus) {
-                    step.el.focus({ preventScroll: true });
-                }
-            })
-    );
+  return (
+    computePosition(target, step.el,floatingUIOptions)
+      .then(floatingUIposition(step, shouldCenter))
+      // Wait before forcing focus.
+      .then(
+        (step) =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve(step), 300);
+          })
+      )
+      // Replaces focusAfterRender modifier.
+      .then((step) => {
+        if (step && step.el && step.options.autoFocus) {
+          step.el.focus({ preventScroll: true });
+        }
+      })
+  );
 }
 
 /**
@@ -115,86 +115,48 @@ function setPosition(target, step, floatingUIOptions, shouldCenter) {
  * @return {function({x: *, y: *, placement: *, middlewareData: *}): Promise<unknown>}
  */
 function floatingUIposition(step, shouldCenter) {
-    return ({ x, y, placement, middlewareData }) => {
-        if (!step.el) {
-            return step;
-        }
+  return ({ x, y, placement, middlewareData }) => {
+    if (!step.el) {
+      return step;
+    }
 
-        if (shouldCenter) {
-            Object.assign(step.el.style, {
-                position: 'fixed',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)'
-            });
-        } else {
-            Object.assign(step.el.style, {
-                position: 'fixed',
-                left: `${x}px`,
-                top: `${y}px`
-            });
-        }
+    if (shouldCenter) {
+      Object.assign(step.el.style, {
+        position: 'fixed',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)'
+      });
+    } else {
+      Object.assign(step.el.style, {
+        position: 'absolute',
+        left: `${x}px`,
+        top: `${y}px`
+      });
+    }
 
-        step.el.dataset.popperPlacement = placement;
+    step.el.dataset.popperPlacement = placement;
 
-        placeArrow(step.el, middlewareData, placement);
+    placeArrow(step.el, middlewareData);
 
-        return step;
-    };
+    return step;
+  };
 }
 
 /**
  *
  * @param el
  * @param middlewareData
- * @param {string} placement
  */
-function placeArrow(el, middlewareData, placement) {
-    // console.log("STEP EL:");
-    // console.log(el);
-
-
-    const arrowEl = el.querySelector('.shepherd-arrow');
-    if (arrowEl && middlewareData.arrow) {
-        const { x: arrowX, y: arrowY, centerOffset } = middlewareData.arrow;
-        // console.log("CENTER OFFSET: " + centerOffset + " PLACEMENT: " + placement);
-
-
-        let clipPath = "";
-        let sharpCorner = "";
-
-        if (centerOffset < 0 && placement.startsWith("left")) {
-            clipPath = "polygon(0 75%, 50% 0, 0 0)";
-            sharpCorner = "TR";
-        }
-        if (centerOffset < 0 && placement.startsWith("right")) {
-            clipPath = "polygon(100% 0, 50% 0, 100% 75%)"
-            sharpCorner = "TL";
-        }
-        if (centerOffset > 0 && placement.startsWith("left")) {
-            clipPath = "polygon(0 100%, 50% 100%, 0 25%)";
-            sharpCorner = "BR";
-        }
-        if (centerOffset > 0 && placement.startsWith("right")) {
-            clipPath = "polygon(100% 100%, 50% 100%, 100% 25%)";
-            sharpCorner = "BL";
-        }
-
-        if(sharpCorner){
-            el.setAttribute("data-sharp-corner", sharpCorner);
-        } else {
-            el.removeAttribute("data-sharp-corner")
-        }
-
-
-        Object.assign(arrowEl.style, {
-            left: arrowX != null ? `${arrowX}px` : '',
-            top: arrowY != null ? `${arrowY}px` : '',
-            clipPath: clipPath ?? ''
-        });
-
-
-    }
+function placeArrow(el, middlewareData) {
+  const arrowEl = el.querySelector('.shepherd-arrow');
+  if (arrowEl && middlewareData.arrow) {
+    const { x: arrowX, y: arrowY } = middlewareData.arrow;
+    Object.assign(arrowEl.style, {
+      left: arrowX != null ? `${arrowX}px` : '',
+      top: arrowY != null ? `${arrowY}px` : ''
+    });
+  }
 }
 
 /**
@@ -205,37 +167,33 @@ function placeArrow(el, middlewareData, placement) {
  * @private
  */
 export function getFloatingUIOptions(attachToOptions, step) {
-    const options = {
-        strategy: 'fixed',
-        middleware: []
-    };
+  const options = {
+    strategy: 'absolute',
+    middleware: []
+  };
 
-    const arrowEl = addArrow(step);
+  const arrowEl = addArrow(step);
 
-    const shouldCenter = shouldCenterStep(attachToOptions);
+  const shouldCenter = shouldCenterStep(attachToOptions);
 
-    if (!shouldCenter) {
-        options.middleware.push(
-            flip({
-                fallbackStrategy: "bestFit"
-            }),
-            // Replicate PopperJS default behavior.
-            shift({
-                // limiter: limitShift(),
-                crossAxis: true,
-                mainAxis: true,
-                padding: 24
-            })
-        );
+  if (!shouldCenter) {
+    options.middleware.push(
+      flip(),
+      // Replicate PopperJS default behavior.
+      shift({
+        limiter: limitShift(),
+        crossAxis: true
+      })
+    );
 
-        if (arrowEl) {
-            options.middleware.push(arrow({ element: arrowEl }));
-        }
-
-        options.placement = attachToOptions.on;
+    if (arrowEl) {
+      options.middleware.push(arrow({ element: arrowEl }));
     }
 
-    return merge(step.options.floatingUIOptions || {}, options);
+    options.placement = attachToOptions.on;
+  }
+
+  return merge(step.options.floatingUIOptions || {}, options);
 }
 
 /**
@@ -243,9 +201,9 @@ export function getFloatingUIOptions(attachToOptions, step) {
  * @return {HTMLElement|false|null}
  */
 function addArrow(step) {
-    if (step.options.arrow && step.el) {
-        return step.el.querySelector('.shepherd-arrow');
-    }
+  if (step.options.arrow && step.el) {
+    return step.el.querySelector('.shepherd-arrow');
+  }
 
-    return false;
+  return false;
 }

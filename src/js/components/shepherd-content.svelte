@@ -19,8 +19,7 @@
         border-radius: 5px;
         outline: none;
         padding: 0;
-        /* box-shadow: 16px 20px 20px 4px rgba(0,0,0,.15); */
-        background-color: white;
+        box-shadow: 16px 20px 20px 4px rgba(0,0,0,.15);
     }
 
     .extra-padding {
