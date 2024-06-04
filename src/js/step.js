@@ -76,6 +76,12 @@ export class Step extends Evented {
    * @param {object} options.cancelIcon Options for the cancel icon
    * @param {boolean} options.cancelIcon.enabled Should a cancel “✕” be shown in the header of the step?
    * @param {string} options.cancelIcon.label The label to add for `aria-label`
+   * 
+   * @param {object} options.badge
+   * @param {string} options.badge.text
+   * @param {string} options.badge.backgroundColor
+   * @param {string} options.badge.textColor
+   * 
    * @param {string} options.classes A string of extra classes to add to the step's content element.
    * @param {string} options.highlightClass An extra class to apply to the `attachTo` element when it is
    * highlighted (that is, when its step is active). You can then target that selector in your CSS.

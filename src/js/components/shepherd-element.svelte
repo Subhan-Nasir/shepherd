@@ -214,6 +214,7 @@
 
 
         --tour-header-bg  : var(--tour-grey-lightest);
+        --tour-badge-bg: #ECF1FF;
         --tour-pointer-bg : #fcfcfc;
 
         --tour-btn-active-shadow-col : #6161624d;

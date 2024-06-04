@@ -150,6 +150,9 @@ declare namespace Step {
      */
     cancelIcon?: StepOptionsCancelIcon;
 
+
+    badge?: StepOptionsBadge
+
     /**
      * A boolean, that when set to false, will set `pointer-events: none` on the target.
      */
@@ -323,6 +326,12 @@ declare namespace Step {
     height: number;
     classes?: string;
 
+  }
+
+  interface StepOptionsBadge {
+    text: string
+    backgroundColor?: string,
+    textColor?: string
   }
 
   interface StepOptionsVideo {
