@@ -1,6 +1,9 @@
 <script>
     export let url;
     export let classes;
+    export let width;
+    export let height;
+
 </script>
 
 <style global>
@@ -9,27 +12,26 @@
         /* margin-bottom: 1rem; */
     }
 
+    .shepherd-video {
+        width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+    }
+
 </style>
 
 <div class="shepherd-video-container">
-    
-    <div class="embed-responsive embed-responsive-16by9 {classes}">
-        <iframe
-            class="embed-responsive-item"
-            width="500"
-            height="350"
-            src={url}
-            title="Embedded video player"
-            frameborder="0"
-            allow="accelerometer;
-            autoplay;
-            clipboard-write;
-            encrypted-media;
-            gyroscope;
-            picture-in-picture;
-            web-share"
-            allowfullscreen
-        ></iframe>
-    </div>
+
+    <!-- svelte-ignore a11y-media-has-caption -->
+    <video
+        src={url}
+        width="{width}"
+        height="{height}"
+        class="shepherd-video {classes}"
+        controls
+    >
+    </video>
+
+
 </div>
 
