@@ -169,8 +169,8 @@
         font-family: 'Material Symbols Outlined';
         font-style: normal;
         src: 
-            url('assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2') format('woff2'),
-            url('assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf') format('truetype');
+            url('/assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2') format('woff2'),
+            url('/assets/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf') format('truetype');
     }
 
     .shepherd-material-symbols-outlined {
@@ -214,6 +214,8 @@
 
 
         --tour-header-bg  : var(--tour-grey-lightest);
+        /* --tour-header-bg: red; */
+
         --tour-badge-bg: #ECF1FF;
         --tour-pointer-bg : white;
 
