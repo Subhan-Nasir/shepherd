@@ -410,11 +410,11 @@
             stroke-dasharray 0ms,
             stroke-dashhoffset var(--animationLength) ease-in-out;
 
-        animation: pathAnimation 1000ms ease-in-out forwards;
+        /* animation: pathAnimation 500ms ease-in-out forwards; */
         /* stroke-dashoffset: var(--outline-length); */
     }
 
-    @keyframes pathAnimatino {
+    @keyframes pathAnimation {
         from {
             stroke-dashoffset: var(--outline-length);
         }
