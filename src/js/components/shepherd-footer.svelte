@@ -103,17 +103,16 @@
         /* flex-grow: 1; */
         width: 100%;
         justify-content: center;
-        padding-bottom: var(--padding-bottom);
+        padding-inline: 1.5rem;
     }
 
     .additional-buttons-container > * {
         margin: 0;
     }
 
-    .additional-buttons-container.align-right {
+    .additional-buttons-container.footer-hidden {
         justify-content: end;
-        padding: 0.5rem;
-        padding-bottom: 0.75rem;
+        border-top: 1px solid var(--tour-grey-light);
     }
 
     .footer-buttons-container {
@@ -131,12 +130,12 @@
         background-color: transparent;
         padding: 0.5rem 1rem;
         overflow: hidden;
-    }
 
-
-    .grey-border-top {
         border-top: 1px solid var(--tour-grey-light);
+
     }
+
+
 
     .icon-button {
         /* min-width: var(--arrow-btn-min-width); */
@@ -257,11 +256,9 @@
             'opsz' 48
     }
 
-    .margin-top-1 {
+    .additional-buttons-container, .footer-buttons-container {
         margin-top: 1rem;
     }
-
-
 
 </style>
 
@@ -270,7 +267,10 @@
 
 
     {#if addtionalButtons && addtionalButtons.length > 0}
-        <div class="additional-buttons-container margin-top-1" class:align-right={!footerPresent} class:grey-border-top={!footerPresent}>
+        <div
+            class="additional-buttons-container"
+            class:footer-hidden={!footerPresent}
+        >
             {#each addtionalButtons as config}
                 <ShepherdButton
                     {config}
@@ -282,7 +282,7 @@
 
     {#if footerPresent}
 
-        <div class="footer-buttons-container grey-border-top" class:margin-top-1={!addtionalButtons || addtionalButtons.length === 0}>
+        <div class="footer-buttons-container">
 
             <div class="left-button-container">
                 {#if leftButton}

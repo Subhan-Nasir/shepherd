@@ -2,7 +2,7 @@
     import { isFunction } from '../utils/type-check';
 
     export let config, step;
-    let action, classes, disabled, label, secondary, text;
+    let action, classes, disabled, label, secondary, text, iconPosition, iconName;
 
     $: {
         action = config.action ? config.action.bind(step.tour) : null;
@@ -11,6 +11,8 @@
         label = config.label ? getConfigOption(config.label) : null;
         secondary = config.secondary;
         text = config.text ? getConfigOption(config.text) : null;
+        iconName = config.iconName ? getConfigOption(config.iconName) : null;
+        iconPosition = config.iconPosition ? getConfigOption(config.iconPosition) : null;
     }
 
     function getConfigOption(option) {
@@ -43,6 +45,7 @@
 
         transition: all 0.5s ease;
 
+        cursor: pointer;
     }
 
     .shepherd-button:not(:disabled):hover {
@@ -62,14 +65,46 @@
     .shepherd-button:disabled {
         cursor: not-allowed;
     }
+
+    .full-width {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .link-button {
+        border: 1px solid var(--tour-primary);
+    }
+
+    .link-button:not(:disabled):hover
+    {
+        background-color: var(--tour-primary);
+        color: white;
+    }
+
+    .text-with-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
 </style>
 
 <button
     aria-label="{label ? label : null}"
-    class="{`${(classes || '')} shepherd-button ${(secondary ? 'shepherd-button-secondary' : '')}`}"
+    class="{`shepherd-button ${(secondary ? 'shepherd-button-secondary' : '')} ${(classes || '')}`}"
+    class:text-with-icon={!!iconName && iconPosition}
     disabled={disabled}
     on:click={action}
     tabindex="0"
 >
+    {#if iconName && iconPosition === "left"}
+        <span class="shepherd-material-symbols-outlined">{iconName}</span>
+    {/if}
+    
     {@html text}
+
+    {#if iconName && iconPosition === "right"}
+        <span class="shepherd-material-symbols-outlined">{iconName}</span>
+    {/if}
 </button>

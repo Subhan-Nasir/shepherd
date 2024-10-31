@@ -60,6 +60,8 @@
         font-family: var(--tour-font);
         font-size: 0.875rem;
         font-weight: 400;
+
+        cursor: pointer;
     }
 
 
