@@ -8,7 +8,7 @@
 
 <style global>
     .shepherd-video-container {
-        padding: 0 2rem;
+        padding: 0 1.5rem;
         /* margin-bottom: 1rem; */
     }
 
@@ -16,6 +16,7 @@
         width: 100%;
         height: auto;
         border-radius: 0.5rem;
+        margin-top: 1rem;
     }
 
 </style>

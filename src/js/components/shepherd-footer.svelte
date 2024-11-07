@@ -113,6 +113,7 @@
     .additional-buttons-container.footer-hidden {
         justify-content: end;
         border-top: 1px solid var(--tour-grey-light);
+        padding-block: 1rem;
     }
 
     .footer-buttons-container {
