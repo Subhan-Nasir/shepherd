@@ -34,8 +34,6 @@
 
   .shepherd-has-title .shepherd-content .shepherd-header {
     background: #e6e6e6;
-    /* background: red; */
-    /* background: blue; */
     padding: 1em;
   }
 </style>
