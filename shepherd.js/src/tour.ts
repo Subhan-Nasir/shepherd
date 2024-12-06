@@ -9,7 +9,8 @@ import {
 } from './utils/type-check.ts';
 import { cleanupSteps } from './utils/cleanup.ts';
 import { normalizePrefix, uuid } from './utils/general.ts';
-// @ts-expect-error TODO: we don't have Svelte .d.ts files until we generate the dist
+// ---@ts-expect-error TODO: we don't have Svelte .d.ts files until we generate the dist
+// @ts-ignore TODO: we don't have Svelte .d.ts files until we generate the dist
 import ShepherdModal from './components/shepherd-modal.svelte';
 
 export interface EventOptions {
@@ -316,8 +317,6 @@ export class Tour extends Evented {
 
   /**
    * Show a specific step in the tour
-   * @param {number | string} key - The key to look up the step by
-   * @param {boolean} forward - True if we are going forward, false if backward
    */
   show(key: number | string = 0, forward = true) {
     const step = isString(key) ? this.getById(key) : this.steps[key];
@@ -466,6 +465,11 @@ export class Tour extends Evented {
 
     this.id = `${tourName}--${tourId}`;
   }
+
+  public getName(){
+    return this.options.tourName ?? null;
+  }
+
 }
 
 /**

@@ -57,7 +57,7 @@ const plugins = [
 // If we are running with --environment DEVELOPMENT, serve via browsersync for local development
 if (process.env.DEVELOPMENT) {
   plugins.push(
-    serve({ contentBase: ['.', 'dist', '../test/cypress/dummy'], open: true })
+    serve({ contentBase: ['.', 'dist', '../test/cypress/dummy'], open: false })
   );
   plugins.push(livereload());
 }
@@ -88,7 +88,7 @@ export default [
           console.log('Rename .svelte.d.ts to .d.svelte.ts');
 
           await execaCommand(
-            `renamer --find .svelte.d.ts --replace .d.svelte.ts tmp/esm/**`,
+            `renamer --find .svelte.d.ts --replace .d.svelte.ts tmp/esm/** --force`,
             {
               stdio: 'inherit'
             }
@@ -158,7 +158,7 @@ export default [
           console.log('Rename .svelte.d.ts to .d.svelte.ts');
 
           await execaCommand(
-            `renamer --find .svelte.d.ts --replace .d.svelte.ts tmp/cjs/**`,
+            `renamer --find .svelte.d.ts --replace .d.svelte.ts tmp/cjs/** --force`,
             {
               stdio: 'inherit'
             }
@@ -195,10 +195,10 @@ export default [
             'shepherd.d.cts'
           );
           let content = fs.readFileSync(declarationFile, 'utf8');
-          content = content.replace(
-            /export {[\n\r]+[ \t]+Shepherd as default,[\n\r]};/g,
-            'export = Shepherd;'
-          );
+          // content = content.replace(
+          //   /export {[\n\r]+[ \t]+Shepherd as default,[\n\r]};/g,
+          //   'export = Shepherd;'
+          // );
           fs.writeFileSync(declarationFile, content);
         }
       }
