@@ -1,7 +1,7 @@
 <script>
   import { makeOverlayPath } from '../utils/overlay-path.ts';
 
-  export let element, openingProperties;
+  export let element, openingProperties, opacity;
   let modalIsVisible = false;
   let rafId = undefined;
   let pathDefinition;
@@ -246,15 +246,6 @@
   }
 </script>
 
-<svg
-  bind:this={element}
-  class={`${
-    modalIsVisible ? 'shepherd-modal-is-visible' : ''
-  } shepherd-modal-overlay-container`}
-  on:touchmove={_preventModalOverlayTouch}
->
-  <path d={pathDefinition} />
-</svg>
 
 <style global>
   .shepherd-modal-overlay-container {
@@ -275,7 +266,7 @@
 
   .shepherd-modal-overlay-container.shepherd-modal-is-visible {
     height: 100vh;
-    opacity: 0.5;
+    opacity: var(--opacity, 0.5);
     transition:
       all 0.3s ease-out,
       height 0s 0s,
@@ -287,3 +278,16 @@
     pointer-events: all;
   }
 </style>
+
+
+<svg
+  bind:this={element}
+  id="tourModalOverlay"
+  class={`${
+    modalIsVisible ? 'shepherd-modal-is-visible' : ''
+  } shepherd-modal-overlay-container`}
+  style="--opacity: {opacity}"
+  on:touchmove={_preventModalOverlayTouch}
+>
+  <path d={pathDefinition} />
+</svg>
