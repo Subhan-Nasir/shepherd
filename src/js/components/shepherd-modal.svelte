@@ -2,7 +2,7 @@
     import { uuid } from '../utils/general.js';
     import { makeOverlayPath } from '../utils/overlay-path.js';
 
-    export let element, openingProperties, opacity;
+    export let element, openingProperties, opacity, overlayClasses;
     const guid = uuid();
     let modalIsVisible = false;
     let rafId = undefined;
@@ -208,7 +208,7 @@
     id="tourModalOverlay"
     class={`${
     modalIsVisible ? 'shepherd-modal-is-visible' : ''
-    } shepherd-modal-overlay-container`}
+    } shepherd-modal-overlay-container ${overlayClasses}`}
     style="--opacity: {opacity}"
     on:touchmove={_preventModalOverlayTouch}
 >
@@ -218,15 +218,20 @@
 <style global>
     .shepherd-modal-overlay-container {
         height: 0;
-        left: 0;
-        opacity: 0;
-        overflow: hidden;
-        pointer-events: none;
-        position: fixed;
-        top: 0;
-        transition: all 0.3s ease-out, height 0ms 0.3s, opacity 0.3s 0ms;
         width: 100vw;
+
+        top: 0;
+        left: 0;
+
+        opacity: 0;
+
+        overflow: hidden;
         z-index: 9997;
+
+        pointer-events: none;
+
+        position: fixed;
+        transition: all 0.3s ease-out, height 0ms 0.3s, opacity 0.3s 0ms;
     }
 
     .shepherd-modal-overlay-container.shepherd-modal-is-visible {
@@ -235,6 +240,15 @@
         transition: all 0.3s ease-out, height 0s 0s, opacity 0.3s 0s;
         transform: translateZ(0);
     }
+
+    .shepherd-modal-overlay-container.animate-height {
+        transition: all 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out;
+    }
+
+    .shepherd-modal-overlay-container.animate-height.shepherd-modal-is-visible {
+        transition: all 0.3s ease-out, height 0.3s ease-out, opacity 0.3s 0s;
+    }
+
 
     .shepherd-modal-overlay-container.shepherd-modal-is-visible path {
         pointer-events: all;

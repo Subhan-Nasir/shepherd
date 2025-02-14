@@ -167,7 +167,12 @@ declare namespace Tour {
      * Controls opacity of overlay
      */
 
-    overlayOpacity?: number
+    overlayOpacity?: number,
+    /**
+     * Adds classes to overlay
+     */
+
+    overlayClasses?: string
     /**
      * Will cancel the tour when you click outside the tooltip.
      */

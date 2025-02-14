@@ -46,6 +46,7 @@ export class Tour extends Evented {
      * @param {boolean} options.cancelOnOutsideClick Cancels the tour when you click outside tooltip
      * @param {boolean} options.cancelOnMouseLeave Cancels the tour when mouse leaves tooltip
      * @param {number} options.overlayOpacity Opacity of the background overlay
+     * @param {string} options.overlayClasses Classes applied to the background overlay
      * 
      * @returns {Tour}
      */
@@ -365,7 +366,8 @@ export class Tour extends Evented {
             props: {
                 classPrefix: this.classPrefix,
                 styles: this.styles,
-                opacity: this.options.overlayOpacity
+                opacity: this.options.overlayOpacity,
+                overlayClasses: this.options.overlayClasses
             },
         });
 
