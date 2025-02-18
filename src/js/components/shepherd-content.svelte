@@ -12,6 +12,10 @@
     let image = step.options.image;
     let video = step.options.video;
 
+
+    let tour = step.getTour();
+    let footerEnabled = tour.options.enableProgressBar || Array.isArray(step.options.buttons) && step.options.buttons.length
+
 </script>
 
 <style global>
@@ -31,7 +35,7 @@
 
 <div
   class="shepherd-content"
-  class:extra-padding={!(Array.isArray(step.options.buttons) && step.options.buttons.length)}
+  class:extra-padding={!footerEnabled}
 >
     {#if !isUndefined(step.options.title) || (step.options.cancelIcon && step.options.cancelIcon.enabled)}
         <ShepherdHeader
@@ -68,7 +72,7 @@
 
 
 
-    {#if Array.isArray(step.options.buttons) && step.options.buttons.length}
+    {#if footerEnabled}
         <ShepherdFooter
             {step}
         />

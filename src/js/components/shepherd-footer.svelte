@@ -24,10 +24,10 @@
 
     $: buttons = step.options.buttons;
 
-    $: leftButton = buttons.find(btn => {return (btn.type === "back" || btn.position === "left")}) ?? null;
-    $: rightButton = buttons.find(btn => {return (btn.type === "next" || btn.position === "right")}) ?? null;
-    $: footerPresent = (progressBarEnabled || leftButton || rightButton) ? true : false;
-    $: addtionalButtons = buttons.filter(btn => {return btn !== leftButton && btn !== rightButton}).filter(btn => !!btn);
+    $: leftButton = buttons?.find(btn => {return (btn.type === "back" || btn.position === "left")}) ?? null;
+    $: rightButton = buttons?.find(btn => {return (btn.type === "next" || btn.position === "right")}) ?? null;
+    $: navButtonsPresent = (progressBarEnabled || leftButton || rightButton) ? true : false;
+    $: addtionalButtons = buttons?.filter(btn => {return btn !== leftButton && btn !== rightButton}).filter(btn => !!btn);
 
 
     let tour = step.getTour();
@@ -54,8 +54,6 @@
     function isTextButton(btn){
         return btn.classes.includes("text-button");
     }
-
-
 
 </script>
 
@@ -267,10 +265,8 @@
 
 <footer class="shepherd-footer">
 
-
-
     {#if addtionalButtons && addtionalButtons.length > 0}
-        <div class="additional-buttons-container margin-top-1" class:align-right={!footerPresent} class:grey-border-top={!footerPresent}>
+        <div class="additional-buttons-container margin-top-1" class:align-right={!navButtonsPresent} class:grey-border-top={!navButtonsPresent}>
             {#each addtionalButtons as config}
                 <ShepherdButton
                     {config}
@@ -280,7 +276,7 @@
         </div>
     {/if}
 
-    {#if footerPresent}
+    {#if navButtonsPresent}
 
         <div class="footer-buttons-container grey-border-top" class:margin-top-1={!addtionalButtons || addtionalButtons.length === 0}>
 
@@ -288,7 +284,6 @@
                 {#if leftButton}
                     <ShepherdButton config={leftButton} step={step}/>
                 {/if}
-
             </div>
 
             <div class="progress-bar-container">
@@ -318,17 +313,10 @@
                 {#if rightButton}
                     <ShepherdButton config={rightButton} step={step}/>
                 {/if}
-
             </div>
-
-
-
-
         </div>
         
     {/if}
 
-
-    
 
 </footer>
